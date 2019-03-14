@@ -529,7 +529,7 @@ def run_cnn(cnn_model, train_images, train_labels, test_images, test_labels, fra
 # Experiments
 ###############################################################################
 
-fraction_of_train_samples_space = np.geomspace(0.01, 0.1, num=10)
+fraction_of_train_samples_space = np.geomspace(0.01, 0.35, num=10)
 
 
 def print_old_results(file_name):
@@ -594,10 +594,10 @@ cnn_best_acc_vs_n = run_experiment(run_cnn, "cnn_best_acc_vs_n",
 # Plots
 ###############################################################################
 
-plt.rcParams['figure.figsize'] = 13, 10
+plt.rcParams['figure.figsize'] = 15, 12
 plt.rcParams['font.size'] = 25
-plt.rcParams['legend.fontsize'] = 16.5
-plt.rcParams['legend.handlelength'] = 2.5
+plt.rcParams['legend.fontsize'] = 14
+plt.rcParams['legend.handlelength'] = 3
 plt.rcParams['figure.titlesize'] = 20
 plt.rcParams['xtick.labelsize'] = 15
 plt.rcParams['ytick.labelsize'] = 15
@@ -611,7 +611,7 @@ ax.plot(fraction_of_train_samples_space*100, deep_conv_rf_two_layer_acc_vs_n, ma
         markerfacecolor='red', markersize=10, color='green', linewidth=3, label="DeepConvRF (2-layer, shared)")
 
 ax.plot(fraction_of_train_samples_space*100, deep_conv_rf_old_acc_vs_n, marker='X',
-        markerfacecolor='red', markersize=10, color='brown', linewidth=3, label="DeepConvRF (1-layer, unshared)")
+        markerfacecolor='red', markersize=10, color='brown', linewidth=3, linestyle="--", label="DeepConvRF (1-layer, unshared)")
 ax.plot(fraction_of_train_samples_space*100, deep_conv_rf_old_two_layer_acc_vs_n, marker='X',
         markerfacecolor='red', markersize=10, color='brown', linewidth=3, label="DeepConvRF (2-layer, unshared)")
 
