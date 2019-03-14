@@ -1,0 +1,101 @@
+Files already downloaded and verified
+Files already downloaded and verified
+acc vs n_samples: Naive RF
+
+Train Fraction: 0.01
+Accuracy: 0.496
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.50475
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5217499999999999
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.54425
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.55725
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.57475
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.57175
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.587
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.587
+
+Train Fraction: 0.1
+Accuracy: 0.59975
+
+
+acc vs n_samples: DeepConvRF (unshared)
+
+Train Fraction: 0.01
+Accuracy: 0.5025
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.51525
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.54025
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.56975
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.58575
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.6032500000000001
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.601
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.6025
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.62075
+
+Train Fraction: 0.1
+Accuracy: 0.62625
+
+
+acc vs n_samples: DeepConvRF (shared)
+
+Train Fraction: 0.01
+Accuracy: 0.51825
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.53575
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5555000000000001
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.58
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.58675
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.6112500000000001
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.6152500000000001
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.621
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.627
+
+Train Fraction: 0.1
+Accuracy: 0.6135
+
+
