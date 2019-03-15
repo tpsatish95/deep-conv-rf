@@ -21,8 +21,13 @@ sns.set()
 warnings.filterwarnings("ignore")
 # sys.stdout = open("deep_conv_rf_logs.txt", "w+")
 
+##########
+# Settings
+##########
 base_path = ""
-# base_path = "10_percent_data/"
+# base_path = "experiments/DeepConvRF/10_percent_data/"
+class_one = 3
+class_two = 5
 
 
 ###########################################################################################################
@@ -545,7 +550,7 @@ def print_old_results(file_name):
     return accuracy_scores
 
 
-def run_experiment(experiment, experiment_result_file, text, cnn_model=None, class1=3, class2=5):
+def run_experiment(experiment, experiment_result_file, text, cnn_model=None, class1=class_one, class2=class_two):
     global fraction_of_train_samples_space
     print("##################################################################")
     print("acc vs n_samples: " + text + "\n")
@@ -598,39 +603,45 @@ cnn_best_acc_vs_n = run_experiment(run_cnn, "cnn_best_acc_vs_n",
 ###############################################################################
 
 plt.rcParams['figure.figsize'] = 15, 12
+plt.rcParams['figure.titlesize'] = 20
 plt.rcParams['font.size'] = 25
 plt.rcParams['legend.fontsize'] = 14
 plt.rcParams['legend.handlelength'] = 3
-plt.rcParams['figure.titlesize'] = 20
 plt.rcParams['xtick.labelsize'] = 15
 plt.rcParams['ytick.labelsize'] = 15
+plt.rcParams['lines.linewidth'] = 3
 
-fig, ax = plt.subplots()  # create a new figure with a default 111 subplot
-ax.plot(fraction_of_train_samples_space*100, naive_rf_acc_vs_n, marker='X', markerfacecolor='red',
-        markersize=10, color='green', linewidth=3, linestyle=":", label="NaiveRF")
-ax.plot(fraction_of_train_samples_space*100, deep_conv_rf_acc_vs_n, marker='X', markerfacecolor='red',
-        markersize=10, color='green', linewidth=3, linestyle="--", label="DeepConvRF (1-layer, shared)")
-ax.plot(fraction_of_train_samples_space*100, deep_conv_rf_two_layer_acc_vs_n, marker='X',
-        markerfacecolor='red', markersize=10, color='green', linewidth=3, label="DeepConvRF (2-layer, shared)")
+total_train_samples = len(np.argwhere(cifar_train_labels == class_one)) + \
+    len(np.argwhere(cifar_train_labels == class_two))
+x_lables = list(fraction_of_train_samples_space*total_train_samples)
 
-ax.plot(fraction_of_train_samples_space*100, deep_conv_rf_old_acc_vs_n, marker='X',
-        markerfacecolor='red', markersize=10, color='brown', linewidth=3, linestyle="--", label="DeepConvRF (1-layer, unshared)")
-ax.plot(fraction_of_train_samples_space*100, deep_conv_rf_old_two_layer_acc_vs_n, marker='X',
-        markerfacecolor='red', markersize=10, color='brown', linewidth=3, label="DeepConvRF (2-layer, unshared)")
+fig, ax = plt.subplots()
+ax.plot(x_lables, naive_rf_acc_vs_n, marker="", color='green',
+        linestyle=":", label="NaiveRF")
 
-ax.plot(fraction_of_train_samples_space*100, cnn_acc_vs_n, marker='X', markerfacecolor='red',
-        markersize=10, color='orange', linewidth=3, linestyle=":", label="CNN (1-filter)")
-ax.plot(fraction_of_train_samples_space*100, cnn32_acc_vs_n, marker='X', markerfacecolor='red',
-        markersize=10, color='orange', linewidth=3, linestyle="--", label="CNN (1-layer, 32-filters)")
-ax.plot(fraction_of_train_samples_space*100, cnn32_two_layer_acc_vs_n, marker='X',
-        markerfacecolor='red', markersize=10, color='orange', linewidth=3, label="CNN (2-layer, 32-filters)")
+ax.plot(x_lables, deep_conv_rf_old_acc_vs_n, marker="", color='brown',
+        linestyle="--", label="DeepConvRF (1-layer, unshared)")
+ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n, marker="",
+        color='brown', label="DeepConvRF (2-layer, unshared)")
 
-ax.plot(fraction_of_train_samples_space*100, cnn_best_acc_vs_n, marker='X',
-        markerfacecolor='red', markersize=10, color='blue', linewidth=3, label="CNN (best)")
+ax.plot(x_lables, deep_conv_rf_acc_vs_n, marker="", color='green',
+        linestyle="--", label="DeepConvRF (1-layer, shared)")
+ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n, marker="",
+        color='green', label="DeepConvRF (2-layer, shared)")
 
-ax.set_xlabel('Percentage of Train Samples', fontsize=18)
+ax.plot(x_lables, cnn_acc_vs_n, marker="", color='orange',
+        linestyle=":", label="CNN (1-filter)")
+ax.plot(x_lables, cnn32_acc_vs_n, marker="", color='orange',
+        linestyle="--", label="CNN (1-layer, 32-filters)")
+ax.plot(x_lables, cnn32_two_layer_acc_vs_n, marker="",
+        color='orange', label="CNN (2-layer, 32-filters)")
+
+ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best)")
+
+
+ax.set_xlabel('# of Train Samples', fontsize=18)
 ax.set_xscale('log')
-ax.set_xticks(list(fraction_of_train_samples_space*100))
+ax.set_xticks(x_lables)
 ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
 ax.set_ylabel('Accuracy', fontsize=18)
