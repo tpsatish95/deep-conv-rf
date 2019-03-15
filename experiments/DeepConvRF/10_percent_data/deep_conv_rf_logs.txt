@@ -1,0 +1,310 @@
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+##################################################################
+acc vs n_samples: Naive RF
+
+Train Fraction: 0.01
+Accuracy: 0.496
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.50475
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5217499999999999
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.54425
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.55725
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.57475
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.57175
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.587
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.587
+
+Train Fraction: 0.1
+Accuracy: 0.59975
+
+##################################################################
+##################################################################
+acc vs n_samples: DeepConvRF (unshared)
+
+Train Fraction: 0.01
+Accuracy: 0.5025
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.51525
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.54025
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.56975
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.58575
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.6032500000000001
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.601
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.6025
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.62075
+
+Train Fraction: 0.1
+Accuracy: 0.62625
+
+##################################################################
+##################################################################
+acc vs n_samples: DeepConvRF (shared)
+
+Train Fraction: 0.01
+Accuracy: 0.51825
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.53575
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5555000000000001
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.58
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.58675
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.6112500000000001
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.6152500000000001
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.621
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.627
+
+Train Fraction: 0.1
+Accuracy: 0.6135
+
+##################################################################
+##################################################################
+acc vs n_samples: DeepConvRF (2-layer,shared)
+
+Train Fraction: 0.01
+Accuracy: 0.50375 
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.509 
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.53225 
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.56775 
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.5822499999999999 
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.60475 
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.60825 
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.607 
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.61475 
+
+Train Fraction: 0.1
+Accuracy: 0.613 
+
+##################################################################
+##################################################################
+acc vs n_samples: DeepConvRF (2-layer,unshared)
+
+Train Fraction: 0.01
+Accuracy: 0.505 
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.52875 
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5375000000000001 
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.577 
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.5855 
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.60175 
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.603 
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.61825 
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.62525 
+
+Train Fraction: 0.1
+Accuracy: 0.62525 
+
+##################################################################
+##################################################################
+acc vs n_samples: CNN (1-filter)
+
+Train Fraction: 0.01
+Accuracy: 0.491 
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.50175 
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5255 
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.5329999999999999 
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.52875 
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.5325 
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.5489999999999999 
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.5327500000000001 
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.52675 
+
+Train Fraction: 0.1
+Accuracy: 0.5395 
+
+##################################################################
+##################################################################
+acc vs n_samples: CNN (32-filter)
+
+Train Fraction: 0.01
+Accuracy: 0.4805 
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.50575 
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5125 
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.5229999999999999 
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.53725 
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.53975 
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.5822499999999999 
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.57325 
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.5985 
+
+Train Fraction: 0.1
+Accuracy: 0.58675 
+
+##################################################################
+##################################################################
+acc vs n_samples: CNN (2-layer, 32-filter)
+
+Train Fraction: 0.01
+Accuracy: 0.47224999999999995 
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.49924999999999997 
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.51675 
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.52075 
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.54325 
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.54375 
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.5780000000000001 
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.52825 
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.57925 
+
+Train Fraction: 0.1
+Accuracy: 0.569 
+
+##################################################################
+##################################################################
+acc vs n_samples: CNN (best)
+
+Train Fraction: 0.01
+Accuracy: 0.5 
+
+Train Fraction: 0.01291549665014884
+Accuracy: 0.5175000000000001 
+
+Train Fraction: 0.016681005372000592
+Accuracy: 0.5 
+
+Train Fraction: 0.021544346900318832
+Accuracy: 0.49849999999999994 
+
+Train Fraction: 0.027825594022071243
+Accuracy: 0.5 
+
+Train Fraction: 0.03593813663804628
+Accuracy: 0.5 
+
+Train Fraction: 0.046415888336127774
+Accuracy: 0.53125 
+
+Train Fraction: 0.05994842503189409
+Accuracy: 0.5 
+
+Train Fraction: 0.0774263682681127
+Accuracy: 0.532 
+
+Train Fraction: 0.1
+Accuracy: 0.5045 
+
+##################################################################

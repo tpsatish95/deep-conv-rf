@@ -21,6 +21,9 @@ sns.set()
 warnings.filterwarnings("ignore")
 # sys.stdout = open("deep_conv_rf_logs.txt", "w+")
 
+base_path = ""
+# base_path = "10_percent_data/"
+
 
 ###########################################################################################################
 # Data Preparation
@@ -547,7 +550,7 @@ def run_experiment(experiment, experiment_result_file, text, cnn_model=None, cla
     print("##################################################################")
     print("acc vs n_samples: " + text + "\n")
     acc_vs_n = list()
-    file_name = experiment_result_file+".npy"
+    file_name = base_path+experiment_result_file+".npy"
     if not os.path.exists(file_name):
         for fraction_of_train_samples in fraction_of_train_samples_space:
             if not cnn_model:
@@ -635,4 +638,4 @@ ax.set_ylabel('Accuracy', fontsize=18)
 
 ax.set_title("3 (Cats) vs 5 (Dogs) Classification", fontsize=18)
 plt.legend()
-plt.savefig("rf_deepconvrf_cnn_comparisons.png")
+plt.savefig(base_path+"rf_deepconvrf_cnn_comparisons.png")
