@@ -2,6 +2,7 @@
 import sys
 import os.path
 import warnings
+import time
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -26,8 +27,8 @@ warnings.filterwarnings("ignore")
 ##########
 base_path = ""
 # base_path = "experiments/DeepConvRF/10_percent_data/"
-class_one = 3
-class_two = 5
+class_one = 1
+class_two = 9
 
 
 ###########################################################################################################
@@ -543,15 +544,18 @@ fraction_of_train_samples_space = np.geomspace(0.01, 0.35, num=10)
 def print_old_results(file_name):
     global fraction_of_train_samples_space
     accuracy_scores = np.load(file_name)
-    for fraction_of_train_samples, best_accuracy in zip(fraction_of_train_samples_space, accuracy_scores):
+    for fraction_of_train_samples, (best_accuracy, time_taken) in zip(fraction_of_train_samples_space, accuracy_scores):
         print("Train Fraction:", str(fraction_of_train_samples))
         print("Accuracy:", str(best_accuracy))
+        print("Experiment Runtime: " + str(time_taken), "\n")
         print()
     return accuracy_scores
 
 
 def run_experiment(experiment, experiment_result_file, text, cnn_model=None, class1=class_one, class2=class_two):
     global fraction_of_train_samples_space
+    repeats = 2
+
     print("##################################################################")
     print("acc vs n_samples: " + text + "\n")
     acc_vs_n = list()
@@ -559,14 +563,20 @@ def run_experiment(experiment, experiment_result_file, text, cnn_model=None, cla
     if not os.path.exists(file_name):
         for fraction_of_train_samples in fraction_of_train_samples_space:
             if not cnn_model:
+                start = time.time()
                 best_accuracy = np.mean([experiment(cifar_train_images, cifar_train_labels, cifar_test_images,
-                                                    cifar_test_labels, fraction_of_train_samples, class1, class2) for _ in range(2)])
+                                                    cifar_test_labels, fraction_of_train_samples, class1, class2) for _ in range(repeats)])
+                end = time.time()
             else:
+                start = time.time()
                 best_accuracy = np.mean([experiment(cnn_model, cifar_train_images, cifar_train_labels, cifar_test_images,
-                                                    cifar_test_labels, fraction_of_train_samples, class1, class2) for _ in range(2)])
-            acc_vs_n.append(best_accuracy)
+                                                    cifar_test_labels, fraction_of_train_samples, class1, class2) for _ in range(repeats)])
+                end = time.time()
+            time_taken = (end - start)/float(repeats)
+            acc_vs_n.append((best_accuracy, time_taken))
             print("Train Fraction:", str(fraction_of_train_samples))
-            print("Accuracy:", str(best_accuracy), "\n")
+            print("Accuracy:", str(best_accuracy))
+            print("Experiment Runtime: " + str(time_taken), "\n")
         np.save(file_name, acc_vs_n)
     else:
         acc_vs_n = print_old_results(file_name)
@@ -576,27 +586,27 @@ def run_experiment(experiment, experiment_result_file, text, cnn_model=None, cla
 
 
 # RFs
-naive_rf_acc_vs_n = run_experiment(
-    run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
-deep_conv_rf_old_acc_vs_n = run_experiment(
-    run_one_layer_deep_conv_rf_old, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (unshared)")
-deep_conv_rf_acc_vs_n = run_experiment(
-    run_one_layer_deep_conv_rf, "deep_conv_rf_acc_vs_n", "DeepConvRF (shared)")
-deep_conv_rf_old_two_layer_acc_vs_n = run_experiment(
-    run_two_layer_deep_conv_rf_old, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
-deep_conv_rf_two_layer_acc_vs_n = run_experiment(
-    run_two_layer_deep_conv_rf, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
+naive_rf_acc_vs_n, _ = list(zip(*run_experiment(
+    run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")))
+deep_conv_rf_old_acc_vs_n, _ = list(zip(*run_experiment(
+    run_one_layer_deep_conv_rf_old, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (unshared)")))
+deep_conv_rf_acc_vs_n, _ = list(zip(*run_experiment(
+    run_one_layer_deep_conv_rf, "deep_conv_rf_acc_vs_n", "DeepConvRF (shared)")))
+deep_conv_rf_old_two_layer_acc_vs_n, _ = list(zip(*run_experiment(
+    run_two_layer_deep_conv_rf_old, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")))
+deep_conv_rf_two_layer_acc_vs_n, _ = list(zip(*run_experiment(
+    run_two_layer_deep_conv_rf, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")))
 
 
 # CNNs
-cnn_acc_vs_n = run_experiment(run_cnn, "cnn_acc_vs_n",
-                              "CNN (1-filter)", cnn_model=SimpleCNNOneFilter)
-cnn32_acc_vs_n = run_experiment(run_cnn, "cnn32_acc_vs_n",
-                                "CNN (32-filter)", cnn_model=SimpleCNN32Filter)
-cnn32_two_layer_acc_vs_n = run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
-                                          "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN32Filter2Layers)
-cnn_best_acc_vs_n = run_experiment(run_cnn, "cnn_best_acc_vs_n",
-                                   "CNN (best)", cnn_model=BestCNN)
+cnn_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn_acc_vs_n",
+                                           "CNN (1-filter)", cnn_model=SimpleCNNOneFilter)))
+cnn32_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn32_acc_vs_n",
+                                             "CNN (32-filter)", cnn_model=SimpleCNN32Filter)))
+cnn32_two_layer_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
+                                                       "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN32Filter2Layers)))
+cnn_best_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
+                                                "CNN (best)", cnn_model=BestCNN)))
 
 ###############################################################################
 # Plots
@@ -647,6 +657,6 @@ ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax.set_ylabel('Accuracy', fontsize=18)
 # ax.set_ylim(0.68, 1)
 
-ax.set_title("3 (Cats) vs 5 (Dogs) Classification", fontsize=18)
+ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
 plt.legend()
 plt.savefig(base_path+"rf_deepconvrf_cnn_comparisons.png")
