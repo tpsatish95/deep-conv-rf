@@ -25,8 +25,8 @@ warnings.filterwarnings("ignore")
 ##########
 # Settings
 ##########
-base_path = ""
-# base_path = "experiments/DeepConvRF/10_percent_data/"
+# base_path = ""
+base_path = "experiments/DeepConvRF/35_percent_data/1vs9/"
 class_one = 1
 class_two = 9
 
@@ -42,13 +42,13 @@ def normalize(x):
 
 # train data
 cifar_trainset = datasets.CIFAR10(root='./data', train=True, download=True, transform=None)
-cifar_train_images = normalize(cifar_trainset.data)
-cifar_train_labels = np.array(cifar_trainset.targets)
+cifar_train_images = normalize(cifar_trainset.train_data)
+cifar_train_labels = np.array(cifar_trainset.train_labels)
 
 # test data
 cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=None)
-cifar_test_images = normalize(cifar_testset.data)
-cifar_test_labels = np.array(cifar_testset.targets)
+cifar_test_images = normalize(cifar_testset.test_data)
+cifar_test_labels = np.array(cifar_testset.test_labels)
 
 # # 3 (cat) vs 5 (dog) classification
 #
@@ -586,27 +586,27 @@ def run_experiment(experiment, experiment_result_file, text, cnn_model=None, cla
 
 
 # RFs
-naive_rf_acc_vs_n, _ = list(zip(*run_experiment(
+naive_rf_acc_vs_n, naive_rf_acc_vs_n_times = list(zip(*run_experiment(
     run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")))
-deep_conv_rf_old_acc_vs_n, _ = list(zip(*run_experiment(
+deep_conv_rf_old_acc_vs_n, deep_conv_rf_old_acc_vs_n_times = list(zip(*run_experiment(
     run_one_layer_deep_conv_rf_old, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (unshared)")))
-deep_conv_rf_acc_vs_n, _ = list(zip(*run_experiment(
+deep_conv_rf_acc_vs_n, deep_conv_rf_acc_vs_n_times = list(zip(*run_experiment(
     run_one_layer_deep_conv_rf, "deep_conv_rf_acc_vs_n", "DeepConvRF (shared)")))
-deep_conv_rf_old_two_layer_acc_vs_n, _ = list(zip(*run_experiment(
+deep_conv_rf_old_two_layer_acc_vs_n, deep_conv_rf_old_two_layer_acc_vs_n_times = list(zip(*run_experiment(
     run_two_layer_deep_conv_rf_old, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")))
-deep_conv_rf_two_layer_acc_vs_n, _ = list(zip(*run_experiment(
+deep_conv_rf_two_layer_acc_vs_n, deep_conv_rf_two_layer_acc_vs_n_times = list(zip(*run_experiment(
     run_two_layer_deep_conv_rf, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")))
 
 
 # CNNs
-cnn_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn_acc_vs_n",
-                                           "CNN (1-filter)", cnn_model=SimpleCNNOneFilter)))
-cnn32_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn32_acc_vs_n",
-                                             "CNN (32-filter)", cnn_model=SimpleCNN32Filter)))
-cnn32_two_layer_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
-                                                       "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN32Filter2Layers)))
-cnn_best_acc_vs_n, _ = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
-                                                "CNN (best)", cnn_model=BestCNN)))
+cnn_acc_vs_n, cnn_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_acc_vs_n",
+                                                            "CNN (1-filter)", cnn_model=SimpleCNNOneFilter)))
+cnn32_acc_vs_n, cnn32_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_acc_vs_n",
+                                                                "CNN (32-filter)", cnn_model=SimpleCNN32Filter)))
+cnn32_two_layer_acc_vs_n, cnn32_two_layer_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
+                                                                                    "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN32Filter2Layers)))
+cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
+                                                                      "CNN (best)", cnn_model=BestCNN)))
 
 ###############################################################################
 # Plots
@@ -621,6 +621,7 @@ plt.rcParams['xtick.labelsize'] = 15
 plt.rcParams['ytick.labelsize'] = 15
 plt.rcParams['lines.linewidth'] = 3
 
+# plot accuracies
 total_train_samples = len(np.argwhere(cifar_train_labels == class_one)) + \
     len(np.argwhere(cifar_train_labels == class_two))
 x_lables = list(fraction_of_train_samples_space*total_train_samples)
@@ -655,8 +656,44 @@ ax.set_xticks(x_lables)
 ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
 ax.set_ylabel('Accuracy', fontsize=18)
-# ax.set_ylim(0.68, 1)
 
 ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
 plt.legend()
 plt.savefig(base_path+"rf_deepconvrf_cnn_comparisons.png")
+
+
+# plot execution times
+fig, ax = plt.subplots()
+ax.plot(x_lables, naive_rf_acc_vs_n_times, marker="", color='green',
+        linestyle=":", label="NaiveRF")
+
+ax.plot(x_lables, deep_conv_rf_old_acc_vs_n_times, marker="", color='brown',
+        linestyle="--", label="DeepConvRF (1-layer, unshared)")
+ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n_times, marker="",
+        color='brown', label="DeepConvRF (2-layer, unshared)")
+
+ax.plot(x_lables, deep_conv_rf_acc_vs_n_times, marker="", color='green',
+        linestyle="--", label="DeepConvRF (1-layer, shared)")
+ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n_times, marker="",
+        color='green', label="DeepConvRF (2-layer, shared)")
+
+ax.plot(x_lables, cnn_acc_vs_n_times, marker="", color='orange',
+        linestyle=":", label="CNN (1-filter)")
+ax.plot(x_lables, cnn32_acc_vs_n_times, marker="", color='orange',
+        linestyle="--", label="CNN (1-layer, 32-filters)")
+ax.plot(x_lables, cnn32_two_layer_acc_vs_n_times, marker="",
+        color='orange', label="CNN (2-layer, 32-filters)")
+
+ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (best)")
+
+
+ax.set_xlabel('# of Train Samples', fontsize=18)
+ax.set_xscale('log')
+ax.set_xticks(x_lables)
+ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+
+ax.set_ylabel('Execution Time (seconds)', fontsize=18)
+
+ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
+plt.legend()
+plt.savefig(base_path+"rf_deepconvrf_cnn_perf_comparisons.png")
