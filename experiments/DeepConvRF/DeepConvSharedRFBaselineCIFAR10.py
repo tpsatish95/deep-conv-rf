@@ -25,8 +25,8 @@ warnings.filterwarnings("ignore")
 ##########
 # Settings
 ##########
-# base_path = ""
-base_path = "experiments/DeepConvRF/35_percent_data/1vs9/"
+base_path = ""
+# base_path = "experiments/DeepConvRF/35_percent_data/1vs9/"
 class_one = 1
 class_two = 9
 
