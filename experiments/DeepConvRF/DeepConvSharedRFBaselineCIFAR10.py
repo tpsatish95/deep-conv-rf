@@ -458,7 +458,7 @@ def run_two_layer_deep_conv_rf(train_images, train_labels, test_images, test_lab
     return accuracy_score(test_labels, test_preds)
 
 ###############################################################################
-# Wrapper Code for Different Random Forest Experiments
+# Wrapper Code for Different CNN Experiments
 ###############################################################################
 
 
