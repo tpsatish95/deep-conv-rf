@@ -474,7 +474,7 @@ testset = datasets.CIFAR10(root='./data', train=False,
 
 def cnn_train_test(cnn_model, y_train, y_test, fraction_of_train_samples, class1=3, class2=5):
     # set params
-    num_epochs = 5
+    num_epochs = 15
     learning_rate = 0.001
 
     class1_indices = np.argwhere(y_train == class1).flatten()
@@ -485,13 +485,13 @@ def cnn_train_test(cnn_model, y_train, y_test, fraction_of_train_samples, class1
 
     train_sampler = torch.utils.data.sampler.SubsetRandomSampler(train_indices)
     train_loader = torch.utils.data.DataLoader(
-        trainset, batch_size=4, num_workers=2, sampler=train_sampler)
+        trainset, batch_size=16, num_workers=2, sampler=train_sampler)
 
     test_indices = np.concatenate(
         [np.argwhere(y_test == class1).flatten(), np.argwhere(y_test == class2).flatten()])
     test_sampler = torch.utils.data.sampler.SubsetRandomSampler(test_indices)
 
-    test_loader = torch.utils.data.DataLoader(testset, batch_size=4,
+    test_loader = torch.utils.data.DataLoader(testset, batch_size=16,
                                               shuffle=False, num_workers=2, sampler=test_sampler)
 
     # define model
