@@ -25,8 +25,8 @@ warnings.filterwarnings("ignore")
 ##########
 # Settings
 ##########
-base_path = ""
-# base_path = "35_percent_data/1vs9/"
+# base_path = ""
+base_path = "experiments/DeepConvRF/35_percent_data/3vs5/"
 class_one = 3
 class_two = 5
 
@@ -42,13 +42,13 @@ def normalize(x):
 
 # train data
 cifar_trainset = datasets.CIFAR10(root='./data', train=True, download=True, transform=None)
-cifar_train_images = normalize(cifar_trainset.data)
-cifar_train_labels = np.array(cifar_trainset.targets)
+cifar_train_images = normalize(cifar_trainset.train_data)
+cifar_train_labels = np.array(cifar_trainset.train_labels)
 
 # test data
 cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=None)
-cifar_test_images = normalize(cifar_testset.data)
-cifar_test_labels = np.array(cifar_testset.targets)
+cifar_test_images = normalize(cifar_testset.test_data)
+cifar_test_labels = np.array(cifar_testset.test_labels)
 
 # # 3 (cat) vs 5 (dog) classification
 #
@@ -657,7 +657,7 @@ ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
 ax.set_ylabel('Accuracy', fontsize=18)
 
-ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
+ax.set_title("3 (Cats) vs 5 (Dogs) Classification", fontsize=18)
 plt.legend()
 plt.savefig(base_path+"rf_deepconvrf_cnn_comparisons.png")
 
