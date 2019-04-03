@@ -1,6 +1,6 @@
-## commands to build and run this file
+## commands to build and run this docker file
 # docker build -t deep-conv-rf:latest - < Dockerfile
-# docker run -it --rm --name deep-conv-rf-env deep-conv-rf:latest
+# docker run -it --rm -v <local_host_dir_path>:/root/workspace/ --name deep-conv-rf-env deep-conv-rf:latest
 
 FROM ubuntu:16.04
 
@@ -36,11 +36,11 @@ RUN python3.6 get-pip.py
 
 RUN ln -s /usr/bin/python3.6 /usr/local/bin/python
 
-# Install Rerf dependencies
+# Install RerF dependencies
 RUN apt-get install -y build-essential cmake python3-dev libomp-dev vim
 
 # make a directory for mounting local files into docker
-RUN mkdir /root/host_files/
+RUN mkdir /root/workspace/
 
 # change working directory to install RerF
 RUN mkdir /root/code/
@@ -54,7 +54,7 @@ WORKDIR /root/code/Python
 
 # install python requirements
 RUN pip install -r requirements.txt
-RUN pip install matplotlib seaborn pandas jupyter pycodestyle torch torchvision
+RUN pip install matplotlib seaborn pandas jupyter pycodestyle torch torchvision pytest
 
 # clean old installs
 RUN python setup.py clean --all
@@ -65,12 +65,12 @@ RUN pip install -e .
 # add RerF to PYTHONPATH for dev purposes
 RUN echo "export PYTHONPATH='${PYTHONPATH}:/root/code'" >> ~/.bashrc
 
-# clean dir and test if mgcpy is correctly installed
+# clean dir and test if RerF is correctly installed
 RUN py3clean .
 RUN python -c "import RerF"
 
-# go back to code root
-WORKDIR /root/code
+# set working dir to workspace (you can mount any local host dir into this path)
+WORKDIR /root/workspace/
 
 # launch terminal
 CMD ["/bin/bash"]
