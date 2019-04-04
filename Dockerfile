@@ -54,7 +54,7 @@ WORKDIR /root/code/Python
 
 # install python requirements
 RUN pip install -r requirements.txt
-RUN pip install matplotlib seaborn pandas jupyter pycodestyle torch torchvision pytest
+RUN pip install matplotlib seaborn pandas jupyter pycodestyle torch torchvision pytest scikit-learn scipy
 
 # clean old installs
 RUN python setup.py clean --all
