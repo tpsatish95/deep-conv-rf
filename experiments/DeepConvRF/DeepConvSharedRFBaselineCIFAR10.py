@@ -3,6 +3,7 @@ import sys
 import os.path
 import warnings
 import time
+import copy
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -11,24 +12,35 @@ import seaborn as sns
 import torch
 import torch.nn.functional as F
 import torchvision.datasets as datasets
-import torch.optim as optim
 import torchvision.transforms as transforms
+import torch.nn as nn
+from torch.autograd import Variable
+import torch.utils.data as Data
+import torchvision
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 sns.set()
+plt.style.use('seaborn')
 warnings.filterwarnings("ignore")
 # sys.stdout = open("deep_conv_rf_logs.txt", "w+")
 
 ##########
 # Settings
 ##########
-# base_path = ""
-base_path = "experiments/DeepConvRF/35_percent_data/3vs5/"
-class_one = 3
-class_two = 5
+torch.set_num_threads(1)
+
+base_path = ""
+# base_path = "experiments/DeepConvRF/35_percent_data/3vs5/"
+
+cifar_data_path = "./data"
+
+class_one = 1
+class_two = 9
+
+MAX_TRAIN_FRACTION = 0.35
 
 
 ###########################################################################################################
@@ -36,19 +48,20 @@ class_two = 5
 ###########################################################################################################
 
 def normalize(x):
-    scale = np.mean(np.arange(0, 256))
-    return (x - scale) / scale
+    mean = np.array([0.4914, 0.4822, 0.4465])
+    std = np.array([0.2023, 0.1994, 0.2010])
+    return (x - mean) / std
 
 
 # train data
-cifar_trainset = datasets.CIFAR10(root='./data', train=True, download=True, transform=None)
-cifar_train_images = normalize(cifar_trainset.train_data)
-cifar_train_labels = np.array(cifar_trainset.train_labels)
+cifar_trainset = datasets.CIFAR10(root=cifar_data_path, train=True, download=True, transform=None)
+cifar_train_images = normalize(cifar_trainset.data)
+cifar_train_labels = np.array(cifar_trainset.targets)
 
 # test data
-cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=None)
-cifar_test_images = normalize(cifar_testset.test_data)
-cifar_test_labels = np.array(cifar_testset.test_labels)
+cifar_testset = datasets.CIFAR10(root=cifar_data_path, train=False, download=True, transform=None)
+cifar_test_images = normalize(cifar_testset.data)
+cifar_test_labels = np.array(cifar_testset.targets)
 
 # # 3 (cat) vs 5 (dog) classification
 #
@@ -228,75 +241,61 @@ class ConvRF(object):
 ###############################################################################
 
 
-class SimpleCNNOneFilter(torch.nn.Module):
+class SimpleCNN1layer(nn.Module):
 
-    def __init__(self):
-        super(SimpleCNNOneFilter, self).__init__()
-        self.conv1 = torch.nn.Conv2d(3, 1, kernel_size=10, stride=2)
-        self.fc1 = torch.nn.Linear(144, 10)
-
-    def forward(self, x):
-        x = F.relu(self.conv1(x))
-        x = x.view(-1, 144)
-        x = self.fc1(x)
-        return(x)
-
-
-class SimpleCNN32Filter(torch.nn.Module):
-
-    def __init__(self):
-        super(SimpleCNN32Filter, self).__init__()
-        self.conv1 = torch.nn.Conv2d(3, 32, kernel_size=10, stride=2)
-        self.fc1 = torch.nn.Linear(144*32, 10)
+    def __init__(self, num_filters, num_classes):
+        super(SimpleCNN1layer, self).__init__()
+        self.conv1 = nn.Conv2d(3, num_filters, kernel_size=10, stride=2)
+        self.fc1 = nn.Linear(144*num_filters, num_classes)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
-        x = x.view(-1, 144*32)
-        x = self.fc1(x)
+        x = x.view(x.shape[0], x.shape[1]*x.shape[2]*x.shape[3])
+        x = F.log_softmax(self.fc1(x), dim=1)
         return(x)
 
 
-class SimpleCNN32Filter2Layers(torch.nn.Module):
+class SimpleCNN2Layers(nn.Module):
 
-    def __init__(self):
-        super(SimpleCNN32Filter2Layers, self).__init__()
-        self.conv1 = torch.nn.Conv2d(3, 32, kernel_size=10, stride=2)
-        self.conv2 = torch.nn.Conv2d(32, 32, kernel_size=7, stride=1)
-        self.fc1 = torch.nn.Linear(36*32, 10)
+    def __init__(self, num_filters, num_classes):
+        super(SimpleCNN2Layers, self).__init__()
+        self.conv1 = nn.Conv2d(3, num_filters, kernel_size=10, stride=2)
+        self.conv2 = nn.Conv2d(num_filters, num_filters, kernel_size=7, stride=1)
+        self.fc1 = nn.Linear(36*num_filters, num_classes)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
-        x = x.view(-1, 36*32)
-        x = self.fc1(x)
+        x = x.view(x.shape[0], x.shape[1]*x.shape[2]*x.shape[3])
+        x = F.log_softmax(self.fc1(x), dim=1)
         return(x)
 
 
-class BestCNN(torch.nn.Module):
-    def __init__(self):
-        super(BestCNN, self).__init__()
-        self.conv1 = torch.nn.Conv2d(3, 6, 5)
-        self.pool = torch.nn.MaxPool2d(2, 2)
-        self.conv2 = torch.nn.Conv2d(6, 16, 5)
-        self.fc1 = torch.nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = torch.nn.Linear(120, 84)
-        self.fc3 = torch.nn.Linear(84, 10)
-
-    def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+# class BestCNN(torch.nn.Module):
+#     def __init__(self):
+#         super(BestCNN, self).__init__()
+#         self.conv1 = torch.nn.Conv2d(3, 6, 5)
+#         self.pool = torch.nn.MaxPool2d(2, 2)
+#         self.conv2 = torch.nn.Conv2d(6, 16, 5)
+#         self.fc1 = torch.nn.Linear(16 * 5 * 5, 120)
+#         self.fc2 = torch.nn.Linear(120, 84)
+#         self.fc3 = torch.nn.Linear(84, 10)
+#
+#     def forward(self, x):
+#         x = self.pool(F.relu(self.conv1(x)))
+#         x = self.pool(F.relu(self.conv2(x)))
+#         x = x.view(-1, 16 * 5 * 5)
+#         x = F.relu(self.fc1(x))
+#         x = F.relu(self.fc2(x))
+#         x = self.fc3(x)
+#         return x
 
 ###############################################################################
 # Wrapper Code for Different Random Forest Experiments
 ###############################################################################
 
 
-def run_naive_rf(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1=3, class2=5):
+def run_naive_rf(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1, class2):
     num_train_samples_class_1 = int(np.sum(train_labels == class1) * fraction_of_train_samples)
     num_train_samples_class_2 = int(np.sum(train_labels == class2) * fraction_of_train_samples)
 
@@ -320,7 +319,7 @@ def run_naive_rf(train_images, train_labels, test_images, test_labels, fraction_
     return accuracy_score(test_labels, test_preds)
 
 
-def run_one_layer_deep_conv_rf_old(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1=3, class2=5):
+def run_one_layer_deep_conv_rf_old(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1, class2):
     num_train_samples_class_1 = int(np.sum(train_labels == class1) * fraction_of_train_samples)
     num_train_samples_class_2 = int(np.sum(train_labels == class2) * fraction_of_train_samples)
 
@@ -352,7 +351,7 @@ def run_one_layer_deep_conv_rf_old(train_images, train_labels, test_images, test
     return accuracy_score(test_labels, mnist_test_preds)
 
 
-def run_one_layer_deep_conv_rf(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1=3, class2=5):
+def run_one_layer_deep_conv_rf(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1, class2):
     num_train_samples_class_1 = int(np.sum(train_labels == class1) * fraction_of_train_samples)
     num_train_samples_class_2 = int(np.sum(train_labels == class2) * fraction_of_train_samples)
 
@@ -384,7 +383,7 @@ def run_one_layer_deep_conv_rf(train_images, train_labels, test_images, test_lab
     return accuracy_score(test_labels, mnist_test_preds)
 
 
-def run_two_layer_deep_conv_rf_old(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1=3, class2=5):
+def run_two_layer_deep_conv_rf_old(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1, class2):
     num_train_samples_class_1 = int(np.sum(train_labels == class1) * fraction_of_train_samples)
     num_train_samples_class_2 = int(np.sum(train_labels == class2) * fraction_of_train_samples)
 
@@ -421,7 +420,7 @@ def run_two_layer_deep_conv_rf_old(train_images, train_labels, test_images, test
     return accuracy_score(test_labels, test_preds)
 
 
-def run_two_layer_deep_conv_rf(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1=3, class2=5):
+def run_two_layer_deep_conv_rf(train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1, class2):
     num_train_samples_class_1 = int(np.sum(train_labels == class1) * fraction_of_train_samples)
     num_train_samples_class_2 = int(np.sum(train_labels == class2) * fraction_of_train_samples)
 
@@ -462,83 +461,131 @@ def run_two_layer_deep_conv_rf(train_images, train_labels, test_images, test_lab
 ###############################################################################
 
 
+BATCH_SIZE = 32
+NUM_CLASSES = 2
+EPOCH = 100
+
 # transform
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-trainset = datasets.CIFAR10(root='./data', train=True,
-                            download=True, transform=transform)
-testset = datasets.CIFAR10(root='./data', train=False,
-                           download=True, transform=transform)
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+])
+
+trainset = torchvision.datasets.CIFAR10(
+    root=cifar_data_path, train=True, download=True, transform=transform)
+testset = torchvision.datasets.CIFAR10(
+    root=cifar_data_path, train=False, download=True, transform=transform)
 
 
-def cnn_train_test(cnn_model, y_train, y_test, fraction_of_train_samples, class1=3, class2=5):
+def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, EPOCH, config):
+    t0 = time.perf_counter()
+
+    Loss_train = np.zeros((EPOCH,))
+    Loss_test = np.zeros((EPOCH,))
+    Acc_test = np.zeros((EPOCH,))
+    Acc_train = np.zeros((EPOCH,))
+    Time_test = np.zeros((EPOCH,))
+
+    for epoch in range(EPOCH):
+        scheduler.step()
+
+        # train 1 epoch
+        model.train()
+        correct = 0
+        train_loss = 0
+        for step, (x, y) in enumerate(train_loader):
+            b_x = Variable(x)
+            b_y = Variable(y)
+            scores = model(b_x)
+            loss = F.nll_loss(scores, b_y)      # negative log likelyhood
+            optimizer.zero_grad()               # clear gradients for this training step
+            loss.backward()                     # backpropagation, compute gradients
+            optimizer.step()                    # apply gradients
+            model.zero_grad()
+
+            # computing training accuracy
+            pred = scores.data.max(1, keepdim=True)[1]
+            correct += pred.eq(b_y.data.view_as(pred)).long().cpu().sum()
+            train_loss += F.nll_loss(scores, b_y, reduction='sum').item()
+
+        Acc_train[epoch] = 100 * float(correct) / float(len(train_loader.dataset))
+        Loss_train[epoch] = train_loss / len(train_loader.dataset)
+
+        # testing
+        model.eval()
+        correct = 0
+        test_loss = 0
+        for step, (x, y) in enumerate(test_loader):
+            b_x = Variable(x)
+            b_y = Variable(y)
+            scores = model(b_x)
+            test_loss += F.nll_loss(scores, b_y, reduction='sum').item()
+            pred = scores.data.max(1, keepdim=True)[1]
+            correct += pred.eq(b_y.data.view_as(pred)).long().cpu().sum()
+
+        Loss_test[epoch] = test_loss/len(test_loader.dataset)
+        Acc_test[epoch] = 100 * float(correct) / float(len(test_loader.dataset))
+        Time_test[epoch] = time.perf_counter()-t0
+
+    return Acc_test[-1]
+
+###########################################################################################################
+# CNN Model Trainer Helper
+###########################################################################################################
+
+
+def cnn_train_test(model, fraction_of_train_samples, config, class1, class2):
+    print("Experiment:", str(config))
+
     # set params
-    num_epochs = 15
-    learning_rate = 0.001
+    learning_rate = config["lr"]
+    weight_decay = config["weight_decay"]
 
-    class1_indices = np.argwhere(y_train == class1).flatten()
-    class1_indices = class1_indices[:int(len(class1_indices) * fraction_of_train_samples)]
-    class2_indices = np.argwhere(y_train == class2).flatten()
-    class2_indices = class2_indices[:int(len(class2_indices) * fraction_of_train_samples)]
-    train_indices = np.concatenate([class1_indices, class2_indices])
+    # get only train images and labels for two classes
+    cifar_train_labels = trainset.targets
+    cifar_test_labels = testset.targets
 
-    train_sampler = torch.utils.data.sampler.SubsetRandomSampler(train_indices)
-    train_loader = torch.utils.data.DataLoader(
-        trainset, batch_size=16, num_workers=2, sampler=train_sampler)
+    indx_0 = np.argwhere(np.asarray(cifar_train_labels) == class1).flatten()
+    indx_0 = indx_0[:int(len(indx_0) * fraction_of_train_samples)]
+    indx_1 = np.argwhere(np.asarray(cifar_train_labels) == class2).flatten()
+    indx_1 = indx_1[:int(len(indx_1) * fraction_of_train_samples)]
+    indx = np.concatenate([indx_0, indx_1])
 
-    test_indices = np.concatenate(
-        [np.argwhere(y_test == class1).flatten(), np.argwhere(y_test == class2).flatten()])
-    test_sampler = torch.utils.data.sampler.SubsetRandomSampler(test_indices)
+    trainset_sub = copy.deepcopy(trainset)
+    trainset_sub.data = trainset_sub.data[indx, :, :, :]
+    trainset_sub.targets = np.asarray(trainset_sub.targets)[indx]
+    trainset_sub.targets[trainset_sub.targets == class1] = 0
+    trainset_sub.targets[trainset_sub.targets == class2] = 1
 
-    test_loader = torch.utils.data.DataLoader(testset, batch_size=16,
-                                              shuffle=False, num_workers=2, sampler=test_sampler)
+    indx_0 = np.asarray(cifar_test_labels) == class1
+    indx_1 = np.asarray(cifar_test_labels) == class2
+    indx = indx_0 + indx_1
 
-    # define model
-    net = cnn_model()
+    testset_sub = copy.deepcopy(testset)
+    testset_sub.data = testset_sub.data[indx, :, :, :]
+    testset_sub.targets = np.asarray(testset_sub.targets)[indx]
+    testset_sub.targets[testset_sub.targets == class1] = 0
+    testset_sub.targets[testset_sub.targets == class2] = 1
 
-    # loss and optimizer
-    criterion = torch.nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
+    train_loader = Data.DataLoader(dataset=trainset_sub, batch_size=BATCH_SIZE, shuffle=True)
+    test_loader = Data.DataLoader(dataset=testset_sub, batch_size=BATCH_SIZE, shuffle=False)
 
-    for epoch in range(num_epochs):  # loop over the dataset multiple times
+    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate,
+                                momentum=.9, weight_decay=weight_decay)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=EPOCH/3, gamma=.1)
 
-        for i, data in enumerate(train_loader, 0):
-            # get the inputs
-            inputs, labels = data
-
-            # zero the parameter gradients
-            optimizer.zero_grad()
-
-            # forward + backward + optimize
-            outputs = net(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
-
-    # test the model
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for data in test_loader:
-            images, labels = data
-            outputs = net(images)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels.view(-1)).sum().item()
-    accuracy = float(correct) / float(total)
-    return accuracy
+    return cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, EPOCH, config)
 
 
-def run_cnn(cnn_model, train_images, train_labels, test_images, test_labels, fraction_of_train_samples, class1=3, class2=5):
-    return cnn_train_test(cnn_model, train_labels, test_labels, fraction_of_train_samples, class1, class2)
+def run_cnn(cnn_model, fraction_of_train_samples, cnn_config, class1, class2):
+    return cnn_train_test(cnn_model, fraction_of_train_samples, cnn_config, class1, class2)
 
 
 ###############################################################################
 # Experiments
 ###############################################################################
 
-fraction_of_train_samples_space = np.geomspace(0.01, 0.35, num=10)
+fraction_of_train_samples_space = np.geomspace(0.01, MAX_TRAIN_FRACTION, num=10)
 
 
 def print_old_results(file_name):
@@ -552,7 +599,7 @@ def print_old_results(file_name):
     return accuracy_scores
 
 
-def run_experiment(experiment, experiment_result_file, text, cnn_model=None, class1=class_one, class2=class_two):
+def run_experiment(experiment, experiment_result_file, text, cnn_model=None, cnn_config={}, class1=class_one, class2=class_two):
     global fraction_of_train_samples_space
     repeats = 2
 
@@ -569,8 +616,8 @@ def run_experiment(experiment, experiment_result_file, text, cnn_model=None, cla
                 end = time.time()
             else:
                 start = time.time()
-                best_accuracy = np.mean([experiment(cnn_model, cifar_train_images, cifar_train_labels, cifar_test_images,
-                                                    cifar_test_labels, fraction_of_train_samples, class1, class2) for _ in range(repeats)])
+                best_accuracy = np.mean(
+                    [experiment(cnn_model, fraction_of_train_samples, cnn_config, class1, class2) for _ in range(repeats)])
                 end = time.time()
             time_taken = (end - start)/float(repeats)
             acc_vs_n.append((best_accuracy, time_taken))
@@ -599,14 +646,18 @@ deep_conv_rf_two_layer_acc_vs_n, deep_conv_rf_two_layer_acc_vs_n_times = list(zi
 
 
 # CNNs
+cnn_acc_vs_n_config = {"model": 0, "lr": 1e-5, "weight_decay": 10}
 cnn_acc_vs_n, cnn_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_acc_vs_n",
-                                                            "CNN (1-filter)", cnn_model=SimpleCNNOneFilter)))
+                                                            "CNN (1-filter)", cnn_model=SimpleCNN1layer(1, NUM_CLASSES), cnn_config=cnn_acc_vs_n_config)))
+cnn32_acc_vs_n_config = {"model": 1, "lr": 1e-5, "weight_decay": 10}
 cnn32_acc_vs_n, cnn32_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_acc_vs_n",
-                                                                "CNN (32-filter)", cnn_model=SimpleCNN32Filter)))
+                                                                "CNN (32-filter)", cnn_model=SimpleCNN1layer(32, NUM_CLASSES), cnn_config=cnn32_acc_vs_n_config)))
+cnn32_two_layer_acc_vs_n_config = {"model": 2, "lr": 1e-5, "weight_decay": 10}
 cnn32_two_layer_acc_vs_n, cnn32_two_layer_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
-                                                                                    "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN32Filter2Layers)))
-cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
-                                                                      "CNN (best)", cnn_model=BestCNN)))
+                                                                                    "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES), cnn_config=cnn32_two_layer_acc_vs_n_config)))
+
+# cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
+#                                                                       "CNN (best)", cnn_model=BestCNN)))
 
 ###############################################################################
 # Plots
@@ -647,7 +698,7 @@ ax.plot(x_lables, cnn32_acc_vs_n, marker="", color='orange',
 ax.plot(x_lables, cnn32_two_layer_acc_vs_n, marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best)")
+# ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best)")
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
@@ -657,7 +708,7 @@ ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
 ax.set_ylabel('Accuracy', fontsize=18)
 
-ax.set_title("3 (Cats) vs 5 (Dogs) Classification", fontsize=18)
+ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
 plt.legend()
 plt.savefig(base_path+"rf_deepconvrf_cnn_comparisons.png")
 
@@ -684,7 +735,7 @@ ax.plot(x_lables, cnn32_acc_vs_n_times, marker="", color='orange',
 ax.plot(x_lables, cnn32_two_layer_acc_vs_n_times, marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (best)")
+# ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (best)")
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
@@ -694,6 +745,6 @@ ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 
 ax.set_ylabel('Execution Time (seconds)', fontsize=18)
 
-ax.set_title("3 (Cats) vs 5 (Dogs) Classification", fontsize=18)
+ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
 plt.legend()
 plt.savefig(base_path+"rf_deepconvrf_cnn_perf_comparisons.png")
