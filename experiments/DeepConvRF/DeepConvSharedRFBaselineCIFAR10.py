@@ -31,7 +31,7 @@ warnings.filterwarnings("ignore")
 # Settings
 ##########
 base_path = ""
-# base_path = "experiments/DeepConvRF/35_percent_data/3vs5/"
+base_path = "experiments/DeepConvRF/35_percent_data/1vs9/"
 
 cifar_data_path = "./data"
 
@@ -53,13 +53,13 @@ def normalize(x):
 
 # train data
 cifar_trainset = datasets.CIFAR10(root=cifar_data_path, train=True, download=True, transform=None)
-cifar_train_images = normalize(cifar_trainset.data)
-cifar_train_labels = np.array(cifar_trainset.targets)
+cifar_train_images = normalize(cifar_trainset.train_data)
+cifar_train_labels = np.array(cifar_trainset.train_labels)
 
 # test data
 cifar_testset = datasets.CIFAR10(root=cifar_data_path, train=False, download=True, transform=None)
-cifar_test_images = normalize(cifar_testset.data)
-cifar_test_labels = np.array(cifar_testset.targets)
+cifar_test_images = normalize(cifar_testset.test_data)
+cifar_test_labels = np.array(cifar_testset.test_labels)
 
 # # 3 (cat) vs 5 (dog) classification
 #
@@ -689,11 +689,11 @@ ax.plot(x_lables, deep_conv_rf_acc_vs_n, marker="", color='green',
 ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n, marker="",
         color='green', label="DeepConvRF (2-layer, shared)")
 
-ax.plot(x_lables, cnn_acc_vs_n, marker="", color='orange',
+ax.plot(x_lables, np.array(cnn_acc_vs_n)/100.0, marker="", color='orange',
         linestyle=":", label="CNN (1-filter)")
-ax.plot(x_lables, cnn32_acc_vs_n, marker="", color='orange',
+ax.plot(x_lables, np.array(cnn32_acc_vs_n)/100.0, marker="", color='orange',
         linestyle="--", label="CNN (1-layer, 32-filters)")
-ax.plot(x_lables, cnn32_two_layer_acc_vs_n, marker="",
+ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n)/100.0, marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
 # ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best)")
