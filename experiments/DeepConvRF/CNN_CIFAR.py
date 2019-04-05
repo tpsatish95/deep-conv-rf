@@ -226,41 +226,42 @@ def cnn_train_test_unpack(args):
     return cnn_train_test(**args)
 
 
-with Pool(int(cpu_count()/torch.get_num_threads())) as p:
+with Pool(int(cpu_count()/torch.get_num_threads()) - 1) as p:
     experiment_logs = p.map(cnn_train_test_unpack, param_dicts)
 np.save("grid_search_best_cnn_logs.npy", np.array(experiment_logs))
 
 
-# try
-experiment_logs = np.load("grid_search_best_cnn_logs.npy")
-test_exp = 117
-print(experiment_logs[test_exp])
-acc_train, acc_test, loss_train, loss_test, _ = cnn_train_test(
-    cnn_model_space[experiment_logs[test_exp][2]["model"]], TRAIN_FRACTION, experiment_logs[experiment_logs[test_exp]][2], CLASS1, CLASS2)
-plot(acc_train, acc_test, loss_train, loss_test)
-
-# plot all curves
-for acc_train, acc_test, loss_train, loss_test, config in experiment_logs:
-    print(config)
-    plot(acc_train, acc_test, loss_train, loss_test)
-
-model_0, model_1, model_2 = [[i for i in experiment_logs if i[4]["model"] == x] for x in [0, 1, 2]]
-
-# sort based on best test accuracy
-model_0 = sorted(model_0, key=lambda x: x[1][-1], reverse=True)
-model_1 = sorted(model_1, key=lambda x: x[1][-1], reverse=True)
-model_2 = sorted(model_2, key=lambda x: x[1][-1], reverse=True)
-
-top_n = 10
-
-for acc_train, acc_test, loss_train, loss_test, config in model_0[:top_n]:
-    print(config)
-    plot(acc_train, acc_test, loss_train, loss_test)
-
-for acc_train, acc_test, loss_train, loss_test, config in model_1[:top_n]:
-    print(config)
-    plot(acc_train, acc_test, loss_train, loss_test)
-
-for acc_train, acc_test, loss_train, loss_test, config in model_2[:top_n]:
-    print(config)
-    plot(acc_train, acc_test, loss_train, loss_test)
+# # try
+# experiment_logs = np.load("grid_search_best_cnn_logs.npy")
+# test_exp = 117
+# plot(*experiment_logs[test_exp][:-1])
+# print(experiment_logs[test_exp])
+#
+# # acc_train, acc_test, loss_train, loss_test, _ = cnn_train_test(cnn_model_space[experiment_logs[test_exp][4]["model"]], TRAIN_FRACTION, experiment_logs[test_exp][4], CLASS1, CLASS2)
+# # plot(acc_train, acc_test, loss_train, loss_test)
+#
+# # plot all curves
+# for acc_train, acc_test, loss_train, loss_test, config in experiment_logs:
+#     print(config)
+#     plot(acc_train, acc_test, loss_train, loss_test)
+#
+# model_0, model_1, model_2 = [[i for i in experiment_logs if i[4]["model"] == x] for x in [0, 1, 2]]
+#
+# # sort based on best test accuracy
+# model_0 = sorted(model_0, key=lambda x: x[1][-1], reverse=True)
+# model_1 = sorted(model_1, key=lambda x: x[1][-1], reverse=True)
+# model_2 = sorted(model_2, key=lambda x: x[1][-1], reverse=True)
+#
+# top_n = 10
+#
+# for acc_train, acc_test, loss_train, loss_test, config in model_0[:top_n]:
+#     print(config)
+#     plot(acc_train, acc_test, loss_train, loss_test)
+#
+# for acc_train, acc_test, loss_train, loss_test, config in model_1[:top_n]:
+#     print(config)
+#     plot(acc_train, acc_test, loss_train, loss_test)
+#
+# for acc_train, acc_test, loss_train, loss_test, config in model_2[:top_n]:
+#     print(config)
+#     plot(acc_train, acc_test, loss_train, loss_test)
