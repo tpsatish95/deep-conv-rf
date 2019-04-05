@@ -30,8 +30,6 @@ warnings.filterwarnings("ignore")
 ##########
 # Settings
 ##########
-torch.set_num_threads(1)
-
 base_path = ""
 # base_path = "experiments/DeepConvRF/35_percent_data/3vs5/"
 
@@ -617,7 +615,7 @@ def run_experiment(experiment, experiment_result_file, text, cnn_model=None, cnn
             else:
                 start = time.time()
                 best_accuracy = np.mean(
-                    [experiment(cnn_model, fraction_of_train_samples, cnn_config, class1, class2) for _ in range(repeats)])
+                    [experiment(cnn_model, fraction_of_train_samples, cnn_config, class1, class2) for _ in range(repeats + 1)])
                 end = time.time()
             time_taken = (end - start)/float(repeats)
             acc_vs_n.append((best_accuracy, time_taken))
@@ -646,13 +644,13 @@ deep_conv_rf_two_layer_acc_vs_n, deep_conv_rf_two_layer_acc_vs_n_times = list(zi
 
 
 # CNNs
-cnn_acc_vs_n_config = {"model": 0, "lr": 1e-5, "weight_decay": 10}
+cnn_acc_vs_n_config = {'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 cnn_acc_vs_n, cnn_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_acc_vs_n",
                                                             "CNN (1-filter)", cnn_model=SimpleCNN1layer(1, NUM_CLASSES), cnn_config=cnn_acc_vs_n_config)))
-cnn32_acc_vs_n_config = {"model": 1, "lr": 1e-5, "weight_decay": 10}
+cnn32_acc_vs_n_config = {'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 cnn32_acc_vs_n, cnn32_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_acc_vs_n",
                                                                 "CNN (32-filter)", cnn_model=SimpleCNN1layer(32, NUM_CLASSES), cnn_config=cnn32_acc_vs_n_config)))
-cnn32_two_layer_acc_vs_n_config = {"model": 2, "lr": 1e-5, "weight_decay": 10}
+cnn32_two_layer_acc_vs_n_config = {'model': 2, 'lr': 0.01, 'weight_decay': 0.01}
 cnn32_two_layer_acc_vs_n, cnn32_two_layer_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
                                                                                     "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES), cnn_config=cnn32_two_layer_acc_vs_n_config)))
 
