@@ -650,7 +650,7 @@ cnn_acc_vs_n, cnn_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_acc_vs
 cnn32_acc_vs_n_config = {'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 cnn32_acc_vs_n, cnn32_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_acc_vs_n",
                                                                 "CNN (32-filter)", cnn_model=SimpleCNN1layer(32, NUM_CLASSES), cnn_config=cnn32_acc_vs_n_config)))
-cnn32_two_layer_acc_vs_n_config = {'model': 2, 'lr': 0.01, 'weight_decay': 0.01}
+cnn32_two_layer_acc_vs_n_config = {'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 cnn32_two_layer_acc_vs_n, cnn32_two_layer_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
                                                                                     "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES), cnn_config=cnn32_two_layer_acc_vs_n_config)))
 
