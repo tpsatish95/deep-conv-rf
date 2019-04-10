@@ -31,14 +31,14 @@ warnings.filterwarnings("ignore")
 # Settings
 ##########
 base_path = ""
-base_path = "experiments/DeepConvRF/35_percent_data/1vs9/"
+base_path = "experiments/DeepConvRF/100_percent_data/1vs9/"
 
 cifar_data_path = "./data"
 
 class_one = 1
 class_two = 9
 
-MAX_TRAIN_FRACTION = 0.35
+MAX_TRAIN_FRACTION = 1.0
 
 
 ###########################################################################################################
