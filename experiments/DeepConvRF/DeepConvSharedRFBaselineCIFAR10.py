@@ -17,6 +17,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 import torch.utils.data as Data
 import torchvision
+from cnn_models.resnet import ResNet18
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
@@ -53,13 +54,13 @@ def normalize(x):
 
 # train data
 cifar_trainset = datasets.CIFAR10(root=cifar_data_path, train=True, download=True, transform=None)
-cifar_train_images = normalize(cifar_trainset.train_data)
-cifar_train_labels = np.array(cifar_trainset.train_labels)
+cifar_train_images = normalize(cifar_trainset.data)
+cifar_train_labels = np.array(cifar_trainset.targets)
 
 # test data
 cifar_testset = datasets.CIFAR10(root=cifar_data_path, train=False, download=True, transform=None)
-cifar_test_images = normalize(cifar_testset.test_data)
-cifar_test_labels = np.array(cifar_testset.test_labels)
+cifar_test_images = normalize(cifar_testset.data)
+cifar_test_labels = np.array(cifar_testset.targets)
 
 # # 3 (cat) vs 5 (dog) classification
 #
@@ -267,26 +268,6 @@ class SimpleCNN2Layers(nn.Module):
         x = x.view(x.shape[0], x.shape[1]*x.shape[2]*x.shape[3])
         x = F.log_softmax(self.fc1(x), dim=1)
         return(x)
-
-
-# class BestCNN(torch.nn.Module):
-#     def __init__(self):
-#         super(BestCNN, self).__init__()
-#         self.conv1 = torch.nn.Conv2d(3, 6, 5)
-#         self.pool = torch.nn.MaxPool2d(2, 2)
-#         self.conv2 = torch.nn.Conv2d(6, 16, 5)
-#         self.fc1 = torch.nn.Linear(16 * 5 * 5, 120)
-#         self.fc2 = torch.nn.Linear(120, 84)
-#         self.fc3 = torch.nn.Linear(84, 10)
-#
-#     def forward(self, x):
-#         x = self.pool(F.relu(self.conv1(x)))
-#         x = self.pool(F.relu(self.conv2(x)))
-#         x = x.view(-1, 16 * 5 * 5)
-#         x = F.relu(self.fc1(x))
-#         x = F.relu(self.fc2(x))
-#         x = self.fc3(x)
-#         return x
 
 ###############################################################################
 # Wrapper Code for Different Random Forest Experiments
@@ -654,8 +635,9 @@ cnn32_two_layer_acc_vs_n_config = {'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 cnn32_two_layer_acc_vs_n, cnn32_two_layer_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
                                                                                     "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES), cnn_config=cnn32_two_layer_acc_vs_n_config)))
 
-# cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
-#                                                                       "CNN (best)", cnn_model=BestCNN)))
+cnn_best_acc_vs_n_config = {'model': 3, 'lr': 0.1, 'weight_decay': 5e-4}
+cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
+                                                                      "CNN (best, ResNet18)", cnn_model=ResNet18(), cnn_config=cnn_best_acc_vs_n_config)))
 
 ###############################################################################
 # Plots
@@ -696,7 +678,7 @@ ax.plot(x_lables, np.array(cnn32_acc_vs_n)/100.0, marker="", color='orange',
 ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n)/100.0, marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-# ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best)")
+ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best, ResNet18)")
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
@@ -733,7 +715,7 @@ ax.plot(x_lables, cnn32_acc_vs_n_times, marker="", color='orange',
 ax.plot(x_lables, cnn32_two_layer_acc_vs_n_times, marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-# ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (best)")
+ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (best, ResNet18)")
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
