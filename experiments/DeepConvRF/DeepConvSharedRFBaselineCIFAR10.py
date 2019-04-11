@@ -5,9 +5,9 @@ import warnings
 import time
 import copy
 
-# import matplotlib
-# import matplotlib.pyplot as plt
-# import seaborn as sns
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 import torch
 import torch.nn.functional as F
@@ -24,8 +24,8 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
-# sns.set()
-# plt.style.use('seaborn')
+sns.set()
+plt.style.use('seaborn')
 warnings.filterwarnings("ignore")
 # sys.stdout = open("deep_conv_rf_logs.txt", "w+")
 
@@ -33,7 +33,7 @@ warnings.filterwarnings("ignore")
 # Settings
 ##########
 base_path = ""
-base_path = "100_percent_data/1vs9/"
+base_path = "experiments/DeepConvRF/100_percent_data/1vs9/"
 
 cifar_data_path = "./data"
 
@@ -65,26 +65,6 @@ cifar_train_labels = np.array(cifar_trainset.train_labels)
 cifar_testset = datasets.CIFAR10(root=cifar_data_path, train=False, download=True, transform=None)
 cifar_test_images = normalize(cifar_testset.test_data)
 cifar_test_labels = np.array(cifar_testset.test_labels)
-
-# # 3 (cat) vs 5 (dog) classification
-#
-# # get only train images and labels for two classes: 3 and 5
-# cifar_train_images_3_5 = np.concatenate([cifar_train_images[cifar_train_labels==3], cifar_train_images[cifar_train_labels==5]])
-# cifar_train_labels_3_5 = np.concatenate([np.repeat(0, np.sum(cifar_train_labels==3)), np.repeat(1, np.sum(cifar_train_labels==5))])
-#
-# # visualize data and labels
-#
-# # 3 (label 0) - cat
-# index = 2500
-# print("Label:", cifar_train_labels_3_5[index])
-# plt.imshow(cifar_train_images_3_5[index])
-# plt.show()
-#
-# # 5 (label 1) - dog
-# index = 7500
-# print("Label:", cifar_train_labels_3_5[index])
-# plt.imshow(cifar_train_images_3_5[index])
-# plt.show()
 
 
 ###########################################################################################################
@@ -525,11 +505,11 @@ def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, EPOC
 
 
 def cnn_train_test(model, fraction_of_train_samples, config, class1, class2):
-    print("Experiment:", str(config))
-
     # set params
-    learning_rate = config["lr"]
-    weight_decay = config["weight_decay"]
+    if config:
+        print("Experiment:", str(config))
+        learning_rate = config["lr"]
+        weight_decay = config["weight_decay"]
 
     # get only train images and labels for two classes
     cifar_train_labels = trainset.train_labels
@@ -560,8 +540,13 @@ def cnn_train_test(model, fraction_of_train_samples, config, class1, class2):
     train_loader = Data.DataLoader(dataset=trainset_sub, batch_size=BATCH_SIZE, shuffle=True)
     test_loader = Data.DataLoader(dataset=testset_sub, batch_size=BATCH_SIZE, shuffle=False)
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate,
-                                momentum=.9, weight_decay=weight_decay)
+    if config:
+        optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate,
+                                    momentum=.9, weight_decay=weight_decay)
+    else:
+        # used Adadelta, as it wokrs well without any magic numbers
+        optimizer = torch.optim.Adadelta(model.parameters())
+
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=EPOCH/3, gamma=.1)
 
     return cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, EPOCH, config)
@@ -646,96 +631,95 @@ cnn32_two_layer_acc_vs_n_config = {'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 cnn32_two_layer_acc_vs_n, cnn32_two_layer_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n",
                                                                                     "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES), cnn_config=cnn32_two_layer_acc_vs_n_config)))
 
-cnn_best_acc_vs_n_config = {'model': 3, 'lr': 0.1, 'weight_decay': 5e-4}
 cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = list(zip(*run_experiment(run_cnn, "cnn_best_acc_vs_n",
-                                                                      "CNN (best, ResNet18)", cnn_model=ResNet18(NUM_CLASSES), cnn_config=cnn_best_acc_vs_n_config)))
+                                                                      "CNN (best, ResNet18)", cnn_model=ResNet18(NUM_CLASSES))))
 
-# ###############################################################################
-# # Plots
-# ###############################################################################
-#
-# plt.rcParams['figure.figsize'] = 15, 12
-# plt.rcParams['figure.titlesize'] = 20
-# plt.rcParams['font.size'] = 25
-# plt.rcParams['legend.fontsize'] = 14
-# plt.rcParams['legend.handlelength'] = 3
-# plt.rcParams['xtick.labelsize'] = 15
-# plt.rcParams['ytick.labelsize'] = 15
-# plt.rcParams['lines.linewidth'] = 3
-#
-# # plot accuracies
-# total_train_samples = len(np.argwhere(cifar_train_labels == class_one)) + \
-#     len(np.argwhere(cifar_train_labels == class_two))
-# x_lables = list(fraction_of_train_samples_space*total_train_samples)
-#
-# fig, ax = plt.subplots()
-# ax.plot(x_lables, naive_rf_acc_vs_n, marker="", color='green',
-#         linestyle=":", label="NaiveRF")
-#
-# ax.plot(x_lables, deep_conv_rf_old_acc_vs_n, marker="", color='brown',
-#         linestyle="--", label="DeepConvRF (1-layer, unshared)")
-# ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n, marker="",
-#         color='brown', label="DeepConvRF (2-layer, unshared)")
-#
-# ax.plot(x_lables, deep_conv_rf_acc_vs_n, marker="", color='green',
-#         linestyle="--", label="DeepConvRF (1-layer, shared)")
-# ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n, marker="",
-#         color='green', label="DeepConvRF (2-layer, shared)")
-#
-# ax.plot(x_lables, np.array(cnn_acc_vs_n)/100.0, marker="", color='orange',
-#         linestyle=":", label="CNN (1-filter)")
-# ax.plot(x_lables, np.array(cnn32_acc_vs_n)/100.0, marker="", color='orange',
-#         linestyle="--", label="CNN (1-layer, 32-filters)")
-# ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n)/100.0, marker="",
-#         color='orange', label="CNN (2-layer, 32-filters)")
-#
-# ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best, ResNet18)")
-#
-#
-# ax.set_xlabel('# of Train Samples', fontsize=18)
-# ax.set_xscale('log')
-# ax.set_xticks(x_lables)
-# ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-#
-# ax.set_ylabel('Accuracy', fontsize=18)
-#
-# ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
-# plt.legend()
-# plt.savefig(base_path+"rf_deepconvrf_cnn_comparisons.png")
-#
-#
-# # plot execution times
-# fig, ax = plt.subplots()
-# ax.plot(x_lables, naive_rf_acc_vs_n_times, marker="", color='green',
-#         linestyle=":", label="NaiveRF")
-#
-# ax.plot(x_lables, deep_conv_rf_old_acc_vs_n_times, marker="", color='brown',
-#         linestyle="--", label="DeepConvRF (1-layer, unshared)")
-# ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n_times, marker="",
-#         color='brown', label="DeepConvRF (2-layer, unshared)")
-#
-# ax.plot(x_lables, deep_conv_rf_acc_vs_n_times, marker="", color='green',
-#         linestyle="--", label="DeepConvRF (1-layer, shared)")
-# ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n_times, marker="",
-#         color='green', label="DeepConvRF (2-layer, shared)")
-#
-# ax.plot(x_lables, cnn_acc_vs_n_times, marker="", color='orange',
-#         linestyle=":", label="CNN (1-filter)")
-# ax.plot(x_lables, cnn32_acc_vs_n_times, marker="", color='orange',
-#         linestyle="--", label="CNN (1-layer, 32-filters)")
-# ax.plot(x_lables, cnn32_two_layer_acc_vs_n_times, marker="",
-#         color='orange', label="CNN (2-layer, 32-filters)")
-#
-# ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (best, ResNet18)")
-#
-#
-# ax.set_xlabel('# of Train Samples', fontsize=18)
-# ax.set_xscale('log')
-# ax.set_xticks(x_lables)
-# ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-#
-# ax.set_ylabel('Execution Time (seconds)', fontsize=18)
-#
-# ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
-# plt.legend()
-# plt.savefig(base_path+"rf_deepconvrf_cnn_perf_comparisons.png")
+###############################################################################
+# Plots
+###############################################################################
+
+plt.rcParams['figure.figsize'] = 15, 12
+plt.rcParams['figure.titlesize'] = 20
+plt.rcParams['font.size'] = 25
+plt.rcParams['legend.fontsize'] = 14
+plt.rcParams['legend.handlelength'] = 3
+plt.rcParams['xtick.labelsize'] = 15
+plt.rcParams['ytick.labelsize'] = 15
+plt.rcParams['lines.linewidth'] = 3
+
+# plot accuracies
+total_train_samples = len(np.argwhere(cifar_train_labels == class_one)) + \
+    len(np.argwhere(cifar_train_labels == class_two))
+x_lables = list(fraction_of_train_samples_space*total_train_samples)
+
+fig, ax = plt.subplots()
+ax.plot(x_lables, naive_rf_acc_vs_n, marker="", color='green',
+        linestyle=":", label="NaiveRF")
+
+ax.plot(x_lables, deep_conv_rf_old_acc_vs_n, marker="", color='brown',
+        linestyle="--", label="DeepConvRF (1-layer, unshared)")
+ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n, marker="",
+        color='brown', label="DeepConvRF (2-layer, unshared)")
+
+ax.plot(x_lables, deep_conv_rf_acc_vs_n, marker="", color='green',
+        linestyle="--", label="DeepConvRF (1-layer, shared)")
+ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n, marker="",
+        color='green', label="DeepConvRF (2-layer, shared)")
+
+ax.plot(x_lables, np.array(cnn_acc_vs_n)/100.0, marker="", color='orange',
+        linestyle=":", label="CNN (1-filter)")
+ax.plot(x_lables, np.array(cnn32_acc_vs_n)/100.0, marker="", color='orange',
+        linestyle="--", label="CNN (1-layer, 32-filters)")
+ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n)/100.0, marker="",
+        color='orange', label="CNN (2-layer, 32-filters)")
+
+ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best, ResNet18)")
+
+
+ax.set_xlabel('# of Train Samples', fontsize=18)
+ax.set_xscale('log')
+ax.set_xticks(x_lables)
+ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+
+ax.set_ylabel('Accuracy', fontsize=18)
+
+ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
+plt.legend()
+plt.savefig(base_path+"rf_deepconvrf_cnn_comparisons.png")
+
+
+# plot execution times
+fig, ax = plt.subplots()
+ax.plot(x_lables, naive_rf_acc_vs_n_times, marker="", color='green',
+        linestyle=":", label="NaiveRF")
+
+ax.plot(x_lables, deep_conv_rf_old_acc_vs_n_times, marker="", color='brown',
+        linestyle="--", label="DeepConvRF (1-layer, unshared)")
+ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n_times, marker="",
+        color='brown', label="DeepConvRF (2-layer, unshared)")
+
+ax.plot(x_lables, deep_conv_rf_acc_vs_n_times, marker="", color='green',
+        linestyle="--", label="DeepConvRF (1-layer, shared)")
+ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n_times, marker="",
+        color='green', label="DeepConvRF (2-layer, shared)")
+
+ax.plot(x_lables, cnn_acc_vs_n_times, marker="", color='orange',
+        linestyle=":", label="CNN (1-filter)")
+ax.plot(x_lables, cnn32_acc_vs_n_times, marker="", color='orange',
+        linestyle="--", label="CNN (1-layer, 32-filters)")
+ax.plot(x_lables, cnn32_two_layer_acc_vs_n_times, marker="",
+        color='orange', label="CNN (2-layer, 32-filters)")
+
+ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (best, ResNet18)")
+
+
+ax.set_xlabel('# of Train Samples', fontsize=18)
+ax.set_xscale('log')
+ax.set_xticks(x_lables)
+ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+
+ax.set_ylabel('Execution Time (seconds)', fontsize=18)
+
+ax.set_title("1 (Automobile) vs 9 (Truck) Classification", fontsize=18)
+plt.legend()
+plt.savefig(base_path+"rf_deepconvrf_cnn_perf_comparisons.png")
