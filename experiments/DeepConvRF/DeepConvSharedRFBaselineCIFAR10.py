@@ -673,7 +673,7 @@ ax.plot(x_lables, np.array(cnn32_acc_vs_n)/100.0, marker="", color='orange',
 ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n)/100.0, marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-ax.plot(x_lables, cnn_best_acc_vs_n, marker="", color='blue', label="CNN (best, ResNet18)")
+ax.plot(x_lables, np.array(cnn_best_acc_vs_n)/100.0, marker="", color='blue', label="CNN (best, ResNet18)")
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
