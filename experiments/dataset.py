@@ -73,6 +73,7 @@ def get_subset_data(data, choosen_classes, fraction_of_train_samples, is_numpy=T
         for class_index in choosen_classes:
             indx = np.argwhere(np.asarray(train_labels) == class_index).flatten()
             indx = indx[:int(len(indx) * fraction_of_train_samples)]
+            train_indices.append(indx)
         train_indices = np.concatenate(train_indices)
 
         # prepare subset trainset

@@ -1,4 +1,3 @@
-# general imports
 import copy
 import os.path
 import time
@@ -32,7 +31,7 @@ DATA_PATH = "./data"
 RESULTS_PATH = "results/cifar10/100_percent_data/2vs4/"
 
 CHOOSEN_CLASSES = [2, 4]
-NUM_CLASSES = 2
+NUM_CLASSES = len(CHOOSEN_CLASSES)
 MAX_TRAIN_FRACTION = 1.0
 
 BATCH_SIZE = 128
@@ -93,6 +92,7 @@ def run_experiment(experiment, results_file_name, experiment_name, repeats=2, cn
                 end = time.time()
 
             else:
+                print("CNN Config:", str(cnn_config))
                 start = time.time()
                 best_accuracy = np.mean(
                     [experiment(cnn_model, pytorch_data, CHOOSEN_CLASSES, fraction_of_train_samples, cnn_config) for _ in range(repeats)])
@@ -124,13 +124,13 @@ if __name__ == '__main__':
     script_start = time.time()
 
     # Naive RF
-    run_experiment((run_naive_rf, "naive_rf_acc_vs_n", "Naive RF"))
+    run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
 
     # # Naive RerF
     # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
 
     # DeepConvRF Unshared
-    run_experiment((run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)"))
+    run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
     run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
 
     # DeepConvRF Shared

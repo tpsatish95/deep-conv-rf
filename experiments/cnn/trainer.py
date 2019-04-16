@@ -70,9 +70,6 @@ def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, conf
 
 
 def run_cnn(model, data, choosen_classes, fraction_of_train_samples, config):
-    # set params
-    print("CNN train configuration used:", str(config))
-
     if "lr" in config:
         learning_rate = config["lr"]
     if "weight_decay" in config:
