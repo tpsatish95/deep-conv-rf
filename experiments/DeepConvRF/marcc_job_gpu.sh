@@ -4,7 +4,7 @@
 #SBATCH -n 18
 #SBATCH -p gpuk80
 #SBATCH --gres=gpu:3
-#SBATCH -t 7:0:0
+#SBATCH -t 4:0:0
 #SBATCH --mail-type=end
 #SBATCH --mail-user=spalani2@jhu.edu
 
