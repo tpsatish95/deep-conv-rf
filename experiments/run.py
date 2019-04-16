@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore")
 DATASET_NAME = "CIFAR10"
 DATA_PATH = "./data"
 
-RESULTS_PATH = "results/100_percent_data/2vs4/"
+RESULTS_PATH = "results/cifar10/100_percent_data/2vs4/"
 
 CHOOSEN_CLASSES = [2, 4]
 NUM_CLASSES = 2
