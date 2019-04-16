@@ -37,6 +37,9 @@ def load_results(file_name):
 # Naive RF
 naive_rf_acc_vs_n, naive_rf_acc_vs_n_times = load_results("naive_rf_acc_vs_n")
 
+# # Naive RerF
+# naive_rf_pyrerf_acc_vs_n, naive_rf_pyrerf_acc_vs_n_times = load_results("naive_rf_pyrerf_acc_vs_n")
+
 # DeepConvRF Unshared
 deep_conv_rf_old_acc_vs_n, deep_conv_rf_old_acc_vs_n_times = load_results(
     "deep_conv_rf_old_acc_vs_n")
@@ -48,9 +51,11 @@ deep_conv_rf_acc_vs_n, deep_conv_rf_acc_vs_n_times = load_results("deep_conv_rf_
 deep_conv_rf_two_layer_acc_vs_n, deep_conv_rf_two_layer_acc_vs_n_times = load_results(
     "deep_conv_rf_two_layer_acc_vs_n")
 
-# # DeepConvRerF Shared
-# naive_rf_pyrerf_acc_vs_n, naive_rf_pyrerf_acc_vs_n_times = list(zip(*np.load(base_path+"naive_rf_pyrerf_acc_vs_n.npy")))
-# deep_conv_rf_pyrerf_acc_vs_n, deep_conv_rf_pyrerf_acc_vs_n_times = list(zip(*np.load(base_path+"deep_conv_rf_pyrerf_acc_vs_n.npy")))
+# # DeepConvRF Shared (pyrerf)
+# deep_conv_rf_pyrerf_acc_vs_n, deep_conv_rf_pyrerf_acc_vs_n_times = load_results(
+#     "deep_conv_rf_pyrerf_acc_vs_n")
+# deep_conv_rf_pyrerf_two_layer_acc_vs_n, deep_conv_rf_pyrerf_two_layer_acc_vs_n_times = load_results(
+#     "deep_conv_rf_pyrerf_two_layer_acc_vs_n")
 
 # CNN
 cnn_acc_vs_n, cnn_acc_vs_n_times = load_results("cnn_acc_vs_n")
@@ -83,6 +88,9 @@ fig, ax = plt.subplots()
 ax.plot(x_lables, naive_rf_acc_vs_n, marker="", color='green',
         linestyle=":", label="NaiveRF")
 
+# ax.plot(x_lables, naive_rf_pyrerf_acc_vs_n, marker="",
+#         color='black', linestyle=":", label="Naive RF (pyrerf)")
+
 ax.plot(x_lables, deep_conv_rf_old_acc_vs_n, marker="", color='brown',
         linestyle="--", label="DeepConvRF (1-layer, unshared)")
 ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n, marker="",
@@ -93,10 +101,10 @@ ax.plot(x_lables, deep_conv_rf_acc_vs_n, marker="", color='green',
 ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n, marker="",
         color='green', label="DeepConvRF (2-layer, shared)")
 
-# ax.plot(x_lables, naive_rf_pyrerf_acc_vs_n, marker="",
-#         color='black', linestyle=":", label="Naive RF (pyrerf)")
-# ax.plot(x_lables, deep_conv_rf_pyrerf_acc_vs_n, marker="",
+# ax.plot(x_lables, deep_conv_rf_pyrerf_acc_vs_n, marker="", linestyle="--",
 #         color='black', label="DeepConvRF (1-layer, shared, pyrerf)")
+# ax.plot(x_lables, deep_conv_rf_pyrerf_two_layer_acc_vs_n_times, marker="",
+#         color='black', label="DeepConvRF (2-layer, shared, pyrerf)")
 
 ax.plot(x_lables, np.array(cnn_acc_vs_n)/100.0, marker="", color='orange',
         linestyle=":", label="CNN (1-layer, 1-filter)")
@@ -129,6 +137,9 @@ fig, ax = plt.subplots()
 ax.plot(x_lables, naive_rf_acc_vs_n_times, marker="", color='green',
         linestyle=":", label="NaiveRF")
 
+# ax.plot(x_lables, naive_rf_pyrerf_acc_vs_n_times, marker="",
+#         color='black', linestyle=":", label="Naive RF (pyrerf)")
+
 ax.plot(x_lables, deep_conv_rf_old_acc_vs_n_times, marker="", color='brown',
         linestyle="--", label="DeepConvRF (1-layer, unshared)")
 ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n_times, marker="",
@@ -139,8 +150,8 @@ ax.plot(x_lables, deep_conv_rf_acc_vs_n_times, marker="", color='green',
 ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n_times, marker="",
         color='green', label="DeepConvRF (2-layer, shared)")
 
-# ax.plot(x_lables, naive_rf_pyrerf_acc_vs_n_times, marker="",
-#         color='black', linestyle=":", label="Naive RF (pyrerf)")
+# ax.plot(x_lables, deep_conv_rf_pyrerf_acc_vs_n_times, marker="", linestyle="--",
+#         color='black', label="DeepConvRF (1-layer, shared, pyrerf)")
 # ax.plot(x_lables, deep_conv_rf_pyrerf_acc_vs_n_times, marker="",
 #         color='black', label="DeepConvRF (1-layer, shared, pyrerf)")
 

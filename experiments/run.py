@@ -11,10 +11,13 @@ from cnn.models.resnet import ResNet18
 from cnn.models.simple import SimpleCNN1layer, SimpleCNN2Layers
 from cnn.trainer import run_cnn
 from dataset import get_dataset
+# from random_forest.deep_conv_rerf_shared import (
+#     run_one_layer_deep_conv_rerf_shared, run_two_layer_deep_conv_rerf_shared)
 from random_forest.deep_conv_rf_shared import (
     run_one_layer_deep_conv_rf_shared, run_two_layer_deep_conv_rf_shared)
 from random_forest.deep_conv_rf_unshared import (
     run_one_layer_deep_conv_rf_unshared, run_two_layer_deep_conv_rf_unshared)
+# from random_forest.naive_rerf import run_naive_rerf
 from random_forest.naive_rf import run_naive_rf
 
 warnings.filterwarnings("ignore")
@@ -120,7 +123,11 @@ if __name__ == '__main__':
 
     script_start = time.time()
 
+    # Naive RF
     run_experiment((run_naive_rf, "naive_rf_acc_vs_n", "Naive RF"))
+
+    # # Naive RerF
+    # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
 
     # DeepConvRF Unshared
     run_experiment((run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)"))
@@ -131,8 +138,8 @@ if __name__ == '__main__':
     run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
 
     # # DeepConvRerF Shared
-    # naive_rf_pyrerf_acc_vs_n, naive_rf_pyrerf_acc_vs_n_times = list(zip(*np.load(base_path+"naive_rf_pyrerf_acc_vs_n.npy")))
-    # deep_conv_rf_pyrerf_acc_vs_n, deep_conv_rf_pyrerf_acc_vs_n_times = list(zip(*np.load(base_path+"deep_conv_rf_pyrerf_acc_vs_n.npy")))
+    # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
+    # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
 
     # CNN
     cnn_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
