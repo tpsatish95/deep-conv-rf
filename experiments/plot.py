@@ -11,18 +11,11 @@ plt.style.use('seaborn')
 ###############################################################################
 # Config
 ###############################################################################
-plot_title = "2 (Bird) vs 4 (Deer)"
+plot_title = "3 vs 8"
 
 base_path = run.RESULTS_PATH
-
-choosen_classes = run.CHOOSEN_CLASSES
-fraction_of_train_samples_space = run.fraction_of_train_samples_space
-train_labels = run.numpy_data["train_labels"]
-total_train_samples = sum([len(np.argwhere(train_labels == class_index))
-                           for class_index in choosen_classes])
-x_lables = list(fraction_of_train_samples_space*total_train_samples)
-
 results_path = run.RESULTS_PATH
+x_lables = run.number_of_train_samples_space
 
 ###############################################################################
 # Data

@@ -8,9 +8,9 @@ from RerF import fastPredict, fastRerF
 TREE_TYPE = "binnedBase"
 
 
-def run_naive_rerf(data, choosen_classes, fraction_of_train_samples):
+def run_naive_rerf(dataset_name, data, choosen_classes, fraction_of_train_samples):
     (train_images, train_labels), (test_images, test_labels) = get_subset_data(
-        data, choosen_classes, fraction_of_train_samples)
+        dataset_name, data, choosen_classes, fraction_of_train_samples)
 
     # Train
     forest = fastRerF(X=train_images.reshape(len(train_images), -1),

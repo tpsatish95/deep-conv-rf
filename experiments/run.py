@@ -25,12 +25,12 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-DATASET_NAME = "CIFAR10"
+DATASET_NAME = "SVHN"
 DATA_PATH = "./data"
 
-RESULTS_PATH = "results/cifar10/100_percent_data/2vs4/"
+RESULTS_PATH = "results/svhn/3vs8/"
 
-CHOOSEN_CLASSES = [2, 4]
+CHOOSEN_CLASSES = [3, 8]
 NUM_CLASSES = len(CHOOSEN_CLASSES)
 MAX_TRAIN_FRACTION = 1.0
 
@@ -45,8 +45,6 @@ print("Are GPUs available? " + str(torch.cuda.is_available()) + "\n")
 # Data
 ##############################################################################################################
 
-fraction_of_train_samples_space = np.geomspace(0.01, MAX_TRAIN_FRACTION, num=10)
-
 numpy_data = dict()
 (numpy_data["train_images"], numpy_data["train_labels"]), (numpy_data["test_images"], numpy_data["test_labels"]) = \
     get_dataset(DATA_PATH, DATASET_NAME, is_numpy=True)
@@ -54,6 +52,11 @@ numpy_data = dict()
 pytorch_data = dict()
 pytorch_data["trainset"], pytorch_data["testset"] = get_dataset(DATA_PATH, DATASET_NAME, is_numpy=False)
 
+fraction_of_train_samples_space = np.geomspace(0.01, MAX_TRAIN_FRACTION, num=10)
+
+total_train_samples = sum([len(np.argwhere(numpy_data["train_labels"] == class_index))
+                           for class_index in CHOOSEN_CLASSES])
+number_of_train_samples_space = [int(i) for i in list(fraction_of_train_samples_space * total_train_samples)]
 
 ##############################################################################################################
 # Helpers
@@ -61,12 +64,13 @@ pytorch_data["trainset"], pytorch_data["testset"] = get_dataset(DATA_PATH, DATAS
 
 
 def print_old_results(file_name):
-    global fraction_of_train_samples_space
+    global fraction_of_train_samples_space, number_of_train_samples_space
 
     accuracy_scores = np.load(file_name)
 
-    for fraction_of_train_samples, (best_accuracy, time_taken) in zip(fraction_of_train_samples_space, accuracy_scores):
+    for fraction_of_train_samples, number_of_train_samples, (best_accuracy, time_taken) in zip(fraction_of_train_samples_space, number_of_train_samples_space, accuracy_scores):
         print("Train Fraction:", str(fraction_of_train_samples))
+        print("# of Train Samples:", str(number_of_train_samples))
         print("Accuracy:", str(best_accuracy))
         print("Experiment Runtime: " + str(time_taken), "\n")
         print()
@@ -83,25 +87,26 @@ def run_experiment(experiment, results_file_name, experiment_name, repeats=2, cn
     file_name = RESULTS_PATH + results_file_name + ".npy"
 
     if not os.path.exists(file_name):
-        for fraction_of_train_samples in fraction_of_train_samples_space:
+        for fraction_of_train_samples, number_of_train_samples in zip(fraction_of_train_samples_space, number_of_train_samples_space):
 
             if not cnn_model:
                 start = time.time()
                 best_accuracy = np.mean(
-                    [experiment(numpy_data, CHOOSEN_CLASSES, fraction_of_train_samples) for _ in range(repeats)])
+                    [experiment(DATASET_NAME, numpy_data, CHOOSEN_CLASSES, fraction_of_train_samples) for _ in range(repeats)])
                 end = time.time()
 
             else:
                 print("CNN Config:", str(cnn_config))
                 start = time.time()
                 best_accuracy = np.mean(
-                    [experiment(cnn_model, pytorch_data, CHOOSEN_CLASSES, fraction_of_train_samples, cnn_config) for _ in range(repeats)])
+                    [experiment(DATASET_NAME, cnn_model, pytorch_data, CHOOSEN_CLASSES, fraction_of_train_samples, cnn_config) for _ in range(repeats)])
                 end = time.time()
 
             time_taken = (end - start)/float(repeats)
             acc_vs_n.append((best_accuracy, time_taken))
 
             print("Train Fraction:", str(fraction_of_train_samples))
+            print("# of Train Samples:", str(number_of_train_samples))
             print("Accuracy:", str(best_accuracy))
             print("Experiment Runtime: " + str(time_taken), "\n")
 
@@ -123,23 +128,23 @@ if __name__ == '__main__':
 
     script_start = time.time()
 
-    # Naive RF
-    run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
-
-    # # Naive RerF
-    # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
-
-    # DeepConvRF Unshared
-    run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
-    run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
-
-    # DeepConvRF Shared
-    run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
-    run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
-
-    # # DeepConvRerF Shared
-    # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
-    # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
+    # # Naive RF
+    # run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
+    #
+    # # # Naive RerF
+    # # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
+    #
+    # # DeepConvRF Unshared
+    # run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
+    # run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
+    #
+    # # DeepConvRF Shared
+    # run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
+    # run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
+    #
+    # # # DeepConvRerF Shared
+    # # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
+    # # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
 
     # CNN
     cnn_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)

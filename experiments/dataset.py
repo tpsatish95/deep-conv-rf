@@ -24,16 +24,23 @@ def get_dataset(data_path, dataset_name="CIFAR10", is_numpy=True):
     if dataset_name == "MNIST":
         trainset = datasets.MNIST(root=data_path, train=True, download=True, transform=transformer)
         testset = datasets.MNIST(root=data_path, train=False, download=True, transform=transformer)
+
     elif dataset_name == "FashionMNIST":
-        trainset = datasets.FashionMNIST(root=data_path, train=True,
-                                         download=True, transform=transformer)
-        testset = datasets.FashionMNIST(root=data_path, train=False,
-                                        download=True, transform=transformer)
+        trainset = datasets.FashionMNIST(root=data_path, train=True, download=True, transform=transformer)
+        testset = datasets.FashionMNIST(root=data_path, train=False, download=True, transform=transformer)
+
+    elif dataset_name == "SVHN":
+        trainset = datasets.SVHN(root=data_path, split='train', download=True, transform=transformer)
+        trainset.train_data = np.transpose(trainset.data, (0, 2, 3, 1))
+        trainset.train_labels = trainset.labels
+
+        testset = datasets.SVHN(root=data_path, split='test', download=True, transform=transformer)
+        testset.test_data = np.transpose(testset.data, (0, 2, 3, 1))
+        testset.test_labels = testset.labels
+
     else:
-        trainset = datasets.CIFAR10(root=data_path, train=True,
-                                    download=True, transform=transformer)
-        testset = datasets.CIFAR10(root=data_path, train=False,
-                                   download=True, transform=transformer)
+        trainset = datasets.CIFAR10(root=data_path, train=True, download=True, transform=transformer)
+        testset = datasets.CIFAR10(root=data_path, train=False, download=True, transform=transformer)
 
     if is_numpy:
         train_images = normalize(trainset.train_data)
@@ -48,7 +55,7 @@ def get_dataset(data_path, dataset_name="CIFAR10", is_numpy=True):
         return trainset, testset
 
 
-def get_subset_data(data, choosen_classes, fraction_of_train_samples, is_numpy=True, batch_size=None):
+def get_subset_data(dataset_name, data, choosen_classes, fraction_of_train_samples, is_numpy=True, batch_size=None):
     if is_numpy:
         num_samples_per_class = [int(np.sum(data["train_labels"] == class_index)
                                      * fraction_of_train_samples) for class_index in choosen_classes]
@@ -65,8 +72,12 @@ def get_subset_data(data, choosen_classes, fraction_of_train_samples, is_numpy=T
 
         return (train_images, train_labels), (test_images, test_labels)
     else:
-        train_labels = data["trainset"].train_labels
-        test_labels = data["testset"].test_labels
+        if dataset_name == "SVHN":
+            train_labels = data["trainset"].labels
+            test_labels = data["testset"].labels
+        else:
+            train_labels = data["trainset"].train_labels
+            test_labels = data["testset"].test_labels
 
         # get all train class indices
         train_indices = list()
@@ -78,10 +89,16 @@ def get_subset_data(data, choosen_classes, fraction_of_train_samples, is_numpy=T
 
         # prepare subset trainset
         trainset_sub = copy.deepcopy(data["trainset"])
-        trainset_sub.train_data = trainset_sub.train_data[train_indices, :, :, :]
-        trainset_sub.train_labels = np.asarray(trainset_sub.train_labels)[train_indices]
-        for i, class_index in enumerate(choosen_classes):
-            trainset_sub.train_labels[trainset_sub.train_labels == class_index] = i
+        if dataset_name == "SVHN":
+            trainset_sub.data = trainset_sub.data[train_indices, :, :, :]
+            trainset_sub.labels = np.asarray(trainset_sub.labels)[train_indices]
+            for i, class_index in enumerate(choosen_classes):
+                trainset_sub.labels[trainset_sub.labels == class_index] = i
+        else:
+            trainset_sub.train_data = trainset_sub.train_data[train_indices, :, :, :]
+            trainset_sub.train_labels = np.asarray(trainset_sub.train_labels)[train_indices]
+            for i, class_index in enumerate(choosen_classes):
+                trainset_sub.train_labels[trainset_sub.train_labels == class_index] = i
 
         # get all test class indices
         test_indices = np.asarray(test_labels) == choosen_classes[0]
@@ -90,10 +107,16 @@ def get_subset_data(data, choosen_classes, fraction_of_train_samples, is_numpy=T
 
         # prepare subset testset
         testset_sub = copy.deepcopy(data["testset"])
-        testset_sub.test_data = testset_sub.test_data[test_indices, :, :, :]
-        testset_sub.test_labels = np.asarray(testset_sub.test_labels)[test_indices]
-        for i, class_index in enumerate(choosen_classes):
-            testset_sub.test_labels[testset_sub.test_labels == class_index] = i
+        if dataset_name == "SVHN":
+            testset_sub.data = testset_sub.data[test_indices, :, :, :]
+            testset_sub.labels = np.asarray(testset_sub.labels)[test_indices]
+            for i, class_index in enumerate(choosen_classes):
+                testset_sub.labels[testset_sub.labels == class_index] = i
+        else:
+            testset_sub.test_data = testset_sub.test_data[test_indices, :, :, :]
+            testset_sub.test_labels = np.asarray(testset_sub.test_labels)[test_indices]
+            for i, class_index in enumerate(choosen_classes):
+                testset_sub.test_labels[testset_sub.test_labels == class_index] = i
 
         train_loader = Data.DataLoader(dataset=trainset_sub, batch_size=batch_size, shuffle=True)
         test_loader = Data.DataLoader(dataset=testset_sub, batch_size=batch_size, shuffle=False)
