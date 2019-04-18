@@ -25,20 +25,24 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-DATASET_NAME = "FashionMNIST"
+DATASET_NAME = "SVHN"
+TITLE = "3 vs 8"
+
 DATA_PATH = "./data"
+RESULTS_PATH = "results/svhn/3vs8/"
 
-RESULTS_PATH = "results/fashion_mnist/0vs3/"
-
-CHOOSEN_CLASSES = [0, 3]
-NUM_CLASSES = len(CHOOSEN_CLASSES)
+CHOOSEN_CLASSES = [3, 8]
 MAX_TRAIN_FRACTION = 1.0
 
-TITLE = "T-shirt/top (0) vs Dress (3)"
+##############################################################################################################
+# CNN Config
+##############################################################################################################
 
 BATCH_SIZE = 128
 EPOCH = 100
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+NUM_CLASSES = len(CHOOSEN_CLASSES)
 CNN_CONFIG = {"batch_size": BATCH_SIZE, "epoch": EPOCH, "device": DEVICE}
 
 print("Are GPUs available? " + str(torch.cuda.is_available()) + "\n")
@@ -132,23 +136,23 @@ if __name__ == '__main__':
 
     script_start = time.time()
 
-    # # Naive RF
-    # run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
-    #
-    # # # Naive RerF
-    # # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
-    #
-    # # DeepConvRF Unshared
-    # run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
-    # run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
-    #
-    # # DeepConvRF Shared
-    # run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
-    # run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
-    #
-    # # # DeepConvRerF Shared
-    # # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
-    # # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
+    # Naive RF
+    run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
+
+    # # Naive RerF
+    # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
+
+    # DeepConvRF Unshared
+    run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
+    run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
+
+    # DeepConvRF Shared
+    run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
+    run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
+
+    # # DeepConvRerF Shared
+    # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
+    # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
 
     # CNN
     cnn_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
