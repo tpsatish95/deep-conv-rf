@@ -28,12 +28,12 @@ warnings.filterwarnings("ignore")
 
 # ####### CIFAR10 ########
 # DATASET_NAME = "CIFAR10"
-# TITLE = "Bird (2) vs Deer (4)"
+# TITLE = "Automobile (1) vs Truck (9)"
 #
 # DATA_PATH = "./data"
-# RESULTS_PATH = "results/cifar10/100_percent_data/2vs4/"
+# RESULTS_PATH = "results/cifar10/100_percent_data/1vs9/"
 #
-# CHOOSEN_CLASSES = [2, 4]
+# CHOOSEN_CLASSES = [1, 9]
 # MAX_TRAIN_FRACTION = 1.0
 
 ####### SVHN ########
