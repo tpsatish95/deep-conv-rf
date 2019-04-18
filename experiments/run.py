@@ -25,6 +25,17 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
+# ####### CIFAR10 ########
+# DATASET_NAME = "CIFAR10"
+# TITLE = "Bird (2) vs Deer (4)"
+#
+# DATA_PATH = "./data"
+# RESULTS_PATH = "results/cifar10/100_percent_data/2vs4/"
+#
+# CHOOSEN_CLASSES = [2, 4]
+# MAX_TRAIN_FRACTION = 1.0
+
+####### SVHN ########
 DATASET_NAME = "SVHN"
 TITLE = "3 vs 8"
 
@@ -33,6 +44,16 @@ RESULTS_PATH = "results/svhn/3vs8/"
 
 CHOOSEN_CLASSES = [3, 8]
 MAX_TRAIN_FRACTION = 1.0
+
+# ####### FashionMNIST ########
+# DATASET_NAME = "FashionMNIST"
+# TITLE = "T-shirt/top (0) vs Dress (3)"
+#
+# DATA_PATH = "./data"
+# RESULTS_PATH = "results/fashion_mnist/0vs3/"
+#
+# CHOOSEN_CLASSES = [0, 3]
+# MAX_TRAIN_FRACTION = 1.0
 
 ##############################################################################################################
 # CNN Config

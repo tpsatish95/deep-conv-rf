@@ -1,3 +1,5 @@
+import os
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,7 +26,10 @@ x_lables = run.number_of_train_samples_space
 
 def load_results(file_name):
     file_name = results_path + file_name + ".npy"
-    return list(zip(*np.load(file_name)))
+    if os.path.exists(file_name):
+        return list(zip(*np.load(file_name)))
+    else:
+        return list([[np.nan]*len(x_lables), [np.nan]*len(x_lables)])
 
 
 # Naive RF
