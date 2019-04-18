@@ -17,6 +17,12 @@ def normalize(dataset_name, x):
         mean = np.array([0.5, 0.5, 0.5])
         std = np.array([0.5, 0.5, 0.5])
 
+    if not isinstance(x, np.ndarray):
+        x = x.numpy()
+
+    if len(x.shape) != 4:
+        x = x[..., np.newaxis]
+
     return (x - mean) / std
 
 

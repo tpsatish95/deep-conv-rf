@@ -11,8 +11,8 @@ plt.style.use('seaborn')
 ###############################################################################
 # Config
 ###############################################################################
-plot_title = "3 vs 8"
 
+plot_title = run.TITLE
 base_path = run.RESULTS_PATH
 results_path = run.RESULTS_PATH
 x_lables = run.number_of_train_samples_space

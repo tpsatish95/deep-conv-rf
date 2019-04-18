@@ -25,14 +25,16 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-DATASET_NAME = "SVHN"
+DATASET_NAME = "FashionMNIST"
 DATA_PATH = "./data"
 
-RESULTS_PATH = "results/svhn/3vs8/"
+RESULTS_PATH = "results/fashion_mnist/0vs3/"
 
-CHOOSEN_CLASSES = [3, 8]
+CHOOSEN_CLASSES = [0, 3]
 NUM_CLASSES = len(CHOOSEN_CLASSES)
 MAX_TRAIN_FRACTION = 1.0
+
+TITLE = "T-shirt/top (0) vs Dress (3)"
 
 BATCH_SIZE = 128
 EPOCH = 100
