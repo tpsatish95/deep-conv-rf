@@ -16,10 +16,16 @@ def get_dataset(data_path, dataset_name="CIFAR10", is_numpy=True):
     if is_numpy:
         transformer = None
     else:
-        transformer = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ])
+        if dataset_name == "CIFAR10":
+            transformer = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+            ])
+        else:
+            transformer = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            ])
 
     if dataset_name == "MNIST":
         trainset = datasets.MNIST(root=data_path, train=True, download=True, transform=transformer)
