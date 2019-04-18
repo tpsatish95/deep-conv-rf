@@ -4,10 +4,16 @@ import torch.nn.functional as F
 
 class SimpleCNN1layer(nn.Module):
 
-    def __init__(self, num_filters, num_classes):
+    def __init__(self, num_filters, num_classes, img_shape=(32, 32, 3)):
         super(SimpleCNN1layer, self).__init__()
-        self.conv1 = nn.Conv2d(3, num_filters, kernel_size=10, stride=2)
-        self.fc1 = nn.Linear(144*num_filters, num_classes)
+        img_dim, _, num_channels = img_shape
+
+        self.conv1 = nn.Conv2d(num_channels, num_filters, kernel_size=10, stride=2)
+        self.fc1 = nn.Linear((self.compute_fc_dim(img_dim)**2)*num_filters, num_classes)
+
+    def compute_fc_dim(self, img_dim):
+        c1 = int((img_dim - self.conv1.kernel_size[0]) / self.conv1.stride[0]) + 1
+        return c1
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
@@ -18,11 +24,18 @@ class SimpleCNN1layer(nn.Module):
 
 class SimpleCNN2Layers(nn.Module):
 
-    def __init__(self, num_filters, num_classes):
+    def __init__(self, num_filters, num_classes, img_shape=(32, 32, 3)):
         super(SimpleCNN2Layers, self).__init__()
-        self.conv1 = nn.Conv2d(3, num_filters, kernel_size=10, stride=2)
+        img_dim, _, num_channels = img_shape
+
+        self.conv1 = nn.Conv2d(num_channels, num_filters, kernel_size=10, stride=2)
         self.conv2 = nn.Conv2d(num_filters, num_filters, kernel_size=7, stride=1)
-        self.fc1 = nn.Linear(36*num_filters, num_classes)
+        self.fc1 = nn.Linear((self.compute_fc_dim(img_dim)**2)*num_filters, num_classes)
+
+    def compute_fc_dim(self, img_dim):
+        c1 = int((img_dim - self.conv1.kernel_size[0]) / self.conv1.stride[0]) + 1
+        c2 = int((c1 - self.conv2.kernel_size[0]) / self.conv2.stride[0]) + 1
+        return c2
 
     def forward(self, x):
         x = F.relu(self.conv1(x))

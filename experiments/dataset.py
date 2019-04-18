@@ -115,30 +115,32 @@ def get_subset_data(dataset_name, data, choosen_classes, fraction_of_train_sampl
         # prepare subset trainset
         trainset_sub = copy.deepcopy(data["trainset"])
         if dataset_name == "SVHN":
-            trainset_sub.data = trainset_sub.data[train_indices, :, :, :]
+            trainset_sub.data = trainset_sub.data[train_indices, ...]
             trainset_sub.labels = np.asarray(trainset_sub.labels)[train_indices]
             for i, class_index in enumerate(choosen_classes):
                 trainset_sub.labels[trainset_sub.labels == class_index] = i
         else:
-            trainset_sub.train_data = trainset_sub.train_data[train_indices, :, :, :]
+            trainset_sub.train_data = trainset_sub.train_data[train_indices, ...]
             trainset_sub.train_labels = np.asarray(trainset_sub.train_labels)[train_indices]
             for i, class_index in enumerate(choosen_classes):
                 trainset_sub.train_labels[trainset_sub.train_labels == class_index] = i
 
         # get all test class indices
-        test_indices = np.asarray(test_labels) == choosen_classes[0]
-        for class_index in choosen_classes[1:]:
-            test_indices += np.asarray(test_labels) == class_index
+        test_indices = list()
+        for class_index in choosen_classes:
+            indx = np.argwhere(np.asarray(test_labels) == class_index).flatten()
+            test_indices.append(indx)
+        test_indices = np.concatenate(test_indices)
 
         # prepare subset testset
         testset_sub = copy.deepcopy(data["testset"])
         if dataset_name == "SVHN":
-            testset_sub.data = testset_sub.data[test_indices, :, :, :]
+            testset_sub.data = testset_sub.data[test_indices, ...]
             testset_sub.labels = np.asarray(testset_sub.labels)[test_indices]
             for i, class_index in enumerate(choosen_classes):
                 testset_sub.labels[testset_sub.labels == class_index] = i
         else:
-            testset_sub.test_data = testset_sub.test_data[test_indices, :, :, :]
+            testset_sub.test_data = testset_sub.test_data[test_indices, ...]
             testset_sub.test_labels = np.asarray(testset_sub.test_labels)[test_indices]
             for i, class_index in enumerate(choosen_classes):
                 testset_sub.test_labels[testset_sub.test_labels == class_index] = i
