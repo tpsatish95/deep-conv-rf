@@ -6,9 +6,17 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
 
-def normalize(x):
-    mean = np.array([0.4914, 0.4822, 0.4465])
-    std = np.array([0.2023, 0.1994, 0.2010])
+def normalize(dataset_name, x):
+    if dataset_name == "CIFAR10":
+        mean = np.array([0.4914, 0.4822, 0.4465])
+        std = np.array([0.2023, 0.1994, 0.2010])
+    elif dataset_name == "MNIST" or dataset_name == "FashionMNIST":
+        mean = np.array([0.1307, ])
+        std = np.array([0.3081, ])
+    else:
+        mean = np.array([0.5, 0.5, 0.5])
+        std = np.array([0.5, 0.5, 0.5])
+
     return (x - mean) / std
 
 
@@ -20,6 +28,11 @@ def get_dataset(data_path, dataset_name="CIFAR10", is_numpy=True):
             transformer = transforms.Compose([
                 transforms.ToTensor(),
                 transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+            ])
+        elif dataset_name == "MNIST" or dataset_name == "FashionMNIST":
+            transformer = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize((0.1307,), (0.3081,)),
             ])
         else:
             transformer = transforms.Compose([
@@ -49,8 +62,8 @@ def get_dataset(data_path, dataset_name="CIFAR10", is_numpy=True):
         testset = datasets.CIFAR10(root=data_path, train=False, download=True, transform=transformer)
 
     if is_numpy:
-        train_images = normalize(trainset.train_data)
-        test_images = normalize(testset.test_data)
+        train_images = normalize(dataset_name, trainset.train_data)
+        test_images = normalize(dataset_name, testset.test_data)
 
         train_labels = np.array(trainset.train_labels)
         test_labels = np.array(testset.test_labels)
