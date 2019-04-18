@@ -100,7 +100,7 @@ class ResNet(nn.Module):
         return out
 
 
-def ResNet18(num_classes, img_shape):
+def ResNet18(num_classes, img_shape=(32, 32, 3)):
     return ResNet(BasicBlock, [2, 2, 2, 2], num_classes, img_shape)
 
 
