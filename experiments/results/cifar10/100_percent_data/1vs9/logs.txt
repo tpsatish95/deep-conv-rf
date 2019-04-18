@@ -548,36 +548,36 @@ acc vs n_samples: CNN (ResNet18)
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.01
 # of Train Samples: 100
-Accuracy: 61.025
-Experiment Runtime: 103.17429995536804
+Accuracy: 64.72
+Experiment Runtime: 100.05047974586486
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.016681005372000592
 # of Train Samples: 166
-Accuracy: 57.2
-Experiment Runtime: 106.336660861969
+Accuracy: 62.03000000000001
+Experiment Runtime: 106.63307690620422
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.027825594022071243
 # of Train Samples: 278
-Accuracy: 60.275000000000006
-Experiment Runtime: 120.30229210853577
+Accuracy: 62.410000000000004
+Experiment Runtime: 118.63256902694702
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.046415888336127774
 # of Train Samples: 464
-Accuracy: 62.7
-Experiment Runtime: 141.68612110614777
+Accuracy: 67.31
+Experiment Runtime: 135.95813069343566
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.0774263682681127
 # of Train Samples: 774
-Accuracy: 72.32499999999999
-Experiment Runtime: 180.850830078125
+Accuracy: 72.27000000000001
+Experiment Runtime: 170.29145317077638
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
@@ -616,5 +616,4 @@ Experiment Runtime: 1309.5857746601105
 
 
 ##################################################################
-Total Runtime: 0.18799805641174316
-
+Total Runtime: 0.16158103942871094
