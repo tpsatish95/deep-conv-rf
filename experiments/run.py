@@ -1,4 +1,5 @@
 import copy
+import logging
 import os.path
 import time
 import warnings
@@ -66,7 +67,11 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 NUM_CLASSES = len(CHOOSEN_CLASSES)
 CNN_CONFIG = {"batch_size": BATCH_SIZE, "epoch": EPOCH, "device": DEVICE}
 
-print("Are GPUs available? " + str(torch.cuda.is_available()) + "\n")
+logging.basicConfig(level=logging.INFO,
+                    format="%(message)s",
+                    handlers=[logging.FileHandler(RESULTS_PATH + "logs.txt", mode='w'), logging.StreamHandler()])
+
+logging.info("Are GPUs available? " + str(torch.cuda.is_available()) + "\n")
 
 ##############################################################################################################
 # Data
@@ -92,25 +97,31 @@ IMG_SHAPE = numpy_data["train_images"].shape[1:]
 ##############################################################################################################
 
 
-def print_old_results(file_name):
+def print_items(fraction_of_train_samples, number_of_train_samples, best_accuracy, time_taken, cnn_model, cnn_config):
+    if cnn_model:
+        logging.info("CNN Config: " + str(cnn_config))
+    logging.info("Train Fraction: " + str(fraction_of_train_samples))
+    logging.info("# of Train Samples: " + str(number_of_train_samples))
+    logging.info("Accuracy: " + str(best_accuracy))
+    logging.info("Experiment Runtime: " + str(time_taken) + "\n")
+
+
+def print_old_results(file_name, cnn_model, cnn_config):
     global fraction_of_train_samples_space, number_of_train_samples_space
 
     accuracy_scores = np.load(file_name)
 
     for fraction_of_train_samples, number_of_train_samples, (best_accuracy, time_taken) in zip(fraction_of_train_samples_space, number_of_train_samples_space, accuracy_scores):
-        print("Train Fraction:", str(fraction_of_train_samples))
-        print("# of Train Samples:", str(number_of_train_samples))
-        print("Accuracy:", str(best_accuracy))
-        print("Experiment Runtime: " + str(time_taken), "\n")
-        print()
+        print_items(fraction_of_train_samples, number_of_train_samples, best_accuracy, time_taken, cnn_model, cnn_config)
+        logging.info("")
     return accuracy_scores
 
 
 def run_experiment(experiment, results_file_name, experiment_name, repeats=2, cnn_model=None, cnn_config={}):
     global fraction_of_train_samples_space, numpy_data, pytorch_data
 
-    print("##################################################################")
-    print("acc vs n_samples: " + experiment_name + "\n")
+    logging.info("##################################################################")
+    logging.info("acc vs n_samples: " + experiment_name + "\n")
 
     acc_vs_n = list()
     file_name = RESULTS_PATH + results_file_name + ".npy"
@@ -125,7 +136,6 @@ def run_experiment(experiment, results_file_name, experiment_name, repeats=2, cn
                 end = time.time()
 
             else:
-                print("CNN Config:", str(cnn_config))
                 start = time.time()
                 best_accuracy = np.mean(
                     [experiment(DATASET_NAME, cnn_model, pytorch_data, CHOOSEN_CLASSES, fraction_of_train_samples, cnn_config) for _ in range(repeats)])
@@ -134,17 +144,14 @@ def run_experiment(experiment, results_file_name, experiment_name, repeats=2, cn
             time_taken = (end - start)/float(repeats)
             acc_vs_n.append((best_accuracy, time_taken))
 
-            print("Train Fraction:", str(fraction_of_train_samples))
-            print("# of Train Samples:", str(number_of_train_samples))
-            print("Accuracy:", str(best_accuracy))
-            print("Experiment Runtime: " + str(time_taken), "\n")
+            print_items(fraction_of_train_samples, number_of_train_samples, best_accuracy, time_taken, cnn_model, cnn_config)
 
         np.save(file_name, acc_vs_n)
 
     else:
-        acc_vs_n = print_old_results(file_name)
+        acc_vs_n = print_old_results(file_name, cnn_model, cnn_config)
 
-    print("##################################################################")
+    logging.info("##################################################################")
 
     return acc_vs_n
 
@@ -192,4 +199,4 @@ if __name__ == '__main__':
     run_experiment(run_cnn, "cnn_best_acc_vs_n", "CNN (ResNet18)", cnn_model=ResNet18(NUM_CLASSES, IMG_SHAPE), cnn_config=CNN_CONFIG, repeats=3)
 
     script_end = time.time()
-    print("Total Runtime: " + str(script_end - script_start), "\n")
+    logging.info("Total Runtime: " + str(script_end - script_start) + "\n")
