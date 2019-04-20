@@ -26,25 +26,25 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-####### CIFAR10 ########
-DATASET_NAME = "CIFAR10"
-TITLE = "Dog (5) vs Horse(7)"
-
-DATA_PATH = "./data"
-RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
-
-CHOOSEN_CLASSES = [5, 7]
-MAX_TRAIN_FRACTION = 1.0
-
-# ####### SVHN ########
-# DATASET_NAME = "SVHN"
-# TITLE = "1 vs 7"
+# ####### CIFAR10 ########
+# DATASET_NAME = "CIFAR10"
+# TITLE = "Dog (5) vs Horse(7)"
 #
 # DATA_PATH = "./data"
-# RESULTS_PATH = "results/svhn/1vs7/"
+# RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
 #
-# CHOOSEN_CLASSES = [1, 7]
+# CHOOSEN_CLASSES = [5, 7]
 # MAX_TRAIN_FRACTION = 1.0
+
+####### SVHN ########
+DATASET_NAME = "SVHN"
+TITLE = "5 vs 6"
+
+DATA_PATH = "./data"
+RESULTS_PATH = "results/svhn/5vs6/"
+
+CHOOSEN_CLASSES = [5, 6]
+MAX_TRAIN_FRACTION = 1.0
 
 # ####### FashionMNIST ########
 # DATASET_NAME = "FashionMNIST"
