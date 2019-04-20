@@ -38,12 +38,12 @@ warnings.filterwarnings("ignore")
 
 ####### SVHN ########
 DATASET_NAME = "SVHN"
-TITLE = "5 vs 6"
+TITLE = "1 vs 7"
 
 DATA_PATH = "./data"
-RESULTS_PATH = "results/svhn/5vs6/"
+RESULTS_PATH = "results/svhn/1vs7/"
 
-CHOOSEN_CLASSES = [5, 6]
+CHOOSEN_CLASSES = [1, 7]
 MAX_TRAIN_FRACTION = 1.0
 
 # ####### FashionMNIST ########
