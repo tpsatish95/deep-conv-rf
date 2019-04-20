@@ -1,2 +1,0 @@
-Are GPUs available? False
-
