@@ -80,9 +80,9 @@ class DeepConvRFShared(object):
         return kernel_predictions
 
 
-def run_one_layer_deep_conv_rf_shared(dataset_name, data, choosen_classes, fraction_of_train_samples):
+def run_one_layer_deep_conv_rf_shared(dataset_name, data, choosen_classes, sub_train_indices):
     (train_images, train_labels), (test_images, test_labels) = get_subset_data(
-        dataset_name, data, choosen_classes, fraction_of_train_samples)
+        dataset_name, data, choosen_classes, sub_train_indices)
 
     # Train
     # ConvRF (layer 1)
@@ -100,9 +100,9 @@ def run_one_layer_deep_conv_rf_shared(dataset_name, data, choosen_classes, fract
     return accuracy_score(test_labels, test_preds)
 
 
-def run_two_layer_deep_conv_rf_shared(dataset_name, data, choosen_classes, fraction_of_train_samples):
+def run_two_layer_deep_conv_rf_shared(dataset_name, data, choosen_classes, sub_train_indices):
     (train_images, train_labels), (test_images, test_labels) = get_subset_data(
-        dataset_name, data, choosen_classes, fraction_of_train_samples)
+        dataset_name, data, choosen_classes, sub_train_indices)
 
     # Train
     # ConvRF (layer 1)

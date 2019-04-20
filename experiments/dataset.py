@@ -23,7 +23,7 @@ def normalize(dataset_name, x):
     if len(x.shape) != 4:
         x = x[..., np.newaxis]
 
-    return (x - mean) / std
+    return (x / 255.0 - mean) / std
 
 
 def get_dataset(data_path, dataset_name="CIFAR10", is_numpy=True):
@@ -80,15 +80,12 @@ def get_dataset(data_path, dataset_name="CIFAR10", is_numpy=True):
         return trainset, testset
 
 
-def get_subset_data(dataset_name, data, choosen_classes, fraction_of_train_samples, is_numpy=True, batch_size=None):
+def get_subset_data(dataset_name, data, choosen_classes, sub_train_indices, is_numpy=True, batch_size=None):
     if is_numpy:
-        num_samples_per_class = [int(np.sum(data["train_labels"] == class_index)
-                                     * fraction_of_train_samples) for class_index in choosen_classes]
-        train_images = [data["train_images"][data["train_labels"] == class_index]
-                        [:num_samples_per_class[i]] for i, class_index in enumerate(choosen_classes)]
-        train_images = np.concatenate(train_images)
-        train_labels = np.concatenate([np.repeat(i, num_samples)
-                                       for i, num_samples in enumerate(num_samples_per_class)])
+        train_images = data["train_images"][sub_train_indices]
+        train_labels = data["train_labels"][sub_train_indices]
+        for i, class_index in enumerate(choosen_classes):
+            train_labels[train_labels == class_index] = i
 
         test_images = np.concatenate(
             [data["test_images"][data["test_labels"] == class_index] for class_index in choosen_classes])
@@ -105,12 +102,7 @@ def get_subset_data(dataset_name, data, choosen_classes, fraction_of_train_sampl
             test_labels = data["testset"].test_labels
 
         # get all train class indices
-        train_indices = list()
-        for class_index in choosen_classes:
-            indx = np.argwhere(np.asarray(train_labels) == class_index).flatten()
-            indx = indx[:int(len(indx) * fraction_of_train_samples)]
-            train_indices.append(indx)
-        train_indices = np.concatenate(train_indices)
+        train_indices = sub_train_indices
 
         # prepare subset trainset
         trainset_sub = copy.deepcopy(data["trainset"])

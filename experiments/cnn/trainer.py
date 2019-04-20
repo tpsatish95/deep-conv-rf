@@ -66,16 +66,16 @@ def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, conf
         acc_test[epoch] = 100 * float(correct) / float(len(test_loader.dataset))
         time_test[epoch] = time.perf_counter()-t0
 
-    return acc_test[-1]
+    return acc_test[-1] / 100.0
 
 
-def run_cnn(dataset_name, model, data, choosen_classes, fraction_of_train_samples, config):
+def run_cnn(dataset_name, model, data, choosen_classes, sub_train_indices, config):
     if "lr" in config:
         learning_rate = config["lr"]
     if "weight_decay" in config:
         weight_decay = config["weight_decay"]
 
-    train_loader, test_loader = get_subset_data(dataset_name, data, choosen_classes, fraction_of_train_samples, is_numpy=False, batch_size=config["batch_size"])
+    train_loader, test_loader = get_subset_data(dataset_name, data, choosen_classes, sub_train_indices, is_numpy=False, batch_size=config["batch_size"])
 
     if "lr" in config and "weight_decay" in config:
         optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=.9, weight_decay=weight_decay)

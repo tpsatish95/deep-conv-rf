@@ -26,25 +26,25 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-# ####### CIFAR10 ########
-# DATASET_NAME = "CIFAR10"
-# TITLE = "Dog (5) vs Horse(7)"
-#
-# DATA_PATH = "./data"
-# RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
-#
-# CHOOSEN_CLASSES = [5, 7]
-# MAX_TRAIN_FRACTION = 1.0
-
-####### SVHN ########
-DATASET_NAME = "SVHN"
-TITLE = "0 vs 9"
+####### CIFAR10 ########
+DATASET_NAME = "CIFAR10"
+TITLE = "Dog (5) vs Horse(7)"
 
 DATA_PATH = "./data"
-RESULTS_PATH = "results/svhn/0vs9/"
+RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
 
-CHOOSEN_CLASSES = [0, 9]
+CHOOSEN_CLASSES = [5, 7]
 MAX_TRAIN_FRACTION = 1.0
+
+# ####### SVHN ########
+# DATASET_NAME = "SVHN"
+# TITLE = "0 vs 9"
+#
+# DATA_PATH = "./data"
+# RESULTS_PATH = "results/svhn/0vs9/"
+#
+# CHOOSEN_CLASSES = [0, 9]
+# MAX_TRAIN_FRACTION = 1.0
 
 # ####### FashionMNIST ########
 # DATASET_NAME = "FashionMNIST"
@@ -55,6 +55,9 @@ MAX_TRAIN_FRACTION = 1.0
 #
 # CHOOSEN_CLASSES = [0, 3]
 # MAX_TRAIN_FRACTION = 1.0
+
+
+N_TRIALS = 3
 
 ##############################################################################################################
 # CNN Config
@@ -67,11 +70,12 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 NUM_CLASSES = len(CHOOSEN_CLASSES)
 CNN_CONFIG = {"batch_size": BATCH_SIZE, "epoch": EPOCH, "device": DEVICE}
 
-logging.basicConfig(level=logging.INFO,
-                    format="%(message)s",
-                    handlers=[logging.FileHandler(RESULTS_PATH + "logs.txt", mode='w'), logging.StreamHandler()])
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO,
+                        format="%(message)s",
+                        handlers=[logging.FileHandler(RESULTS_PATH + "logs.txt", mode='w'), logging.StreamHandler()])
 
-logging.info("Are GPUs available? " + str(torch.cuda.is_available()) + "\n")
+    logging.info("Are GPUs available? " + str(torch.cuda.is_available()) + "\n")
 
 ##############################################################################################################
 # Data
@@ -82,13 +86,28 @@ numpy_data = dict()
     get_dataset(DATA_PATH, DATASET_NAME, is_numpy=True)
 
 pytorch_data = dict()
-pytorch_data["trainset"], pytorch_data["testset"] = get_dataset(DATA_PATH, DATASET_NAME, is_numpy=False)
+pytorch_data["trainset"], pytorch_data["testset"] = get_dataset(
+    DATA_PATH, DATASET_NAME, is_numpy=False)
 
 fraction_of_train_samples_space = np.geomspace(0.01, MAX_TRAIN_FRACTION, num=10)
 
-total_train_samples = sum([len(np.argwhere(numpy_data["train_labels"] == class_index))
-                           for class_index in CHOOSEN_CLASSES])
-number_of_train_samples_space = [int(i) for i in list(fraction_of_train_samples_space * total_train_samples)]
+class_wise_train_indices = [np.argwhere(
+    numpy_data["train_labels"] == class_index).flatten() for class_index in CHOOSEN_CLASSES]
+
+total_train_samples = sum([len(ci) for ci in class_wise_train_indices])
+
+number_of_train_samples_space = [int(i) for i in list(
+    fraction_of_train_samples_space * total_train_samples)]
+
+train_indices_all_trials = list()
+for n in range(N_TRIALS):
+    train_indices = list()
+    for frac in fraction_of_train_samples_space:
+        sub_sample = np.array([np.random.choice(class_indices, int(
+            len(class_indices)*frac), replace=False) for class_indices in class_wise_train_indices]).flatten()
+        train_indices.append(sub_sample)
+    train_indices_all_trials.append(train_indices)
+
 
 IMG_SHAPE = numpy_data["train_images"].shape[1:]
 
@@ -109,44 +128,46 @@ def print_items(fraction_of_train_samples, number_of_train_samples, best_accurac
 def print_old_results(file_name, cnn_model, cnn_config):
     global fraction_of_train_samples_space, number_of_train_samples_space
 
-    accuracy_scores = np.load(file_name)
+    accuracy_scores = [[np.mean(list(zip(*i))[0]), np.mean(list(zip(*i))[1])] for i in list(zip(*np.load(file_name)))]
 
     for fraction_of_train_samples, number_of_train_samples, (best_accuracy, time_taken) in zip(fraction_of_train_samples_space, number_of_train_samples_space, accuracy_scores):
-        print_items(fraction_of_train_samples, number_of_train_samples, best_accuracy, time_taken, cnn_model, cnn_config)
+        print_items(fraction_of_train_samples, number_of_train_samples,
+                    best_accuracy, time_taken, cnn_model, cnn_config)
         logging.info("")
     return accuracy_scores
 
 
-def run_experiment(experiment, results_file_name, experiment_name, repeats=2, cnn_model=None, cnn_config={}):
-    global fraction_of_train_samples_space, numpy_data, pytorch_data
+def run_experiment(experiment, results_file_name, experiment_name, cnn_model=None, cnn_config={}):
+    global fraction_of_train_samples_space, numpy_data, pytorch_data, train_indices_all_trials
 
     logging.info("##################################################################")
     logging.info("acc vs n_samples: " + experiment_name + "\n")
 
-    acc_vs_n = list()
+    acc_vs_n_all_trials = list()
     file_name = RESULTS_PATH + results_file_name + ".npy"
 
     if not os.path.exists(file_name):
-        for fraction_of_train_samples, number_of_train_samples in zip(fraction_of_train_samples_space, number_of_train_samples_space):
+        for trial_number, train_indices in zip(range(N_TRIALS), train_indices_all_trials):
+            logging.info("Trial " + str(trial_number+1) + "\n")
+            acc_vs_n = list()
+            for fraction_of_train_samples, sub_train_indices in zip(fraction_of_train_samples_space, train_indices):
+                if not cnn_model:
+                    start = time.time()
+                    accuracy = experiment(DATASET_NAME, numpy_data, CHOOSEN_CLASSES, sub_train_indices)
+                    end = time.time()
+                else:
+                    start = time.time()
+                    accuracy = experiment(DATASET_NAME, cnn_model, pytorch_data, CHOOSEN_CLASSES, sub_train_indices, cnn_config)
+                    end = time.time()
+                time_taken = (end - start)
 
-            if not cnn_model:
-                start = time.time()
-                best_accuracy = np.mean(
-                    [experiment(DATASET_NAME, numpy_data, CHOOSEN_CLASSES, fraction_of_train_samples) for _ in range(repeats)])
-                end = time.time()
+                print_items(fraction_of_train_samples, len(sub_train_indices), accuracy, time_taken, cnn_model, cnn_config)
 
-            else:
-                start = time.time()
-                best_accuracy = np.mean(
-                    [experiment(DATASET_NAME, cnn_model, pytorch_data, CHOOSEN_CLASSES, fraction_of_train_samples, cnn_config) for _ in range(repeats)])
-                end = time.time()
+                acc_vs_n.append((accuracy, time_taken))
 
-            time_taken = (end - start)/float(repeats)
-            acc_vs_n.append((best_accuracy, time_taken))
+            acc_vs_n_all_trials.append(acc_vs_n)
 
-            print_items(fraction_of_train_samples, number_of_train_samples, best_accuracy, time_taken, cnn_model, cnn_config)
-
-        np.save(file_name, acc_vs_n)
+        np.save(file_name, acc_vs_n_all_trials)
 
     else:
         acc_vs_n = print_old_results(file_name, cnn_model, cnn_config)
@@ -185,18 +206,18 @@ if __name__ == '__main__':
     # CNN
     cnn_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
     cnn_acc_vs_n_config.update({'model': 0, 'lr': 0.001, 'weight_decay': 1e-05})
-    run_experiment(run_cnn, "cnn_acc_vs_n", "CNN (1-layer, 1-filter)", cnn_model=SimpleCNN1layer(1, NUM_CLASSES, IMG_SHAPE), cnn_config=cnn_acc_vs_n_config, repeats=3)
+    run_experiment(run_cnn, "cnn_acc_vs_n", "CNN (1-layer, 1-filter)", cnn_model=SimpleCNN1layer(1,NUM_CLASSES, IMG_SHAPE), cnn_config=cnn_acc_vs_n_config)
 
     cnn32_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
     cnn32_acc_vs_n_config.update({'model': 1, 'lr': 0.001, 'weight_decay': 0.1})
-    run_experiment(run_cnn, "cnn32_acc_vs_n", "CNN (1-layer, 32-filter)", cnn_model=SimpleCNN1layer(32, NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_acc_vs_n_config, repeats=3)
+    run_experiment(run_cnn, "cnn32_acc_vs_n", "CNN (1-layer, 32-filter)", cnn_model=SimpleCNN1layer(32,NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_acc_vs_n_config)
 
     cnn32_two_layer_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
     cnn32_two_layer_acc_vs_n_config.update({'model': 2, 'lr': 0.001, 'weight_decay': 0.1})
-    run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n", "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_two_layer_acc_vs_n_config, repeats=3)
+    run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n", "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_two_layer_acc_vs_n_config)
 
     # Best CNN
-    run_experiment(run_cnn, "cnn_best_acc_vs_n", "CNN (ResNet18)", cnn_model=ResNet18(NUM_CLASSES, IMG_SHAPE), cnn_config=CNN_CONFIG, repeats=3)
+    run_experiment(run_cnn, "cnn_best_acc_vs_n", "CNN (ResNet18)", cnn_model=ResNet18(NUM_CLASSES, IMG_SHAPE), cnn_config=CNN_CONFIG)
 
     script_end = time.time()
     logging.info("Total Runtime: " + str(script_end - script_start) + "\n")

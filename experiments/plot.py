@@ -27,7 +27,7 @@ x_lables = run.number_of_train_samples_space
 def load_results(file_name):
     file_name = results_path + file_name + ".npy"
     if os.path.exists(file_name):
-        return list(zip(*np.load(file_name)))
+        return list(zip(*[[np.mean(list(zip(*i))[0]), np.mean(list(zip(*i))[1])] for i in list(zip(*np.load(file_name)))]))
     else:
         return list([[np.nan]*len(x_lables), [np.nan]*len(x_lables)])
 
@@ -104,14 +104,14 @@ ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n, marker="",
 # ax.plot(x_lables, deep_conv_rf_pyrerf_two_layer_acc_vs_n_times, marker="",
 #         color='black', label="DeepConvRF (2-layer, shared, pyrerf)")
 
-ax.plot(x_lables, np.array(cnn_acc_vs_n)/100.0, marker="", color='orange',
+ax.plot(x_lables, np.array(cnn_acc_vs_n), marker="", color='orange',
         linestyle=":", label="CNN (1-layer, 1-filter)")
-ax.plot(x_lables, np.array(cnn32_acc_vs_n)/100.0, marker="", color='orange',
+ax.plot(x_lables, np.array(cnn32_acc_vs_n), marker="", color='orange',
         linestyle="--", label="CNN (1-layer, 32-filters)")
-ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n)/100.0, marker="",
+ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n), marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-ax.plot(x_lables, np.array(cnn_best_acc_vs_n)/100.0,
+ax.plot(x_lables, np.array(cnn_best_acc_vs_n),
         marker="", color='blue', label="CNN (ResNet18)")
 
 

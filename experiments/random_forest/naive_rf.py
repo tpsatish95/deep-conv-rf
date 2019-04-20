@@ -4,9 +4,9 @@ from sklearn.metrics import accuracy_score
 from dataset import get_subset_data
 
 
-def run_naive_rf(dataset_name, data, choosen_classes, fraction_of_train_samples):
+def run_naive_rf(dataset_name, data, choosen_classes, sub_train_indices):
     (train_images, train_labels), (test_images, test_labels) = get_subset_data(
-        dataset_name, data, choosen_classes, fraction_of_train_samples)
+        dataset_name, data, choosen_classes, sub_train_indices)
 
     # Train
     clf = RandomForestClassifier(n_estimators=100, n_jobs=-1)
