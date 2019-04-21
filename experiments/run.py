@@ -26,25 +26,25 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-####### CIFAR10 ########
-DATASET_NAME = "CIFAR10"
-TITLE = "Dog (5) vs Horse(7)"
-
-DATA_PATH = "./data"
-RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
-
-CHOOSEN_CLASSES = [5, 7]
-MAX_TRAIN_FRACTION = 1.0
-
-# ####### SVHN ########
-# DATASET_NAME = "SVHN"
-# TITLE = "0 vs 9"
+# ####### CIFAR10 ########
+# DATASET_NAME = "CIFAR10"
+# TITLE = "Dog (5) vs Horse(7)"
 #
 # DATA_PATH = "./data"
-# RESULTS_PATH = "results/svhn/0vs9/"
+# RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
 #
-# CHOOSEN_CLASSES = [0, 9]
+# CHOOSEN_CLASSES = [5, 7]
 # MAX_TRAIN_FRACTION = 1.0
+
+####### SVHN ########
+DATASET_NAME = "SVHN"
+TITLE = "3 vs 8"
+
+DATA_PATH = "./data"
+RESULTS_PATH = "results/svhn/3vs8/"
+
+CHOOSEN_CLASSES = [3, 8]
+MAX_TRAIN_FRACTION = 1.0
 
 # ####### FashionMNIST ########
 # DATASET_NAME = "FashionMNIST"
@@ -103,7 +103,7 @@ train_indices_all_trials = list()
 for n in range(N_TRIALS):
     train_indices = list()
     for frac in fraction_of_train_samples_space:
-        sub_sample = np.array([np.random.choice(class_indices, int(
+        sub_sample = np.concatenate([np.random.choice(class_indices, int(
             len(class_indices)*frac), replace=False) for class_indices in class_wise_train_indices]).flatten()
         train_indices.append(sub_sample)
     train_indices_all_trials.append(train_indices)
@@ -185,19 +185,19 @@ if __name__ == '__main__':
 
     script_start = time.time()
 
-    # Naive RF
-    run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
-
-    # # Naive RerF
-    # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
-
-    # DeepConvRF Unshared
-    run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
-    run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
-
-    # DeepConvRF Shared
-    run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
-    run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
+    # # Naive RF
+    # run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
+    #
+    # # # Naive RerF
+    # # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
+    #
+    # # DeepConvRF Unshared
+    # run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
+    # run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
+    #
+    # # DeepConvRF Shared
+    # run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
+    # run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
 
     # # DeepConvRerF Shared
     # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")

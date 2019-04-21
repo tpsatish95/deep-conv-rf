@@ -1,0 +1,37 @@
+Are GPUs available? False
+
+##################################################################
+acc vs n_samples: Naive RF
+
+Trial 1
+
+Train Fraction: 0.01
+# of Train Samples: 95
+Accuracy: 0.5420784666067685
+Experiment Runtime: 0.48284006118774414
+
+Train Fraction: 0.016681005372000592
+# of Train Samples: 159
+Accuracy: 0.6121593291404612
+Experiment Runtime: 0.35394883155822754
+
+Train Fraction: 0.027825594022071243
+# of Train Samples: 266
+Accuracy: 0.637915543575921
+Experiment Runtime: 0.35620594024658203
+
+Train Fraction: 0.046415888336127774
+# of Train Samples: 445
+Accuracy: 0.6861335729260257
+Experiment Runtime: 0.47163915634155273
+
+Train Fraction: 0.0774263682681127
+# of Train Samples: 743
+Accuracy: 0.7238694219826295
+Experiment Runtime: 0.5920238494873047
+
+Train Fraction: 0.1291549665014884
+# of Train Samples: 1240
+Accuracy: 0.7780772686433064
+Experiment Runtime: 0.8365309238433838
+
