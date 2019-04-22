@@ -36,25 +36,25 @@ warnings.filterwarnings("ignore")
 # CHOOSEN_CLASSES = [5, 7]
 # MAX_TRAIN_FRACTION = 1.0
 
-####### SVHN ########
-DATASET_NAME = "SVHN"
-TITLE = "0 vs 9"
-
-DATA_PATH = "./data"
-RESULTS_PATH = "results/svhn/0vs9/"
-
-CHOOSEN_CLASSES = [0, 9]
-MAX_TRAIN_FRACTION = 1.0
-
-# ####### FashionMNIST ########
-# DATASET_NAME = "FashionMNIST"
-# # TITLE = "T-shirt/top (0) vs Dress (3)"
+# ####### SVHN ########
+# DATASET_NAME = "SVHN"
+# TITLE = "0 vs 9"
 #
 # DATA_PATH = "./data"
-# RESULTS_PATH = "results/fashion_mnist/0vs3/"
+# RESULTS_PATH = "results/svhn/0vs9/"
 #
-# CHOOSEN_CLASSES = [0, 3]
+# CHOOSEN_CLASSES = [0, 9]
 # MAX_TRAIN_FRACTION = 1.0
+
+####### FashionMNIST ########
+DATASET_NAME = "FashionMNIST"
+TITLE = "T-shirt/top (0) vs Dress (3)"
+
+DATA_PATH = "./data"
+RESULTS_PATH = "results/fashion_mnist/0vs3/"
+
+CHOOSEN_CLASSES = [0, 3]
+MAX_TRAIN_FRACTION = 1.0
 
 
 N_TRIALS = 3
