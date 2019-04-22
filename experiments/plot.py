@@ -27,7 +27,7 @@ x_lables = run.number_of_train_samples_space
 def load_results(file_name):
     file_name = results_path + file_name + ".npy"
     if os.path.exists(file_name):
-        return list(zip(*[[np.mean(list(zip(*i))[0]), np.mean(list(zip(*i))[1])] for i in list(zip(*np.load(file_name)))]))
+        return list(zip(*[list(zip(*i)) for i in list(zip(*np.load(file_name)))]))
     else:
         return list([[np.nan]*len(x_lables), [np.nan]*len(x_lables)])
 
@@ -79,40 +79,40 @@ plt.rcParams['lines.linewidth'] = 3
 
 
 ###############################################################################
-# Plot Accuracies
+# Plot Accuracies (1 layer)
 ###############################################################################
 
 fig, ax = plt.subplots()
-ax.plot(x_lables, naive_rf_acc_vs_n, marker="", color='green',
+ax.plot(x_lables, np.mean(naive_rf_acc_vs_n, axis=1), marker="", color='green',
         linestyle=":", label="NaiveRF")
 
-# ax.plot(x_lables, naive_rf_pyrerf_acc_vs_n, marker="",
+# ax.plot(x_lables, np.mean(naive_rf_pyrerf_acc_vs_n, axis=1), marker="",
 #         color='black', linestyle=":", label="Naive RF (pyrerf)")
 
-ax.plot(x_lables, deep_conv_rf_old_acc_vs_n, marker="", color='brown',
+ax.plot(x_lables, np.mean(deep_conv_rf_old_acc_vs_n, axis=1), marker="", color='brown',
         linestyle="--", label="DeepConvRF (1-layer, unshared)")
-ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n, marker="",
+ax.plot(x_lables, np.mean(deep_conv_rf_old_two_layer_acc_vs_n, axis=1), marker="",
         color='brown', label="DeepConvRF (2-layer, unshared)")
 
-ax.plot(x_lables, deep_conv_rf_acc_vs_n, marker="", color='green',
+ax.plot(x_lables, np.mean(deep_conv_rf_acc_vs_n, axis=1), marker="", color='green',
         linestyle="--", label="DeepConvRF (1-layer, shared)")
-ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n, marker="",
+ax.plot(x_lables, np.mean(deep_conv_rf_two_layer_acc_vs_n, axis=1), marker="",
         color='green', label="DeepConvRF (2-layer, shared)")
 
-# ax.plot(x_lables, deep_conv_rf_pyrerf_acc_vs_n, marker="", linestyle="--",
+# ax.plot(x_lables, np.mean(deep_conv_rf_pyrerf_acc_vs_n, axis=1), marker="", linestyle="--",
 #         color='black', label="DeepConvRF (1-layer, shared, pyrerf)")
-# ax.plot(x_lables, deep_conv_rf_pyrerf_two_layer_acc_vs_n_times, marker="",
+# ax.plot(x_lables, np.mean(deep_conv_rf_pyrerf_two_layer_acc_vs_n_times, axis=1), marker="",
 #         color='black', label="DeepConvRF (2-layer, shared, pyrerf)")
 
-ax.plot(x_lables, np.array(cnn_acc_vs_n), marker="", color='orange',
+ax.plot(x_lables, np.mean(cnn_acc_vs_n, axis=1), marker="", color='orange',
         linestyle=":", label="CNN (1-layer, 1-filter)")
-ax.plot(x_lables, np.array(cnn32_acc_vs_n), marker="", color='orange',
+ax.plot(x_lables, np.mean(cnn32_acc_vs_n, axis=1), marker="", color='orange',
         linestyle="--", label="CNN (1-layer, 32-filters)")
-ax.plot(x_lables, np.array(cnn32_two_layer_acc_vs_n), marker="",
+ax.plot(x_lables, np.mean(cnn32_two_layer_acc_vs_n, axis=1), marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-ax.plot(x_lables, np.array(cnn_best_acc_vs_n),
-        marker="", color='blue', label="CNN (ResNet18)")
+ax.plot(x_lables, np.mean(cnn_best_acc_vs_n, axis=1),
+        marker="", color='blue', label="CNN (ResNet18)", alpha=0.7)
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
@@ -132,35 +132,35 @@ plt.savefig(base_path + "accuracy_comparisons.png")
 ###############################################################################
 
 fig, ax = plt.subplots()
-ax.plot(x_lables, naive_rf_acc_vs_n_times, marker="", color='green',
+ax.plot(x_lables, np.mean(naive_rf_acc_vs_n_times, axis=1), marker="", color='green',
         linestyle=":", label="NaiveRF")
 
-# ax.plot(x_lables, naive_rf_pyrerf_acc_vs_n_times, marker="",
+# ax.plot(x_lables, np.mean(naive_rf_pyrerf_acc_vs_n_times, axis=1), marker="",
 #         color='black', linestyle=":", label="Naive RF (pyrerf)")
 
-ax.plot(x_lables, deep_conv_rf_old_acc_vs_n_times, marker="", color='brown',
+ax.plot(x_lables, np.mean(deep_conv_rf_old_acc_vs_n_times, axis=1), marker="", color='brown',
         linestyle="--", label="DeepConvRF (1-layer, unshared)")
-ax.plot(x_lables, deep_conv_rf_old_two_layer_acc_vs_n_times, marker="",
+ax.plot(x_lables, np.mean(deep_conv_rf_old_two_layer_acc_vs_n_times, axis=1), marker="",
         color='brown', label="DeepConvRF (2-layer, unshared)")
 
-ax.plot(x_lables, deep_conv_rf_acc_vs_n_times, marker="", color='green',
+ax.plot(x_lables, np.mean(deep_conv_rf_acc_vs_n_times, axis=1), marker="", color='green',
         linestyle="--", label="DeepConvRF (1-layer, shared)")
-ax.plot(x_lables, deep_conv_rf_two_layer_acc_vs_n_times, marker="",
+ax.plot(x_lables, np.mean(deep_conv_rf_two_layer_acc_vs_n_times, axis=1), marker="",
         color='green', label="DeepConvRF (2-layer, shared)")
 
-# ax.plot(x_lables, deep_conv_rf_pyrerf_acc_vs_n_times, marker="", linestyle="--",
+# ax.plot(x_lables, np.mean(deep_conv_rf_pyrerf_acc_vs_n_times, axis=1), marker="", linestyle="--",
 #         color='black', label="DeepConvRF (1-layer, shared, pyrerf)")
-# ax.plot(x_lables, deep_conv_rf_pyrerf_acc_vs_n_times, marker="",
+# ax.plot(x_lables, np.mean(deep_conv_rf_pyrerf_acc_vs_n_times, axis=1), marker="",
 #         color='black', label="DeepConvRF (1-layer, shared, pyrerf)")
 
-ax.plot(x_lables, cnn_acc_vs_n_times, marker="", color='orange',
+ax.plot(x_lables, np.mean(cnn_acc_vs_n_times, axis=1), marker="", color='orange',
         linestyle=":", label="CNN (1-layer, 1-filter)")
-ax.plot(x_lables, cnn32_acc_vs_n_times, marker="", color='orange',
+ax.plot(x_lables, np.mean(cnn32_acc_vs_n_times, axis=1), marker="", color='orange',
         linestyle="--", label="CNN (1-layer, 32-filters)")
-ax.plot(x_lables, cnn32_two_layer_acc_vs_n_times, marker="",
+ax.plot(x_lables, np.mean(cnn32_two_layer_acc_vs_n_times, axis=1), marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-ax.plot(x_lables, cnn_best_acc_vs_n_times, marker="", color='blue', label="CNN (ResNet18)")
+ax.plot(x_lables, np.mean(cnn_best_acc_vs_n_times, axis=1), marker="", color='blue', label="CNN (ResNet18)")
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
