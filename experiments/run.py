@@ -28,17 +28,17 @@ warnings.filterwarnings("ignore")
 
 ####### CIFAR10 ########
 DATASET_NAME = "CIFAR10"
-TITLE = "Automobile (1) vs Truck(9)"
+# TITLE = "Automobile (1) vs Truck(9)"
 
 DATA_PATH = "./data"
-RESULTS_PATH = "results/cifar10/100_percent_data/1vs9/"
+RESULTS_PATH = "results/cifar10/100_percent_data/2vs4/"
 
-CHOOSEN_CLASSES = [1, 9]
+CHOOSEN_CLASSES = [2, 4]
 MAX_TRAIN_FRACTION = 1.0
 
 # ####### SVHN ########
 # DATASET_NAME = "SVHN"
-# TITLE = "5 vs 6"
+# # TITLE = "5 vs 6"
 #
 # DATA_PATH = "./data"
 # RESULTS_PATH = "results/svhn/5vs6/"
@@ -48,7 +48,7 @@ MAX_TRAIN_FRACTION = 1.0
 
 # ####### FashionMNIST ########
 # DATASET_NAME = "FashionMNIST"
-# TITLE = "T-shirt/top (0) vs Dress (3)"
+# # TITLE = "T-shirt/top (0) vs Dress (3)"
 #
 # DATA_PATH = "./data"
 # RESULTS_PATH = "results/fashion_mnist/0vs3/"
