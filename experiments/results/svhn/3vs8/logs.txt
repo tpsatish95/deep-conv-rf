@@ -5,62 +5,62 @@ acc vs n_samples: Naive RF
 
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 0.6169088507265521
-Experiment Runtime: 0.984578013420105
+Accuracy: 0.6254219873770732
+Experiment Runtime: 0.7451772689819336
 
 
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 0.6538969616908851
-Experiment Runtime: 0.9352908134460449
+Accuracy: 0.665785997357992
+Experiment Runtime: 0.7450671990712484
 
 
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 0.7125715543813298
-Experiment Runtime: 0.9156330823898315
+Accuracy: 0.7101864083370028
+Experiment Runtime: 0.778429905573527
 
 
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 0.7468075737560547
-Experiment Runtime: 1.0315676927566528
+Accuracy: 0.7447526787024805
+Experiment Runtime: 0.8712554772694906
 
 
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 0.7787318361955086
-Experiment Runtime: 1.0552113056182861
+Accuracy: 0.778218112432115
+Experiment Runtime: 0.8952942689259847
 
 
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 0.818251871422281
-Experiment Runtime: 1.1991525888442993
+Accuracy: 0.8092617055628946
+Experiment Runtime: 1.0263940493265789
 
 
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 0.837626596213122
-Experiment Runtime: 1.5319911241531372
+Accuracy: 0.8406722442389549
+Experiment Runtime: 1.2215928236643474
 
 
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 0.8505063848524879
-Experiment Runtime: 2.0664111375808716
+Accuracy: 0.8541758403052987
+Experiment Runtime: 1.660538673400879
 
 
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 0.8678996036988111
-Experiment Runtime: 2.9947597980499268
+Accuracy: 0.86753265815353
+Experiment Runtime: 2.427091360092163
 
 
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 0.8727432848965213
-Experiment Runtime: 4.664296984672546
+Accuracy: 0.8775869660942316
+Experiment Runtime: 3.6402692000071206
 
 
 ##################################################################
@@ -69,62 +69,62 @@ acc vs n_samples: DeepConvRF (1-layer, unshared)
 
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 0.6306693086745927
-Experiment Runtime: 11.287047505378723
+Accuracy: 0.6406869220607662
+Experiment Runtime: 11.3023730913798
 
 
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 0.6478423601937473
-Experiment Runtime: 13.473780274391174
+Accuracy: 0.6568325260531337
+Experiment Runtime: 13.76096781094869
 
 
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 0.694297666226332
-Experiment Runtime: 18.339157938957214
+Accuracy: 0.6864083370027888
+Experiment Runtime: 18.752102613449097
 
 
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 0.7113606340819023
-Experiment Runtime: 28.052286028862
+Accuracy: 0.6907382944371054
+Experiment Runtime: 28.800999800364178
 
 
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 0.7297446059004844
-Experiment Runtime: 46.12265241146088
+Accuracy: 0.7260384558931454
+Experiment Runtime: 45.510061184565224
 
 
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 0.7786217525319242
-Experiment Runtime: 77.12416970729828
+Accuracy: 0.7683105827095259
+Experiment Runtime: 76.82532143592834
 
 
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 0.7717965653896962
-Experiment Runtime: 129.50348818302155
+Accuracy: 0.7736679876706297
+Experiment Runtime: 133.2030642827352
 
 
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 0.7952443857331573
-Experiment Runtime: 226.33787524700165
+Accuracy: 0.7957581094965507
+Experiment Runtime: 232.0092655022939
 
 
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 0.7881990312637605
-Experiment Runtime: 404.8470723628998
+Accuracy: 0.8076471451636578
+Experiment Runtime: 416.16630204518634
 
 
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 0.8042712461470718
-Experiment Runtime: 726.3724950551987
+Accuracy: 0.7846029649200058
+Experiment Runtime: 754.2021094163259
 
 
 ##################################################################
@@ -133,62 +133,62 @@ acc vs n_samples: DeepConvRF (2-layer, unshared)
 
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 0.6547776309995597
-Experiment Runtime: 12.13523781299591
+Accuracy: 0.6446499339498019
+Experiment Runtime: 12.237717072168985
 
 
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 0.6664464993394981
-Experiment Runtime: 14.599414229393005
+Accuracy: 0.6720974607368267
+Experiment Runtime: 14.943103154500326
 
 
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 0.7051959489211801
-Experiment Runtime: 19.535939931869507
+Accuracy: 0.7206076618229854
+Experiment Runtime: 20.032607714335125
 
 
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 0.746257155438133
-Experiment Runtime: 29.308186769485474
+Accuracy: 0.7357258182885659
+Experiment Runtime: 30.26002113024394
 
 
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 0.7719066490532804
-Experiment Runtime: 47.75233793258667
+Accuracy: 0.7692646411272568
+Experiment Runtime: 47.11889330546061
 
 
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 0.8139586085424924
-Experiment Runtime: 78.62534177303314
+Accuracy: 0.8111698223983561
+Experiment Runtime: 78.58781679471333
 
 
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 0.8257375605460149
-Experiment Runtime: 131.2522441148758
+Accuracy: 0.8281227065903419
+Experiment Runtime: 135.60703643163046
 
 
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 0.8360854249229415
-Experiment Runtime: 229.00225853919983
+Accuracy: 0.8433142521649787
+Experiment Runtime: 235.10468673706055
 
 
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 0.8592029942756495
-Experiment Runtime: 406.55355882644653
+Accuracy: 0.850873330397769
+Experiment Runtime: 419.31526732444763
 
 
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 0.857331571994716
-Experiment Runtime: 730.586217880249
+Accuracy: 0.8567444591222664
+Experiment Runtime: 758.4663396676382
 
 
 ##################################################################
@@ -197,62 +197,62 @@ acc vs n_samples: DeepConvRF (1-layer, shared)
 
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 0.5992954645530604
-Experiment Runtime: 169.62197923660278
+Accuracy: 0.6035520328783209
+Experiment Runtime: 198.500284353892
 
 
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 0.6205416116248348
-Experiment Runtime: 181.4361081123352
+Accuracy: 0.6186701893439014
+Experiment Runtime: 211.00190488497415
 
 
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 0.6294583883751651
-Experiment Runtime: 227.24145483970642
+Accuracy: 0.6461177161309263
+Experiment Runtime: 256.47544407844543
 
 
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 0.637604579480405
-Experiment Runtime: 277.9067448377609
+Accuracy: 0.6325407309555262
+Experiment Runtime: 298.5989194711049
 
 
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 0.6399163364156759
-Experiment Runtime: 346.82593274116516
+Accuracy: 0.6554381329810656
+Experiment Runtime: 347.6247278849284
 
 
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 0.6616028181417877
-Experiment Runtime: 502.89282846450806
+Accuracy: 0.6657126082489359
+Experiment Runtime: 443.3254165649414
 
 
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 0.6699691765741964
-Experiment Runtime: 711.5821641683578
+Accuracy: 0.6654924409217672
+Experiment Runtime: 642.0437650680542
 
 
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 0.654557463672391
-Experiment Runtime: 1154.2118382453918
+Accuracy: 0.6740055775722883
+Experiment Runtime: 939.3576097488403
 
 
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 0.6711800968736239
-Experiment Runtime: 1955.223445892334
+Accuracy: 0.6736386320270071
+Experiment Runtime: 1576.389889081319
 
 
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 0.698701012769705
-Experiment Runtime: 3902.732457637787
+Accuracy: 0.6845736092763834
+Experiment Runtime: 2808.6127709547677
 
 
 ##################################################################
@@ -261,62 +261,62 @@ acc vs n_samples: DeepConvRF (2-layer, shared)
 
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 0.5997357992073976
-Experiment Runtime: 211.92649948596954
+Accuracy: 0.6105973873477176
+Experiment Runtime: 246.50285998980203
 
 
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 0.6293483047115809
-Experiment Runtime: 224.71030473709106
+Accuracy: 0.6233670923234992
+Experiment Runtime: 259.79496272404987
 
 
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 0.6459709379128138
-Experiment Runtime: 278.904713511467
+Accuracy: 0.6621165419051812
+Experiment Runtime: 312.77249296506244
 
 
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 0.6524658740642888
-Experiment Runtime: 329.52628457546234
+Accuracy: 0.6465580507852635
+Experiment Runtime: 358.8942309220632
 
 
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 0.6684280052840159
-Experiment Runtime: 401.4923164844513
+Accuracy: 0.6750330250990753
+Experiment Runtime: 409.31336696942645
 
 
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 0.6744826067811537
-Experiment Runtime: 556.7850613594055
+Accuracy: 0.6900777924555995
+Experiment Runtime: 500.9625286261241
 
 
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 0.7327168648172611
-Experiment Runtime: 770.6381442546844
+Accuracy: 0.7030676647585499
+Experiment Runtime: 703.4906136989594
 
 
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 0.6938573315719947
-Experiment Runtime: 1224.885651230812
+Accuracy: 0.6906649053280494
+Experiment Runtime: 1005.062916914622
 
 
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 0.7152135623073536
-Experiment Runtime: 2023.0090215206146
+Accuracy: 0.7182592103331866
+Experiment Runtime: 1659.0114557743073
 
 
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 0.7121312197269924
-Experiment Runtime: 3946.9667893648148
+Accuracy: 0.7171583736973434
+Experiment Runtime: 2890.665750980377
 
 
 ##################################################################
@@ -326,71 +326,71 @@ acc vs n_samples: CNN (1-layer, 1-filter)
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 63.32012329370321
-Experiment Runtime: 93.7290153503418
+Accuracy: 0.6293116101570527
+Experiment Runtime: 84.20771916707356
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 63.12931161015705
-Experiment Runtime: 90.65485159556071
+Accuracy: 0.6312931161015705
+Experiment Runtime: 81.6712965965271
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 63.158667253779534
-Experiment Runtime: 94.15329178174336
+Accuracy: 0.6334947893732571
+Experiment Runtime: 84.85639651616414
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 63.650374284456184
-Experiment Runtime: 98.90314507484436
+Accuracy: 0.6346690151181565
+Experiment Runtime: 89.06708574295044
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 69.3600469690298
-Experiment Runtime: 108.05731391906738
+Accuracy: 0.6357698517539997
+Experiment Runtime: 96.68669541676839
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 75.2018200499046
-Experiment Runtime: 121.76054938634236
+Accuracy: 0.6448701012769705
+Experiment Runtime: 109.35387897491455
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 77.19066490532805
-Experiment Runtime: 145.39856791496277
+Accuracy: 0.7013063261412006
+Experiment Runtime: 130.886669476827
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 79.1428152062234
-Experiment Runtime: 186.01190201441446
+Accuracy: 0.7569352708058125
+Experiment Runtime: 165.8961272239685
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 81.11698223983561
-Experiment Runtime: 258.4924252827962
+Accuracy: 0.7724937619257303
+Experiment Runtime: 225.13156962394714
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 0, 'lr': 0.001, 'weight_decay': 1e-05}
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 81.60135035960663
-Experiment Runtime: 359.4744285742442
+Accuracy: 0.7788052253045649
+Experiment Runtime: 323.99231759707135
 
 
 ##################################################################
@@ -400,71 +400,71 @@ acc vs n_samples: CNN (1-layer, 32-filter)
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 63.51093497724938
-Experiment Runtime: 89.51955691973369
+Accuracy: 0.6068545427858506
+Experiment Runtime: 80.50235152244568
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 68.11977102597974
-Experiment Runtime: 91.55444701512654
+Accuracy: 0.6362835755173933
+Experiment Runtime: 81.87702409426372
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 76.9704975781594
-Experiment Runtime: 93.95696465174358
+Accuracy: 0.6528695141640981
+Experiment Runtime: 84.57881132761638
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 84.19932482019668
-Experiment Runtime: 98.61214311917622
+Accuracy: 0.6441362101864083
+Experiment Runtime: 89.069180727005
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 87.76603552032877
-Experiment Runtime: 109.00731722513835
+Accuracy: 0.6822985468956406
+Experiment Runtime: 97.49643460909526
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 88.18435344194921
-Experiment Runtime: 122.05532240867615
+Accuracy: 0.7652282401291649
+Experiment Runtime: 110.56763339042664
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 89.29252898869807
-Experiment Runtime: 144.87869477272034
+Accuracy: 0.8595332452664025
+Experiment Runtime: 131.29884219169617
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 89.82093057390284
-Experiment Runtime: 184.00907627741495
+Accuracy: 0.8847790987817407
+Experiment Runtime: 166.9788256486257
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 90.11448701012769
-Experiment Runtime: 256.5868670940399
+Accuracy: 0.899823866138265
+Experiment Runtime: 225.9395531018575
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 1, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 90.37134889182444
-Experiment Runtime: 358.48661184310913
+Accuracy: 0.9037134889182444
+Experiment Runtime: 324.8242715994517
 
 
 ##################################################################
@@ -474,71 +474,71 @@ acc vs n_samples: CNN (2-layer, 32-filter)
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 63.459562600910026
-Experiment Runtime: 91.08415683110555
+Accuracy: 0.6345222369000441
+Experiment Runtime: 81.84611145655315
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 64.9493615147512
-Experiment Runtime: 93.52021559079488
+Accuracy: 0.6345222369000441
+Experiment Runtime: 83.12436111768086
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 71.2021136063408
-Experiment Runtime: 95.49838995933533
+Accuracy: 0.6345222369000441
+Experiment Runtime: 85.87070798873901
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 85.03596066343755
-Experiment Runtime: 101.63321526845296
+Accuracy: 0.6345222369000441
+Experiment Runtime: 90.8853669166565
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 89.76221928665785
-Experiment Runtime: 110.5188700358073
+Accuracy: 0.6337883458094818
+Experiment Runtime: 98.99247113863628
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 89.91633641567591
-Experiment Runtime: 124.15922538439433
+Accuracy: 0.6369440774988991
+Experiment Runtime: 112.23014362653096
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 91.07588433876413
-Experiment Runtime: 149.18877943356833
+Accuracy: 0.8603405254660209
+Experiment Runtime: 134.30204828580221
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 91.5088800821958
-Experiment Runtime: 188.9715939362844
+Accuracy: 0.8959342433582856
+Experiment Runtime: 171.3464195728302
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 92.08865404373991
-Experiment Runtime: 256.3810218969981
+Accuracy: 0.9068692206076618
+Experiment Runtime: 232.6973019440969
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu', 'model': 2, 'lr': 0.001, 'weight_decay': 0.1}
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 92.36753265815351
-Experiment Runtime: 370.30325627326965
+Accuracy: 0.9083370027887862
+Experiment Runtime: 334.99249688784283
 
 
 ##################################################################
@@ -548,72 +548,73 @@ acc vs n_samples: CNN (ResNet18)
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.01
 # of Train Samples: 135
-Accuracy: 63.59900190811683
-Experiment Runtime: 213.98389355341592
+Accuracy: 0.6138998972552473
+Experiment Runtime: 202.08902804056802
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.016681005372000592
 # of Train Samples: 225
-Accuracy: 67.00425656832526
-Experiment Runtime: 215.8534835179647
+Accuracy: 0.6607221488331132
+Experiment Runtime: 209.03299005826315
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.027825594022071243
 # of Train Samples: 376
-Accuracy: 73.47717598708351
-Experiment Runtime: 231.48402206103006
+Accuracy: 0.7195068251871423
+Experiment Runtime: 223.43822622299194
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.046415888336127774
 # of Train Samples: 628
-Accuracy: 80.1996183766329
-Experiment Runtime: 258.1831587950389
+Accuracy: 0.8439747541464846
+Experiment Runtime: 248.4818059603373
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.0774263682681127
 # of Train Samples: 1048
-Accuracy: 85.5276676941142
-Experiment Runtime: 306.0231811205546
+Accuracy: 0.9084103918978425
+Experiment Runtime: 293.08812284469604
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.1291549665014884
 # of Train Samples: 1749
-Accuracy: 89.3732570086599
-Experiment Runtime: 379.41422788302106
+Accuracy: 0.9364450315573168
+Experiment Runtime: 361.7462195555369
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.21544346900318834
 # of Train Samples: 2917
-Accuracy: 92.00792602377807
-Experiment Runtime: 506.39165059725445
+Accuracy: 0.9544987523851459
+Experiment Runtime: 478.7882607777913
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.3593813663804626
 # of Train Samples: 4866
-Accuracy: 94.27564949361515
-Experiment Runtime: 719.0975391864777
+Accuracy: 0.9619110523998239
+Experiment Runtime: 676.7378627459208
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 0.5994842503189409
 # of Train Samples: 8118
-Accuracy: 96.26449434903861
-Experiment Runtime: 1067.4970002174377
+Accuracy: 0.9751210920299428
+Experiment Runtime: 1004.4252377351125
 
 
 CNN Config: {'batch_size': 128, 'epoch': 100, 'device': 'cpu'}
 Train Fraction: 1.0
 # of Train Samples: 13542
-Accuracy: 97.14516365771318
-Experiment Runtime: 1639.9200421969097
+Accuracy: 0.9775429326287979
+Experiment Runtime: 1548.1666843096416
 
 
 ##################################################################
-Total Runtime: 0.1676931381225586
+Total Runtime: 0.2154402732849121
+
