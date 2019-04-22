@@ -26,15 +26,15 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-# ####### CIFAR10 ########
-# DATASET_NAME = "CIFAR10"
-# TITLE = "Dog (5) vs Horse(7)"
-#
-# DATA_PATH = "./data"
-# RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
-#
-# CHOOSEN_CLASSES = [5, 7]
-# MAX_TRAIN_FRACTION = 1.0
+####### CIFAR10 ########
+DATASET_NAME = "CIFAR10"
+TITLE = "Dog (5) vs Horse(7)"
+
+DATA_PATH = "./data"
+RESULTS_PATH = "results/cifar10/100_percent_data/5vs7/"
+
+CHOOSEN_CLASSES = [5, 7]
+MAX_TRAIN_FRACTION = 1.0
 
 # ####### SVHN ########
 # DATASET_NAME = "SVHN"
@@ -46,15 +46,15 @@ warnings.filterwarnings("ignore")
 # CHOOSEN_CLASSES = [3, 8]
 # MAX_TRAIN_FRACTION = 1.0
 
-####### FashionMNIST ########
-DATASET_NAME = "FashionMNIST"
-TITLE = "T-shirt/top (0) vs Dress (3)"
-
-DATA_PATH = "./data"
-RESULTS_PATH = "results/fashion_mnist/0vs3/"
-
-CHOOSEN_CLASSES = [0, 3]
-MAX_TRAIN_FRACTION = 1.0
+# ####### FashionMNIST ########
+# DATASET_NAME = "FashionMNIST"
+# TITLE = "T-shirt/top (0) vs Dress (3)"
+#
+# DATA_PATH = "./data"
+# RESULTS_PATH = "results/fashion_mnist/0vs3/"
+#
+# CHOOSEN_CLASSES = [0, 3]
+# MAX_TRAIN_FRACTION = 1.0
 
 
 N_TRIALS = 3
