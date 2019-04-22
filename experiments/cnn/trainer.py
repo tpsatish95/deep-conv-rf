@@ -1,3 +1,4 @@
+import copy
 import time
 
 import numpy as np
@@ -69,7 +70,8 @@ def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, conf
     return acc_test[-1] / 100.0
 
 
-def run_cnn(dataset_name, model, data, choosen_classes, sub_train_indices, config):
+def run_cnn(dataset_name, input_model, data, choosen_classes, sub_train_indices, config):
+    model = copy.deepcopy(input_model)
     if "lr" in config:
         learning_rate = config["lr"]
     if "weight_decay" in config:
