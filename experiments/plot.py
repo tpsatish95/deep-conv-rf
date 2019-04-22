@@ -65,7 +65,7 @@ cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = load_results("cnn_best_acc_vs_n")
 
 
 ###############################################################################
-# Plot Settings
+# Plot Settings and Helpers
 ###############################################################################
 
 plt.rcParams['figure.figsize'] = 15, 12
@@ -78,41 +78,51 @@ plt.rcParams['ytick.labelsize'] = 15
 plt.rcParams['lines.linewidth'] = 3
 
 
+def plot_all_trials_and_summary(plot_ax, x, trials, plot_params):
+    trials = np.array(trials)
+
+    plot_ax.plot(x, np.mean(trials, axis=1), **plot_params)
+
+    del plot_params["label"]
+    for trial_number in range(trials.shape[1]):
+        plot_ax.plot(x, trials[:, trial_number], alpha=0.4, **plot_params)
+
+
 ###############################################################################
 # Plot Accuracies (1 layer)
 ###############################################################################
 
 fig, ax = plt.subplots()
-ax.plot(x_lables, np.mean(naive_rf_acc_vs_n, axis=1), marker="", color='green',
-        linestyle=":", label="NaiveRF")
+plot_all_trials_and_summary(ax, x_lables, naive_rf_acc_vs_n,
+                            plot_params={"marker": "", "color": "green", "linestyle": ":", "label": "NaiveRF"})
 
-# ax.plot(x_lables, np.mean(naive_rf_pyrerf_acc_vs_n, axis=1), marker="",
-#         color='black', linestyle=":", label="Naive RF (pyrerf)")
+# # plot_all_trials_and_summary(ax, x_lables, naive_rf_pyrerf_acc_vs_n,
+#                             plot_params={"marker": "", "color": "black", "linestyle": ":", "label": "Naive RF (pyrerf)"})
 
-ax.plot(x_lables, np.mean(deep_conv_rf_old_acc_vs_n, axis=1), marker="", color='brown',
-        linestyle="--", label="DeepConvRF (1-layer, unshared)")
-ax.plot(x_lables, np.mean(deep_conv_rf_old_two_layer_acc_vs_n, axis=1), marker="",
-        color='brown', label="DeepConvRF (2-layer, unshared)")
+plot_all_trials_and_summary(ax, x_lables, deep_conv_rf_old_acc_vs_n,
+                            plot_params={"marker": "", "color": "brown", "linestyle": "--", "label": "DeepConvRF (1-layer, unshared)"})
+plot_all_trials_and_summary(ax, x_lables, deep_conv_rf_old_two_layer_acc_vs_n,
+                            plot_params={"marker": "", "color": "brown", "label": "DeepConvRF (2-layer, unshared)"})
 
-ax.plot(x_lables, np.mean(deep_conv_rf_acc_vs_n, axis=1), marker="", color='green',
-        linestyle="--", label="DeepConvRF (1-layer, shared)")
-ax.plot(x_lables, np.mean(deep_conv_rf_two_layer_acc_vs_n, axis=1), marker="",
-        color='green', label="DeepConvRF (2-layer, shared)")
+plot_all_trials_and_summary(ax, x_lables, deep_conv_rf_acc_vs_n,
+                            plot_params={"marker": "", "color": "green", "linestyle": "--", "label": "DeepConvRF (1-layer, shared)"})
+plot_all_trials_and_summary(ax, x_lables, deep_conv_rf_two_layer_acc_vs_n,
+                            plot_params={"marker": "", "color": "green", "label": "DeepConvRF (2-layer, shared)"})
 
-# ax.plot(x_lables, np.mean(deep_conv_rf_pyrerf_acc_vs_n, axis=1), marker="", linestyle="--",
-#         color='black', label="DeepConvRF (1-layer, shared, pyrerf)")
-# ax.plot(x_lables, np.mean(deep_conv_rf_pyrerf_two_layer_acc_vs_n_times, axis=1), marker="",
-#         color='black', label="DeepConvRF (2-layer, shared, pyrerf)")
+# plot_all_trials_and_summary(ax, x_lables, deep_conv_rf_pyrerf_acc_vs_n,
+#                             plot_params={"marker": "", "color": "black", "linestyle": "--", "label": "DeepConvRF (1-layer, shared, pyrerf)"})
+# plot_all_trials_and_summary(ax, x_lables, deep_conv_rf_pyrerf_two_layer_acc_vs_n,
+#                             plot_params={"marker": "", "color": "black", "label": "DeepConvRF (2-layer, shared, pyrerf)"})
 
-ax.plot(x_lables, np.mean(cnn_acc_vs_n, axis=1), marker="", color='orange',
-        linestyle=":", label="CNN (1-layer, 1-filter)")
-ax.plot(x_lables, np.mean(cnn32_acc_vs_n, axis=1), marker="", color='orange',
-        linestyle="--", label="CNN (1-layer, 32-filters)")
-ax.plot(x_lables, np.mean(cnn32_two_layer_acc_vs_n, axis=1), marker="",
-        color='orange', label="CNN (2-layer, 32-filters)")
+plot_all_trials_and_summary(ax, x_lables, cnn_acc_vs_n,
+                            plot_params={"marker": "", "color": "orange", "linestyle": ":", "label": "CNN (1-layer, 1-filter)"})
+plot_all_trials_and_summary(ax, x_lables, cnn32_acc_vs_n,
+                            plot_params={"marker": "", "color": "orange", "linestyle": "--", "label": "CNN (1-layer, 32-filter)"})
+plot_all_trials_and_summary(ax, x_lables, cnn32_two_layer_acc_vs_n,
+                            plot_params={"marker": "", "color": "orange", "label": "CNN (2-layer, 32-filter)"})
 
-ax.plot(x_lables, np.mean(cnn_best_acc_vs_n, axis=1),
-        marker="", color='blue', label="CNN (ResNet18)", alpha=0.7)
+plot_all_trials_and_summary(ax, x_lables, cnn_best_acc_vs_n,
+                            plot_params={"marker": "", "color": "blue", "label": "CNN (ResNet18)"})
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
@@ -160,7 +170,8 @@ ax.plot(x_lables, np.mean(cnn32_acc_vs_n_times, axis=1), marker="", color='orang
 ax.plot(x_lables, np.mean(cnn32_two_layer_acc_vs_n_times, axis=1), marker="",
         color='orange', label="CNN (2-layer, 32-filters)")
 
-ax.plot(x_lables, np.mean(cnn_best_acc_vs_n_times, axis=1), marker="", color='blue', label="CNN (ResNet18)")
+ax.plot(x_lables, np.mean(cnn_best_acc_vs_n_times, axis=1),
+        marker="", color='blue', label="CNN (ResNet18)")
 
 
 ax.set_xlabel('# of Train Samples', fontsize=18)
