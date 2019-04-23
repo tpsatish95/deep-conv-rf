@@ -180,8 +180,8 @@ n_layer_experiments = [
 ###############################################################################
 # Plot
 ###############################################################################
-plot_experiments("Classification (1-layer)", one_layer_experiments, plot_all_trials=True, save_to="accuracy_comparisons_1_layer")
-plot_experiments("Classification (n-layers)", n_layer_experiments, plot_all_trials=True, save_to="accuracy_comparisons_n_layer")
+plot_experiments("Classification (1-layer)", one_layer_experiments, plot_all_trials=False, save_to="accuracy_comparisons_1_layer")
+plot_experiments("Classification (n-layers)", n_layer_experiments, plot_all_trials=False, save_to="accuracy_comparisons_n_layer")
 plot_experiments("Classification", all_experiments, plot_all_trials=False, save_to="accuracy_comparisons")
 
 plot_experiments("Classification Performance", all_experiments, is_performance=True, plot_all_trials=False, save_to="perf_comparisons")
