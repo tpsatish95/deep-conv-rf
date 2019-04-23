@@ -1,6 +1,7 @@
 import copy
 import logging
 import os
+import sys
 import time
 import warnings
 
@@ -35,11 +36,16 @@ N_TRIALS = 10
 RUN_RF = True
 RUN_CNN = True
 
-DATASET_NAME = "CIFAR10"
-# DATASET_NAME = "SVHN"
-# DATASET_NAME = "FashionMNIST"
+if len(sys.argv) > 1:
+    DATASET_NAME = str(sys.argv[1])
+    CHOOSEN_CLASSES = [int(i) for i in sys.argv[2:]]
+else:
+    # DATASET_NAME = "CIFAR10"
+    DATASET_NAME = "SVHN"
+    # DATASET_NAME = "FashionMNIST"
 
-CHOOSEN_CLASSES = [1, 9]
+    # CHOOSEN_CLASSES = [3, 8]
+
 
 ##############################################################################################################
 

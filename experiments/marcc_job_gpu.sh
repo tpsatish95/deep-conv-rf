@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=DeepConvRFGPU
 #SBATCH -N 1
-#SBATCH -n 24
+#SBATCH -n 18
 #SBATCH -p gpuk80
 #SBATCH --gres=gpu:3
-#SBATCH -t 18:30:00
+#SBATCH -t 20:00:00
 #SBATCH --mail-type=end
 #SBATCH --mail-user=spalani2@jhu.edu
 
