@@ -28,6 +28,7 @@ warnings.filterwarnings("ignore")
 
 '''General Settings'''
 DATA_PATH = "./data"
+MIN_TRAIN_FRACTION = 0.01
 MAX_TRAIN_FRACTION = 1.0
 N_TRIALS = 3
 
@@ -91,7 +92,7 @@ pytorch_data = dict()
 pytorch_data["trainset"], pytorch_data["testset"] = get_dataset(
     DATA_PATH, DATASET_NAME, is_numpy=False)
 
-fraction_of_train_samples_space = np.geomspace(0.01, MAX_TRAIN_FRACTION, num=10)
+fraction_of_train_samples_space = np.geomspace(MIN_TRAIN_FRACTION, MAX_TRAIN_FRACTION, num=10)
 
 class_wise_train_indices = [np.argwhere(
     numpy_data["train_labels"] == class_index).flatten() for class_index in CHOOSEN_CLASSES]
