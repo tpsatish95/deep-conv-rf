@@ -24,10 +24,8 @@ from random_forest.naive_rf import run_naive_rf
 warnings.filterwarnings("ignore")
 
 ##############################################################################################################
-# Settings
+# General Settings
 ##############################################################################################################
-
-'''General Settings'''
 DATA_PATH = "./data"
 MIN_TRAIN_SAMPLES = 10
 MAX_TRAIN_SAMPLES = 100
@@ -36,7 +34,7 @@ N_TRIALS = 10
 RUN_RF = True
 RUN_CNN = True
 
-if len(sys.argv) > 1:
+if __name__ == '__main__' and len(sys.argv) > 1:
     DATASET_NAME = str(sys.argv[1])
     CHOOSEN_CLASSES = [int(i) for i in sys.argv[2:]]
 else:
@@ -44,8 +42,18 @@ else:
     DATASET_NAME = "SVHN"
     # DATASET_NAME = "FashionMNIST"
 
-    # CHOOSEN_CLASSES = [3, 8]
+    CHOOSEN_CLASSES = [3, 8]
 
+##############################################################################################################
+# CNN Config
+##############################################################################################################
+
+BATCH_SIZE = 8
+EPOCH = 10
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+NUM_CLASSES = len(CHOOSEN_CLASSES)
+CNN_CONFIG = {"batch_size": BATCH_SIZE, "epoch": EPOCH, "device": DEVICE}
 
 ##############################################################################################################
 
@@ -71,17 +79,7 @@ elif DATASET_NAME == "FashionMNIST":
 if not os.path.exists(RESULTS_PATH):
     os.makedirs(RESULTS_PATH)
 
-##############################################################################################################
-# CNN Config
-##############################################################################################################
-
-BATCH_SIZE = 8
-EPOCH = 10
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-NUM_CLASSES = len(CHOOSEN_CLASSES)
-CNN_CONFIG = {"batch_size": BATCH_SIZE, "epoch": EPOCH, "device": DEVICE}
-
+# create logger
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
                         format="%(message)s",

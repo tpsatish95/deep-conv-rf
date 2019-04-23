@@ -15,7 +15,7 @@ module load singularity
 export SINGULARITY_HOME=$PWD:/home/$USER
 
 singularity pull --name pytorch.simg shub://marcc-hpc/pytorch:0.4.1
-singularity exec --nv ./pytorch.simg python -u run.py
+singularity exec --nv ./pytorch.simg python -u run.py FashionMNIST 7 9
 
 # Notes:
 # - sbatch marcc_job_gpu.sh
