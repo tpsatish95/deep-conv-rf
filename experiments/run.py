@@ -1,6 +1,6 @@
 import copy
 import logging
-import os.path
+import os
 import time
 import warnings
 
@@ -28,18 +28,18 @@ warnings.filterwarnings("ignore")
 
 '''General Settings'''
 DATA_PATH = "./data"
-MIN_TRAIN_SAMPLES = 100
-MAX_TRAIN_SAMPLES = 10000
+MIN_TRAIN_SAMPLES = 10
+MAX_TRAIN_SAMPLES = 100
 N_TRIALS = 10
 
 RUN_RF = True
 RUN_CNN = True
 
-# DATASET_NAME = "CIFAR10"
+DATASET_NAME = "CIFAR10"
 # DATASET_NAME = "SVHN"
-DATASET_NAME = "FashionMNIST"
+# DATASET_NAME = "FashionMNIST"
 
-CHOOSEN_CLASSES = [2, 4]
+CHOOSEN_CLASSES = [1, 9]
 
 ##############################################################################################################
 
@@ -61,13 +61,16 @@ elif DATASET_NAME == "FashionMNIST":
     TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
     RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/" + str(MIN_TRAIN_SAMPLES) + "_to_" + str(MAX_TRAIN_SAMPLES) + "/"
 
+# create the results directory
+if not os.path.exists(RESULTS_PATH):
+    os.makedirs(RESULTS_PATH)
 
 ##############################################################################################################
 # CNN Config
 ##############################################################################################################
 
-BATCH_SIZE = 128
-EPOCH = 100
+BATCH_SIZE = 8
+EPOCH = 10
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 NUM_CLASSES = len(CHOOSEN_CLASSES)

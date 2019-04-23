@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=DeepConvRFGPU
 #SBATCH -N 1
-#SBATCH -n 18
+#SBATCH -n 24
 #SBATCH -p gpuk80
 #SBATCH --gres=gpu:3
-#SBATCH -t 9:0:0
+#SBATCH -t 18:30:00
 #SBATCH --mail-type=end
 #SBATCH --mail-user=spalani2@jhu.edu
 
@@ -18,7 +18,6 @@ singularity pull --name pytorch.simg shub://marcc-hpc/pytorch:0.4.1
 singularity exec --nv ./pytorch.simg python -u run.py
 
 # Notes:
-# - all 4 GPU exps take 9 hours on the above config
 # - sbatch marcc_job_gpu.sh
 # - sqme
 # - after state changes from PD to R
