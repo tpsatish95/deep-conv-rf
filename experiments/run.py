@@ -49,7 +49,7 @@ RUN_CNN = True
 '''FashionMNIST'''
 DATASET_NAME = "FashionMNIST"
 FashionMNIST_MAP = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
-CHOOSEN_CLASSES = [2, 4]
+CHOOSEN_CLASSES = [0, 3]
 TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
 RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
 
