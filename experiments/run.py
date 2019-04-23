@@ -30,28 +30,30 @@ warnings.filterwarnings("ignore")
 DATA_PATH = "./data"
 MAX_TRAIN_FRACTION = 1.0
 N_TRIALS = 3
+
 RUN_RF = True
 RUN_CNN = True
 
-'''CIFAR10'''
 # DATASET_NAME = "CIFAR10"
-# CIFAR10_MAP = {0: 'airplane', 1: 'automobile', 2: 'bird', 3: 'cat', 4: 'deer', 5: 'dog', 6: 'frog', 7: 'horse', 8: 'ship', 9: 'truck'}
-# CHOOSEN_CLASSES = [1, 9]
-# TITLE = " vs ".join([CIFAR10_MAP[i].capitalize() + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
-# RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
-
-'''SVHN'''
 # DATASET_NAME = "SVHN"
-# CHOOSEN_CLASSES = [5, 6]
-# TITLE = " vs ".join([str(i) for i in CHOOSEN_CLASSES])
-# RESULTS_PATH = "results/svhn/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
-
-'''FashionMNIST'''
 DATASET_NAME = "FashionMNIST"
-FashionMNIST_MAP = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+
 CHOOSEN_CLASSES = [0, 3]
-TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
-RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+
+if DATASET_NAME == "CIFAR10":
+    '''CIFAR10'''
+    CIFAR10_MAP = {0: 'airplane', 1: 'automobile', 2: 'bird', 3: 'cat', 4: 'deer', 5: 'dog', 6: 'frog', 7: 'horse', 8: 'ship', 9: 'truck'}
+    TITLE = " vs ".join([CIFAR10_MAP[i].capitalize() + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
+    RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+elif DATASET_NAME == "SVHN":
+    '''SVHN'''
+    TITLE = " vs ".join([str(i) for i in CHOOSEN_CLASSES])
+    RESULTS_PATH = "results/svhn/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+elif DATASET_NAME == "FashionMNIST":
+    '''FashionMNIST'''
+    FashionMNIST_MAP = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+    TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
+    RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
 
 
 ##############################################################################################################
