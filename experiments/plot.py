@@ -125,7 +125,8 @@ def plot_experiments(title, experiments, save_to, is_performance=False, plot_all
     fig, ax = plt.subplots()
 
     for experiment_name in experiments:
-        plot_experiment(ax, x_lables, experiment_name, experiment_plot_styles[experiment_name], is_performance=is_performance, plot_all_trials=plot_all_trials)
+        plot_experiment(ax, x_lables, experiment_name,
+                        experiment_plot_styles[experiment_name], is_performance=is_performance, plot_all_trials=plot_all_trials)
 
     ax.set_xlabel('# of Train Samples', fontsize=18)
     ax.set_xscale('log')
@@ -180,8 +181,12 @@ n_layer_experiments = [
 ###############################################################################
 # Plot
 ###############################################################################
-plot_experiments("Classification (1-layer)", one_layer_experiments, plot_all_trials=False, save_to="accuracy_comparisons_1_layer")
-plot_experiments("Classification (n-layers)", n_layer_experiments, plot_all_trials=False, save_to="accuracy_comparisons_n_layer")
-plot_experiments("Classification", all_experiments, plot_all_trials=False, save_to="accuracy_comparisons")
+plot_experiments("Classification (1-layer)", one_layer_experiments,
+                 plot_all_trials=False, save_to="accuracy_comparisons_1_layer")
+plot_experiments("Classification (n-layers)", n_layer_experiments,
+                 plot_all_trials=False, save_to="accuracy_comparisons_n_layer")
+plot_experiments("Classification", all_experiments,
+                 plot_all_trials=False, save_to="accuracy_comparisons")
 
-plot_experiments("Classification Performance", all_experiments, is_performance=True, plot_all_trials=False, save_to="perf_comparisons")
+plot_experiments("Classification Performance", all_experiments, is_performance=True,
+                 plot_all_trials=False, save_to="perf_comparisons")
