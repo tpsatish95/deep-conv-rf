@@ -30,13 +30,15 @@ warnings.filterwarnings("ignore")
 DATA_PATH = "./data"
 MAX_TRAIN_FRACTION = 1.0
 N_TRIALS = 3
+RUN_RF = True
+RUN_CNN = True
 
 '''CIFAR10'''
-DATASET_NAME = "CIFAR10"
-CIFAR10_MAP = {0: 'airplane', 1: 'automobile', 2: 'bird', 3: 'cat', 4: 'deer', 5: 'dog', 6: 'frog', 7: 'horse', 8: 'ship', 9: 'truck'}
-CHOOSEN_CLASSES = [1, 9]
-TITLE = " vs ".join([CIFAR10_MAP[i].capitalize() + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
-RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+# DATASET_NAME = "CIFAR10"
+# CIFAR10_MAP = {0: 'airplane', 1: 'automobile', 2: 'bird', 3: 'cat', 4: 'deer', 5: 'dog', 6: 'frog', 7: 'horse', 8: 'ship', 9: 'truck'}
+# CHOOSEN_CLASSES = [1, 9]
+# TITLE = " vs ".join([CIFAR10_MAP[i].capitalize() + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
+# RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
 
 '''SVHN'''
 # DATASET_NAME = "SVHN"
@@ -45,11 +47,11 @@ RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES])
 # RESULTS_PATH = "results/svhn/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
 
 '''FashionMNIST'''
-# DATASET_NAME = "FashionMNIST"
-# FashionMNIST_MAP = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
-# CHOOSEN_CLASSES = [0, 3]
-# TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
-# RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+DATASET_NAME = "FashionMNIST"
+FashionMNIST_MAP = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+CHOOSEN_CLASSES = [2, 4]
+TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
+RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
 
 
 ##############################################################################################################
@@ -178,39 +180,41 @@ if __name__ == '__main__':
 
     script_start = time.time()
 
-    # Naive RF
-    run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
+    if RUN_RF:
+        # Naive RF
+        run_experiment(run_naive_rf, "naive_rf_acc_vs_n", "Naive RF")
 
-    # # Naive RerF
-    # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
+        # # Naive RerF
+        # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
 
-    # DeepConvRF Unshared
-    run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
-    run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
+        # DeepConvRF Unshared
+        run_experiment(run_one_layer_deep_conv_rf_unshared, "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
+        run_experiment(run_two_layer_deep_conv_rf_unshared, "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
 
-    # DeepConvRF Shared
-    run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
-    run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
+        # DeepConvRF Shared
+        run_experiment(run_one_layer_deep_conv_rf_shared, "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
+        run_experiment(run_two_layer_deep_conv_rf_shared, "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
 
-    # # DeepConvRerF Shared
-    # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
-    # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
+        # # DeepConvRerF Shared
+        # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
+        # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
 
-    # CNN
-    cnn_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
-    cnn_acc_vs_n_config.update({'model': 0, 'lr': 0.001, 'weight_decay': 1e-05})
-    run_experiment(run_cnn, "cnn_acc_vs_n", "CNN (1-layer, 1-filter)", cnn_model=SimpleCNN1layer(1,NUM_CLASSES, IMG_SHAPE), cnn_config=cnn_acc_vs_n_config)
+    if RUN_CNN:
+        # CNN
+        cnn_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
+        cnn_acc_vs_n_config.update({'model': 0, 'lr': 0.001, 'weight_decay': 1e-05})
+        run_experiment(run_cnn, "cnn_acc_vs_n", "CNN (1-layer, 1-filter)", cnn_model=SimpleCNN1layer(1,NUM_CLASSES, IMG_SHAPE), cnn_config=cnn_acc_vs_n_config)
 
-    cnn32_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
-    cnn32_acc_vs_n_config.update({'model': 1, 'lr': 0.001, 'weight_decay': 0.1})
-    run_experiment(run_cnn, "cnn32_acc_vs_n", "CNN (1-layer, 32-filter)", cnn_model=SimpleCNN1layer(32,NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_acc_vs_n_config)
+        cnn32_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
+        cnn32_acc_vs_n_config.update({'model': 1, 'lr': 0.001, 'weight_decay': 0.1})
+        run_experiment(run_cnn, "cnn32_acc_vs_n", "CNN (1-layer, 32-filter)", cnn_model=SimpleCNN1layer(32,NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_acc_vs_n_config)
 
-    cnn32_two_layer_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
-    cnn32_two_layer_acc_vs_n_config.update({'model': 2, 'lr': 0.001, 'weight_decay': 0.1})
-    run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n", "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_two_layer_acc_vs_n_config)
+        cnn32_two_layer_acc_vs_n_config = copy.deepcopy(CNN_CONFIG)
+        cnn32_two_layer_acc_vs_n_config.update({'model': 2, 'lr': 0.001, 'weight_decay': 0.1})
+        run_experiment(run_cnn, "cnn32_two_layer_acc_vs_n", "CNN (2-layer, 32-filter)", cnn_model=SimpleCNN2Layers(32, NUM_CLASSES, IMG_SHAPE), cnn_config=cnn32_two_layer_acc_vs_n_config)
 
-    # Best CNN
-    run_experiment(run_cnn, "cnn_best_acc_vs_n", "CNN (ResNet18)", cnn_model=ResNet18(NUM_CLASSES, IMG_SHAPE), cnn_config=CNN_CONFIG)
+        # Best CNN
+        run_experiment(run_cnn, "cnn_best_acc_vs_n", "CNN (ResNet18)", cnn_model=ResNet18(NUM_CLASSES, IMG_SHAPE), cnn_config=CNN_CONFIG)
 
     script_end = time.time()
     logging.info("Total Runtime: " + str(script_end - script_start) + "\n")
