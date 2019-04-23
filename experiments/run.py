@@ -28,8 +28,8 @@ warnings.filterwarnings("ignore")
 
 '''General Settings'''
 DATA_PATH = "./data"
-MIN_TRAIN_SAMPLES = 10
-MAX_TRAIN_SAMPLES = 100
+MIN_TRAIN_SAMPLES = 100
+MAX_TRAIN_SAMPLES = 10000
 N_TRIALS = 10
 
 RUN_RF = True
@@ -49,17 +49,17 @@ if DATASET_NAME == "CIFAR10":
                    4: 'deer', 5: 'dog', 6: 'frog', 7: 'horse', 8: 'ship', 9: 'truck'}
     TITLE = " vs ".join([CIFAR10_MAP[i].capitalize() +
                          " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
-    RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+    RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/" + str(MIN_TRAIN_SAMPLES) + "_to_" + str(MAX_TRAIN_SAMPLES) + "/"
 elif DATASET_NAME == "SVHN":
     '''SVHN'''
     TITLE = " vs ".join([str(i) for i in CHOOSEN_CLASSES])
-    RESULTS_PATH = "results/svhn/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+    RESULTS_PATH = "results/svhn/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/" + str(MIN_TRAIN_SAMPLES) + "_to_" + str(MAX_TRAIN_SAMPLES) + "/"
 elif DATASET_NAME == "FashionMNIST":
     '''FashionMNIST'''
     FashionMNIST_MAP = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress',
                         'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
     TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
-    RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+    RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/" + str(MIN_TRAIN_SAMPLES) + "_to_" + str(MAX_TRAIN_SAMPLES) + "/"
 
 
 ##############################################################################################################
