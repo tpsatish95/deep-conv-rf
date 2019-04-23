@@ -26,38 +26,31 @@ warnings.filterwarnings("ignore")
 # Settings
 ##############################################################################################################
 
-# ####### CIFAR10 ########
-# DATASET_NAME = "CIFAR10"
-# TITLE = "Automobile (1) vs Truck(9)"
-#
-# DATA_PATH = "./data"
-# RESULTS_PATH = "results/cifar10/1vs9/"
-#
-# CHOOSEN_CLASSES = [1, 9]
-# MAX_TRAIN_FRACTION = 1.0
-
-####### SVHN ########
-DATASET_NAME = "SVHN"
-TITLE = "5 vs 6"
-
+'''General Settings'''
 DATA_PATH = "./data"
-RESULTS_PATH = "results/svhn/5vs6/"
-
-CHOOSEN_CLASSES = [5, 6]
 MAX_TRAIN_FRACTION = 1.0
-
-# ####### FashionMNIST ########
-# DATASET_NAME = "FashionMNIST"
-# TITLE = "T-shirt/top (0) vs Dress (3)"
-#
-# DATA_PATH = "./data"
-# RESULTS_PATH = "results/fashion_mnist/0vs3/"
-#
-# CHOOSEN_CLASSES = [0, 3]
-# MAX_TRAIN_FRACTION = 1.0
-
-
 N_TRIALS = 3
+
+'''CIFAR10'''
+DATASET_NAME = "CIFAR10"
+CIFAR10_MAP = {0: 'airplane', 1: 'automobile', 2: 'bird', 3: 'cat', 4: 'deer', 5: 'dog', 6: 'frog', 7: 'horse', 8: 'ship', 9: 'truck'}
+CHOOSEN_CLASSES = [1, 9]
+TITLE = " vs ".join([CIFAR10_MAP[i].capitalize() + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
+RESULTS_PATH = "results/cifar10/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+
+'''SVHN'''
+# DATASET_NAME = "SVHN"
+# CHOOSEN_CLASSES = [5, 6]
+# TITLE = " vs ".join([str(i) for i in CHOOSEN_CLASSES])
+# RESULTS_PATH = "results/svhn/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+
+'''FashionMNIST'''
+# DATASET_NAME = "FashionMNIST"
+# FashionMNIST_MAP = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+# CHOOSEN_CLASSES = [0, 3]
+# TITLE = " vs ".join([FashionMNIST_MAP[i] + " (" + str(i) + ")" for i in CHOOSEN_CLASSES])
+# RESULTS_PATH = "results/fashion_mnist/" + "vs".join([str(i) for i in CHOOSEN_CLASSES]) + "/"
+
 
 ##############################################################################################################
 # CNN Config
