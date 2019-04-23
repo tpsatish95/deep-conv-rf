@@ -28,9 +28,9 @@ warnings.filterwarnings("ignore")
 
 '''General Settings'''
 DATA_PATH = "./data"
-MIN_TRAIN_FRACTION = 0.01
-MAX_TRAIN_FRACTION = 1.0
-N_TRIALS = 3
+MIN_TRAIN_SAMPLES = 10
+MAX_TRAIN_SAMPLES = 100
+N_TRIALS = 10
 
 RUN_RF = True
 RUN_CNN = True
@@ -39,7 +39,7 @@ RUN_CNN = True
 # DATASET_NAME = "SVHN"
 DATASET_NAME = "FashionMNIST"
 
-CHOOSEN_CLASSES = [0, 3]
+CHOOSEN_CLASSES = [2, 4]
 
 ##############################################################################################################
 
@@ -92,15 +92,16 @@ pytorch_data = dict()
 pytorch_data["trainset"], pytorch_data["testset"] = get_dataset(
     DATA_PATH, DATASET_NAME, is_numpy=False)
 
-fraction_of_train_samples_space = np.geomspace(MIN_TRAIN_FRACTION, MAX_TRAIN_FRACTION, num=10)
-
 class_wise_train_indices = [np.argwhere(
     numpy_data["train_labels"] == class_index).flatten() for class_index in CHOOSEN_CLASSES]
 
 total_train_samples = sum([len(ci) for ci in class_wise_train_indices])
 
-number_of_train_samples_space = [int(i) for i in list(
-    fraction_of_train_samples_space * total_train_samples)]
+MIN_TRAIN_FRACTION = MIN_TRAIN_SAMPLES / total_train_samples
+MAX_TRAIN_FRACTION = MAX_TRAIN_SAMPLES / total_train_samples
+fraction_of_train_samples_space = np.geomspace(MIN_TRAIN_FRACTION, MAX_TRAIN_FRACTION, num=10)
+
+number_of_train_samples_space = [int(i) for i in list(fraction_of_train_samples_space * total_train_samples)]
 
 train_indices_all_trials = list()
 for n in range(N_TRIALS):
