@@ -27,8 +27,8 @@ warnings.filterwarnings("ignore")
 # General Settings
 ##############################################################################################################
 DATA_PATH = "./data"
-MIN_TRAIN_SAMPLES = 10
-MAX_TRAIN_SAMPLES = 100
+MIN_TRAIN_SAMPLES = 120
+MAX_TRAIN_SAMPLES = 12000
 N_TRIALS = 10
 
 RUN_RF = True
@@ -39,10 +39,10 @@ if __name__ == '__main__' and len(sys.argv) > 1:
     CHOOSEN_CLASSES = [int(i) for i in sys.argv[2:]]
 else:
     # DATASET_NAME = "CIFAR10"
-    DATASET_NAME = "SVHN"
-    # DATASET_NAME = "FashionMNIST"
+    # DATASET_NAME = "SVHN"
+    DATASET_NAME = "FashionMNIST"
 
-    CHOOSEN_CLASSES = [3, 8]
+    CHOOSEN_CLASSES = [7, 9]
 
 ##############################################################################################################
 # CNN Config
