@@ -42,7 +42,7 @@ else:
     # DATASET_NAME = "SVHN"
     DATASET_NAME = "FashionMNIST"
 
-    CHOOSEN_CLASSES = [7, 9]
+    CHOOSEN_CLASSES = [2, 4]
 
 ##############################################################################################################
 # CNN Config
