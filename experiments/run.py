@@ -45,6 +45,9 @@ parser.add_argument("--dataset", default="CIFAR10")
 
 parser.add_argument("--classes", nargs='+', type=int, default=[1, 9])
 
+parser.add_argument("--batch_size", type=int, default=128)
+parser.add_argument("--epochs", type=int, default=100)
+
 args = parser.parse_args()
 MIN_TRAIN_SAMPLES = args.min_samples
 MAX_TRAIN_SAMPLES = args.max_samples
@@ -58,8 +61,8 @@ CHOOSEN_CLASSES = args.classes
 # CNN Config
 ##############################################################################################################
 
-BATCH_SIZE = 128
-EPOCH = 100
+BATCH_SIZE = args.batch_size
+EPOCH = args.epochs
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 NUM_CLASSES = len(CHOOSEN_CLASSES)
