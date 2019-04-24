@@ -38,11 +38,11 @@ if __name__ == '__main__' and len(sys.argv) > 1:
     DATASET_NAME = str(sys.argv[1])
     CHOOSEN_CLASSES = [int(i) for i in sys.argv[2:]]
 else:
-    DATASET_NAME = "CIFAR10"
+    # DATASET_NAME = "CIFAR10"
     # DATASET_NAME = "SVHN"
-    # DATASET_NAME = "FashionMNIST"
+    DATASET_NAME = "FashionMNIST"
 
-    CHOOSEN_CLASSES = [5, 7]
+    CHOOSEN_CLASSES = [7, 9]
 
 ##############################################################################################################
 # CNN Config
