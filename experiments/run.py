@@ -29,7 +29,7 @@ warnings.filterwarnings("ignore")
 DATA_PATH = "./data"
 MIN_TRAIN_SAMPLES = 10
 MAX_TRAIN_SAMPLES = 100
-N_TRIALS = 10
+N_TRIALS = 20
 
 RUN_RF = True
 RUN_CNN = True
@@ -38,11 +38,11 @@ if __name__ == '__main__' and len(sys.argv) > 1:
     DATASET_NAME = str(sys.argv[1])
     CHOOSEN_CLASSES = [int(i) for i in sys.argv[2:]]
 else:
-    # DATASET_NAME = "CIFAR10"
+    DATASET_NAME = "CIFAR10"
     # DATASET_NAME = "SVHN"
-    DATASET_NAME = "FashionMNIST"
+    # DATASET_NAME = "FashionMNIST"
 
-    CHOOSEN_CLASSES = [7, 9]
+    CHOOSEN_CLASSES = [1, 9]
 
 ##############################################################################################################
 # CNN Config
@@ -110,13 +110,22 @@ fraction_of_train_samples_space = np.geomspace(MIN_TRAIN_FRACTION, MAX_TRAIN_FRA
 
 number_of_train_samples_space = [int(i) for i in list(fraction_of_train_samples_space * total_train_samples)]
 
+# progressive sub sampling for each trial, over fraction of train samples
+# constructs from previously sampled indices and adds on to them as frac progresses
 train_indices_all_trials = list()
 for n in range(N_TRIALS):
     train_indices = list()
     for frac in fraction_of_train_samples_space:
-        sub_sample = np.concatenate([np.random.choice(class_indices, int(
-            len(class_indices)*frac), replace=False) for class_indices in class_wise_train_indices]).flatten()
+        sub_sample = list()
+        for i, class_indices in enumerate(class_wise_train_indices):
+            if not train_indices:
+                num_samples = int(len(class_indices) * frac + 0.5)
+                sub_sample.append(np.random.choice(class_indices, num_samples, replace=False))
+            else:
+                num_samples = int(len(class_indices) * frac + 0.5) - len(train_indices[-1][i])
+                sub_sample.append(np.concatenate([train_indices[-1][i], np.random.choice(list(set(class_indices) - set(train_indices[-1][i])), num_samples, replace=False)]).flatten())
         train_indices.append(sub_sample)
+    train_indices = [np.concatenate(t).flatten() for t in train_indices]
     train_indices_all_trials.append(train_indices)
 
 

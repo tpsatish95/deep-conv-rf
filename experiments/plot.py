@@ -19,6 +19,7 @@ plot_title = run.TITLE
 base_path = run.RESULTS_PATH
 results_path = run.RESULTS_PATH
 x_lables = run.number_of_train_samples_space
+n_trials = run.N_TRIALS
 
 ###############################################################################
 # Data
@@ -30,7 +31,7 @@ def load_results(file_name):
     if os.path.exists(file_name):
         return list(zip(*[list(zip(*i)) for i in list(zip(*np.load(file_name)))]))
     else:
-        return list([[np.nan]*len(x_lables), [np.nan]*len(x_lables)])
+        return list([[[np.nan]*n_trials]*len(x_lables), [[np.nan]*n_trials]*len(x_lables)])
 
 
 # Naive RF
