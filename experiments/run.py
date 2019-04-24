@@ -1,9 +1,9 @@
 import copy
 import logging
 import os
-import sys
 import time
 import warnings
+from argparse import ArgumentParser
 
 import numpy as np
 import torch
@@ -22,27 +22,37 @@ from random_forest.deep_conv_rf_unshared import (
 from random_forest.naive_rf import run_naive_rf
 
 warnings.filterwarnings("ignore")
+parser = ArgumentParser()
 
 ##############################################################################################################
 # General Settings
 ##############################################################################################################
 DATA_PATH = "./data"
-MIN_TRAIN_SAMPLES = 100
-MAX_TRAIN_SAMPLES = 10000
-N_TRIALS = 3
 
-RUN_RF = True
-RUN_CNN = True
+parser.add_argument("--min_samples", type=int, default=100)
+parser.add_argument("--max_samples", type=int, default=10000)
 
-if __name__ == '__main__' and len(sys.argv) > 1:
-    DATASET_NAME = str(sys.argv[1])
-    CHOOSEN_CLASSES = [int(i) for i in sys.argv[2:]]
-else:
-    DATASET_NAME = "CIFAR10"
-    # DATASET_NAME = "SVHN"
-    # DATASET_NAME = "FashionMNIST"
+parser.add_argument("--n_trials", type=int, default=3)
 
-    CHOOSEN_CLASSES = [1, 9]
+parser.add_argument("--no_rf", dest="rf", action="store_false")
+parser.set_defaults(rf=True)
+parser.add_argument("--no_cnn", dest="cnn", action="store_false")
+parser.set_defaults(cnn=True)
+
+parser.add_argument("--dataset", default="CIFAR10")
+# parser.add_argument("--dataset", default="SVHN")
+# parser.add_argument("--dataset", default="FashionMNIST")
+
+parser.add_argument("--classes", nargs='+', type=int, default=[1, 9])
+
+args = parser.parse_args()
+MIN_TRAIN_SAMPLES = args.min_samples
+MAX_TRAIN_SAMPLES = args.max_samples
+N_TRIALS = args.n_trials
+RUN_RF = args.rf
+RUN_CNN = args.cnn
+DATASET_NAME = args.dataset
+CHOOSEN_CLASSES = args.classes
 
 ##############################################################################################################
 # CNN Config
