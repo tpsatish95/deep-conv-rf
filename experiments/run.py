@@ -27,9 +27,9 @@ warnings.filterwarnings("ignore")
 # General Settings
 ##############################################################################################################
 DATA_PATH = "./data"
-MIN_TRAIN_SAMPLES = 10
-MAX_TRAIN_SAMPLES = 100
-N_TRIALS = 20
+MIN_TRAIN_SAMPLES = 100
+MAX_TRAIN_SAMPLES = 10000
+N_TRIALS = 3
 
 RUN_RF = True
 RUN_CNN = True
@@ -48,8 +48,8 @@ else:
 # CNN Config
 ##############################################################################################################
 
-BATCH_SIZE = 8
-EPOCH = 10
+BATCH_SIZE = 128
+EPOCH = 100
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 NUM_CLASSES = len(CHOOSEN_CLASSES)
