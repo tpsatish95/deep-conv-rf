@@ -39,11 +39,11 @@ parser.set_defaults(rf=True)
 parser.add_argument("--no_cnn", dest="cnn", action="store_false")
 parser.set_defaults(cnn=True)
 
-# parser.add_argument("--dataset", default="CIFAR10")
+parser.add_argument("--dataset", default="CIFAR10")
 # parser.add_argument("--dataset", default="SVHN")
-parser.add_argument("--dataset", default="FashionMNIST")
+# parser.add_argument("--dataset", default="FashionMNIST")
 
-parser.add_argument("--classes", nargs='+', type=int, default=[0, 3])
+parser.add_argument("--classes", nargs='+', type=int, default=[1, 9])
 
 parser.add_argument("--batch_size", type=int, default=8)
 parser.add_argument("--epochs", type=int, default=10)
