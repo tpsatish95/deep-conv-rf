@@ -29,8 +29,8 @@ parser = ArgumentParser()
 ##############################################################################################################
 DATA_PATH = "./data"
 
-parser.add_argument("--min_samples", type=int, default=135)
-parser.add_argument("--max_samples", type=int, default=13542)
+parser.add_argument("--min_samples", type=int, default=120)
+parser.add_argument("--max_samples", type=int, default=12000)
 
 parser.add_argument("--n_trials", type=int, default=3)
 
@@ -40,10 +40,10 @@ parser.add_argument("--no_cnn", dest="cnn", action="store_false")
 parser.set_defaults(cnn=True)
 
 # parser.add_argument("--dataset", default="CIFAR10")
-parser.add_argument("--dataset", default="SVHN")
-# parser.add_argument("--dataset", default="FashionMNIST")
+# parser.add_argument("--dataset", default="SVHN")
+parser.add_argument("--dataset", default="FashionMNIST")
 
-parser.add_argument("--classes", nargs='+', type=int, default=[3, 8])
+parser.add_argument("--classes", nargs='+', type=int, default=[2, 4])
 
 parser.add_argument("--batch_size", type=int, default=128)
 parser.add_argument("--epochs", type=int, default=100)
