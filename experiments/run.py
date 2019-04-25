@@ -43,7 +43,7 @@ parser.set_defaults(cnn=True)
 # parser.add_argument("--dataset", default="SVHN")
 parser.add_argument("--dataset", default="FashionMNIST")
 
-parser.add_argument("--classes", nargs='+', type=int, default=[2, 4])
+parser.add_argument("--classes", nargs='+', type=int, default=[0, 3])
 
 parser.add_argument("--batch_size", type=int, default=128)
 parser.add_argument("--epochs", type=int, default=100)
