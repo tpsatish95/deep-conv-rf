@@ -29,24 +29,24 @@ parser = ArgumentParser()
 ##############################################################################################################
 DATA_PATH = "./data"
 
-parser.add_argument("--min_samples", type=int, default=10)
-parser.add_argument("--max_samples", type=int, default=100)
+parser.add_argument("--min_samples", type=int, default=96)
+parser.add_argument("--max_samples", type=int, default=9607)
 
-parser.add_argument("--n_trials", type=int, default=20)
+parser.add_argument("--n_trials", type=int, default=3)
 
 parser.add_argument("--no_rf", dest="rf", action="store_false")
 parser.set_defaults(rf=True)
 parser.add_argument("--no_cnn", dest="cnn", action="store_false")
 parser.set_defaults(cnn=True)
 
-parser.add_argument("--dataset", default="CIFAR10")
-# parser.add_argument("--dataset", default="SVHN")
+# parser.add_argument("--dataset", default="CIFAR10")
+parser.add_argument("--dataset", default="SVHN")
 # parser.add_argument("--dataset", default="FashionMNIST")
 
-parser.add_argument("--classes", nargs='+', type=int, default=[1, 9])
+parser.add_argument("--classes", nargs='+', type=int, default=[0, 9])
 
-parser.add_argument("--batch_size", type=int, default=8)
-parser.add_argument("--epochs", type=int, default=10)
+parser.add_argument("--batch_size", type=int, default=128)
+parser.add_argument("--epochs", type=int, default=100)
 
 args = parser.parse_args()
 MIN_TRAIN_SAMPLES = args.min_samples
