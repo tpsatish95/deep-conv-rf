@@ -29,8 +29,8 @@ parser = ArgumentParser()
 ##############################################################################################################
 DATA_PATH = "./data"
 
-parser.add_argument("--min_samples", type=int, default=126)
-parser.add_argument("--max_samples", type=int, default=12609)
+parser.add_argument("--min_samples", type=int, default=100)
+parser.add_argument("--max_samples", type=int, default=10000)
 
 parser.add_argument("--n_trials", type=int, default=3)
 
@@ -39,11 +39,11 @@ parser.set_defaults(rf=True)
 parser.add_argument("--no_cnn", dest="cnn", action="store_false")
 parser.set_defaults(cnn=True)
 
-# parser.add_argument("--dataset", default="CIFAR10")
-parser.add_argument("--dataset", default="SVHN")
+parser.add_argument("--dataset", default="CIFAR10")
+# parser.add_argument("--dataset", default="SVHN")
 # parser.add_argument("--dataset", default="FashionMNIST")
 
-parser.add_argument("--classes", nargs='+', type=int, default=[5, 6])
+parser.add_argument("--classes", nargs='+', type=int, default=[1, 9])
 
 parser.add_argument("--batch_size", type=int, default=128)
 parser.add_argument("--epochs", type=int, default=100)
@@ -121,8 +121,6 @@ MIN_TRAIN_FRACTION = MIN_TRAIN_SAMPLES / total_train_samples
 MAX_TRAIN_FRACTION = MAX_TRAIN_SAMPLES / total_train_samples
 fraction_of_train_samples_space = np.geomspace(MIN_TRAIN_FRACTION, MAX_TRAIN_FRACTION, num=10)
 
-number_of_train_samples_space = [int(i) for i in list(fraction_of_train_samples_space * total_train_samples)]
-
 # progressive sub sampling for each trial, over fraction of train samples
 # constructs from previously sampled indices and adds on to them as frac progresses
 train_indices_all_trials = list()
@@ -141,6 +139,7 @@ for n in range(N_TRIALS):
     train_indices = [np.concatenate(t).flatten() for t in train_indices]
     train_indices_all_trials.append(train_indices)
 
+number_of_train_samples_space = [len(i) for i in train_indices_all_trials[0]]
 
 IMG_SHAPE = numpy_data["train_images"].shape[1:]
 
@@ -207,11 +206,11 @@ def run_experiment(experiment, results_file_name, experiment_name, cnn_model=Non
         np.save(file_name, acc_vs_n_all_trials)
 
     else:
-        acc_vs_n = print_old_results(file_name, cnn_model, cnn_config)
+        acc_vs_n_all_trials = print_old_results(file_name, cnn_model, cnn_config)
 
     logging.info("##################################################################")
 
-    return acc_vs_n
+    return acc_vs_n_all_trials
 
 
 ##############################################################################################################

@@ -5,6 +5,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from scipy.stats import sem
 
 import run
 
@@ -16,7 +17,6 @@ plt.style.use('seaborn')
 ###############################################################################
 
 plot_title = run.TITLE
-base_path = run.RESULTS_PATH
 results_path = run.RESULTS_PATH
 x_lables = run.number_of_train_samples_space
 n_trials = run.N_TRIALS
@@ -105,14 +105,17 @@ experiment_plot_styles = {
 ###############################################################################
 
 
-def plot_experiment(plot_ax, x, experiment_name, plot_params, is_performance=False, plot_all_trials=True):
+def plot_experiment(plot_ax, x, experiment_name, plot_params, is_performance=False, plot_all_trials=True, plot_error_bars=True):
     plot_params = copy.deepcopy(plot_params)
     if not is_performance:
         trials = np.array(eval(experiment_name))
     else:
         trials = np.array(eval(experiment_name + "_times"))
 
-    plot_ax.plot(x, np.mean(trials, axis=1), **plot_params)
+    if plot_error_bars:
+        plot_ax.errorbar(x, np.mean(trials, axis=1), yerr=sem(trials, axis=1), elinewidth=2, **plot_params)
+    else:
+        plot_ax.plot(x, np.mean(trials, axis=1), **plot_params)
 
     if plot_all_trials:
         del plot_params["label"]
@@ -120,7 +123,7 @@ def plot_experiment(plot_ax, x, experiment_name, plot_params, is_performance=Fal
             plot_ax.plot(x, trials[:, trial_number], alpha=0.4, **plot_params)
 
 
-def plot_experiments(title, experiments, save_to, is_performance=False, plot_all_trials=True):
+def plot_experiments(title, experiments, save_to, is_performance=False, plot_all_trials=True, plot_error_bars=True):
     global experiment_plot_styles, x_lables
 
     fig, ax = plt.subplots()
@@ -142,7 +145,7 @@ def plot_experiments(title, experiments, save_to, is_performance=False, plot_all
     ax.set_title(plot_title + " " + title, fontsize=18)
     plt.legend()
 
-    plt.savefig(base_path + save_to + ".png")
+    plt.savefig(results_path + save_to + ".png")
 
 
 ###############################################################################
@@ -183,11 +186,11 @@ n_layer_experiments = [
 # Plot
 ###############################################################################
 plot_experiments("Classification (1-layer)", one_layer_experiments,
-                 plot_all_trials=False, save_to="accuracy_comparisons_1_layer")
+                 plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons_1_layer")
 plot_experiments("Classification (n-layers)", n_layer_experiments,
-                 plot_all_trials=False, save_to="accuracy_comparisons_n_layer")
+                 plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons_n_layer")
 plot_experiments("Classification", all_experiments,
-                 plot_all_trials=False, save_to="accuracy_comparisons")
+                 plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons")
 
 plot_experiments("Classification Performance", all_experiments, is_performance=True,
-                 plot_all_trials=False, save_to="perf_comparisons")
+                 plot_all_trials=False, plot_error_bars=False, save_to="perf_comparisons")
