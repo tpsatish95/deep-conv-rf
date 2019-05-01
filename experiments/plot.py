@@ -1,5 +1,6 @@
 import copy
 import os
+import json
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -7,64 +8,14 @@ import numpy as np
 import seaborn as sns
 from scipy.stats import sem
 
-import run
+from dataset import get_dataset
+from utils import get_number_of_train_samples_space, get_title_and_results_path
 
 sns.set()
 plt.style.use('seaborn')
 
-###############################################################################
-# Config
-###############################################################################
-
-plot_title = run.TITLE
-results_path = run.RESULTS_PATH
-x_lables = run.number_of_train_samples_space
-n_trials = run.N_TRIALS
-
-###############################################################################
-# Data
-###############################################################################
-
-
-def load_results(file_name):
-    file_name = results_path + file_name + ".npy"
-    if os.path.exists(file_name):
-        return list(zip(*[list(zip(*i)) for i in list(zip(*np.load(file_name)))]))
-    else:
-        return list([[[np.nan]*n_trials]*len(x_lables), [[np.nan]*n_trials]*len(x_lables)])
-
-
-# Naive RF
-naive_rf_acc_vs_n, naive_rf_acc_vs_n_times = load_results("naive_rf_acc_vs_n")
-
-# # Naive RerF
-# naive_rf_pyrerf_acc_vs_n, naive_rf_pyrerf_acc_vs_n_times = load_results("naive_rf_pyrerf_acc_vs_n")
-
-# DeepConvRF Unshared
-deep_conv_rf_old_acc_vs_n, deep_conv_rf_old_acc_vs_n_times = load_results(
-    "deep_conv_rf_old_acc_vs_n")
-deep_conv_rf_old_two_layer_acc_vs_n, deep_conv_rf_old_two_layer_acc_vs_n_times = load_results(
-    "deep_conv_rf_old_two_layer_acc_vs_n")
-
-# DeepConvRF Shared
-deep_conv_rf_acc_vs_n, deep_conv_rf_acc_vs_n_times = load_results("deep_conv_rf_acc_vs_n")
-deep_conv_rf_two_layer_acc_vs_n, deep_conv_rf_two_layer_acc_vs_n_times = load_results(
-    "deep_conv_rf_two_layer_acc_vs_n")
-
-# # DeepConvRF Shared (pyrerf)
-# deep_conv_rf_pyrerf_acc_vs_n, deep_conv_rf_pyrerf_acc_vs_n_times = load_results(
-#     "deep_conv_rf_pyrerf_acc_vs_n")
-# deep_conv_rf_pyrerf_two_layer_acc_vs_n, deep_conv_rf_pyrerf_two_layer_acc_vs_n_times = load_results(
-#     "deep_conv_rf_pyrerf_two_layer_acc_vs_n")
-
-# CNN
-cnn_acc_vs_n, cnn_acc_vs_n_times = load_results("cnn_acc_vs_n")
-cnn32_acc_vs_n, cnn32_acc_vs_n_times = load_results("cnn32_acc_vs_n")
-cnn32_two_layer_acc_vs_n, cnn32_two_layer_acc_vs_n_times = load_results("cnn32_two_layer_acc_vs_n")
-
-# Best CNN
-cnn_best_acc_vs_n, cnn_best_acc_vs_n_times = load_results("cnn_best_acc_vs_n")
-
+DATASETS = dict()
+DATA_PATH = "./data"
 
 ###############################################################################
 # Plot Settings
@@ -105,15 +56,24 @@ experiment_plot_styles = {
 ###############################################################################
 
 
-def plot_experiment(plot_ax, x, experiment_name, plot_params, is_performance=False, plot_all_trials=True, plot_error_bars=True):
+def load_results(file_name, results_path, x_lables, n_trials):
+    file_name = results_path + file_name + ".npy"
+    if os.path.exists(file_name):
+        return list(zip(*[list(zip(*i)) for i in list(zip(*np.load(file_name)))]))
+    else:
+        return list([[[np.nan]*n_trials]*len(x_lables), [[np.nan]*n_trials]*len(x_lables)])
+
+
+def plot_experiment(plot_ax, x, n_trials, experiment_name, plot_params, results_path, is_performance=False, plot_all_trials=True, plot_error_bars=True):
     plot_params = copy.deepcopy(plot_params)
     if not is_performance:
-        trials = np.array(eval(experiment_name))
+        trials = np.array(load_results(experiment_name, results_path, x, n_trials)[0])
     else:
-        trials = np.array(eval(experiment_name + "_times"))
+        trials = np.array(load_results(experiment_name, results_path, x, n_trials)[1])
 
-    if plot_error_bars:
-        plot_ax.errorbar(x, np.mean(trials, axis=1), yerr=sem(trials, axis=1), elinewidth=2, **plot_params)
+    if plot_error_bars and not is_performance:
+        plot_ax.errorbar(x, np.mean(trials, axis=1), yerr=sem(
+            trials, axis=1), elinewidth=2, **plot_params)
     else:
         plot_ax.plot(x, np.mean(trials, axis=1), **plot_params)
 
@@ -123,14 +83,22 @@ def plot_experiment(plot_ax, x, experiment_name, plot_params, is_performance=Fal
             plot_ax.plot(x, trials[:, trial_number], alpha=0.4, **plot_params)
 
 
-def plot_experiments(title, experiments, save_to, is_performance=False, plot_all_trials=True, plot_error_bars=True):
-    global experiment_plot_styles, x_lables
+def plot_experiments(title, experiments, config, save_to, is_performance=False, plot_all_trials=True, plot_error_bars=True):
+    global experiment_plot_styles, DATASETS
+
+    plot_title, results_path = get_title_and_results_path(
+        config["dataset_name"], config["choosen_classes"], config["min_samples"], config["max_samples"])
+
+    if config["dataset_name"] not in DATASETS:
+        DATASETS[config["dataset_name"]] = get_dataset(DATA_PATH, config["dataset_name"], is_numpy=True)
+    x_lables = get_number_of_train_samples_space(DATASETS[config["dataset_name"]], config["choosen_classes"], config["min_samples"], config["max_samples"])
+    n_trials = config["n_trials"]
 
     fig, ax = plt.subplots()
 
     for experiment_name in experiments:
-        plot_experiment(ax, x_lables, experiment_name,
-                        experiment_plot_styles[experiment_name], is_performance=is_performance, plot_all_trials=plot_all_trials)
+        plot_experiment(ax, x_lables, n_trials, experiment_name,
+                        experiment_plot_styles[experiment_name], results_path, is_performance=is_performance, plot_all_trials=plot_all_trials)
 
     ax.set_xlabel('# of Train Samples', fontsize=18)
     ax.set_xscale('log')
@@ -147,10 +115,26 @@ def plot_experiments(title, experiments, save_to, is_performance=False, plot_all
 
     plt.savefig(results_path + save_to + ".png")
 
+    plt.clf()
+    plt.close(fig)
+
+
+def plot_all_figures(config):
+    plot_experiments("Classification (1-layer)", one_layer_experiments, config,
+                     plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons_1_layer")
+    plot_experiments("Classification (n-layers)", n_layer_experiments, config,
+                     plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons_n_layer")
+    plot_experiments("Classification", all_experiments, config,
+                     plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons")
+
+    plot_experiments("Classification Performance", all_experiments, config, is_performance=True,
+                     plot_all_trials=False, plot_error_bars=False, save_to="perf_comparisons")
+
 
 ###############################################################################
 # Plot Groups
 ###############################################################################
+
 
 all_experiments = [
     "naive_rf_acc_vs_n",
@@ -181,16 +165,17 @@ n_layer_experiments = [
     "cnn_best_acc_vs_n"
 ]
 
-
 ###############################################################################
 # Plot
 ###############################################################################
-plot_experiments("Classification (1-layer)", one_layer_experiments,
-                 plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons_1_layer")
-plot_experiments("Classification (n-layers)", n_layer_experiments,
-                 plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons_n_layer")
-plot_experiments("Classification", all_experiments,
-                 plot_all_trials=False, plot_error_bars=True, save_to="accuracy_comparisons")
 
-plot_experiments("Classification Performance", all_experiments, is_performance=True,
-                 plot_all_trials=False, plot_error_bars=False, save_to="perf_comparisons")
+if __name__ == '__main__':
+    config = json.load(open("config.json", "r"))
+    # plot_all_figures(config["CIFAR10"]["1vs9"]["10_to_100"])
+
+    # plot all:
+    for dataset in config:
+        for pairs in config[dataset]:
+            for sample_range in config[dataset][pairs]:
+                print(config[dataset][pairs][sample_range])
+                plot_all_figures(config[dataset][pairs][sample_range])

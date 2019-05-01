@@ -1,0 +1,242 @@
+{
+  "CIFAR10": {
+    "1vs9": {
+      "10_to_100": {
+        "dataset_name": "CIFAR10",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          1,
+          9
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "100_to_10000": {
+        "dataset_name": "CIFAR10",
+        "min_samples": 100,
+        "max_samples": 10000,
+        "n_trials": 3,
+        "choosen_classes": [
+          1,
+          9
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    },
+    "2vs4": {
+      "10_to_100": {
+        "dataset_name": "CIFAR10",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          2,
+          4
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "100_to_10000": {
+        "dataset_name": "CIFAR10",
+        "min_samples": 100,
+        "max_samples": 10000,
+        "n_trials": 3,
+        "choosen_classes": [
+          2,
+          4
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    },
+    "5vs7": {
+      "10_to_100": {
+        "dataset_name": "CIFAR10",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          5,
+          7
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "100_to_10000": {
+        "dataset_name": "CIFAR10",
+        "min_samples": 100,
+        "max_samples": 10000,
+        "n_trials": 3,
+        "choosen_classes": [
+          5,
+          7
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    }
+  },
+  "FashionMNIST": {
+    "0vs3": {
+      "10_to_100": {
+        "dataset_name": "FashionMNIST",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          0,
+          3
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "100_to_10000": {
+        "dataset_name": "FashionMNIST",
+        "min_samples": 120,
+        "max_samples": 12000,
+        "n_trials": 3,
+        "choosen_classes": [
+          0,
+          3
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    },
+    "2vs4": {
+      "10_to_100": {
+        "dataset_name": "FashionMNIST",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          2,
+          4
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "100_to_10000": {
+        "dataset_name": "FashionMNIST",
+        "min_samples": 120,
+        "max_samples": 12000,
+        "n_trials": 3,
+        "choosen_classes": [
+          2,
+          4
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    },
+    "7vs9": {
+      "10_to_100": {
+        "dataset_name": "FashionMNIST",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          7,
+          9
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "100_to_10000": {
+        "dataset_name": "FashionMNIST",
+        "min_samples": 120,
+        "max_samples": 12000,
+        "n_trials": 3,
+        "choosen_classes": [
+          7,
+          9
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    }
+  },
+  "SVHN": {
+    "0vs9": {
+      "10_to_100": {
+        "dataset_name": "SVHN",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          0,
+          9
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "96_to_9607": {
+        "dataset_name": "SVHN",
+        "min_samples": 96,
+        "max_samples": 9607,
+        "n_trials": 3,
+        "choosen_classes": [
+          0,
+          9
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    },
+    "3vs8": {
+      "10_to_100": {
+        "dataset_name": "SVHN",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          3,
+          8
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "135_to_13542": {
+        "dataset_name": "SVHN",
+        "min_samples": 135,
+        "max_samples": 13542,
+        "n_trials": 3,
+        "choosen_classes": [
+          3,
+          8
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    },
+    "5vs6": {
+      "10_to_100": {
+        "dataset_name": "SVHN",
+        "min_samples": 10,
+        "max_samples": 100,
+        "n_trials": 20,
+        "choosen_classes": [
+          5,
+          6
+        ],
+        "batch_size": 8,
+        "epochs": 10
+      },
+      "126_to_12609": {
+        "dataset_name": "SVHN",
+        "min_samples": 126,
+        "max_samples": 12609,
+        "n_trials": 3,
+        "choosen_classes": [
+          5,
+          6
+        ],
+        "batch_size": 128,
+        "epochs": 100
+      }
+    }
+  }
+}
