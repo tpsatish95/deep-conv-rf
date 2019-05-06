@@ -12,12 +12,8 @@ from cnn.models.resnet import ResNet18
 from cnn.models.simple import SimpleCNN1layer, SimpleCNN2Layers
 from cnn.trainer import run_cnn
 from dataset import get_dataset
-from random_forest.deep_conv_rerf_shared import (
-    run_one_layer_deep_conv_rerf_shared, run_two_layer_deep_conv_rerf_shared)
-from random_forest.deep_conv_rf_shared import (
-    run_one_layer_deep_conv_rf_shared, run_two_layer_deep_conv_rf_shared)
-from random_forest.deep_conv_rf_unshared import (
-    run_one_layer_deep_conv_rf_unshared, run_two_layer_deep_conv_rf_unshared)
+from random_forest.deep_conv_rf_runners import (run_one_layer_deep_conv_rf,
+                                                run_two_layer_deep_conv_rf)
 from random_forest.naive_rerf import run_naive_rerf
 from random_forest.naive_rf import run_naive_rf
 from utils import get_title_and_results_path
@@ -72,7 +68,8 @@ CNN_CONFIG = {"batch_size": BATCH_SIZE, "epoch": EPOCH, "device": DEVICE}
 ##############################################################################################################
 
 
-TITLE, RESULTS_PATH = get_title_and_results_path(DATASET_NAME, CHOOSEN_CLASSES, MIN_TRAIN_SAMPLES, MAX_TRAIN_SAMPLES)
+TITLE, RESULTS_PATH = get_title_and_results_path(
+    DATASET_NAME, CHOOSEN_CLASSES, MIN_TRAIN_SAMPLES, MAX_TRAIN_SAMPLES)
 
 # create the results directory
 if not os.path.exists(RESULTS_PATH):
@@ -120,7 +117,8 @@ for n in range(N_TRIALS):
                 sub_sample.append(np.random.choice(class_indices, num_samples, replace=False))
             else:
                 num_samples = int(len(class_indices) * frac + 0.5) - len(train_indices[-1][i])
-                sub_sample.append(np.concatenate([train_indices[-1][i], np.random.choice(list(set(class_indices) - set(train_indices[-1][i])), num_samples, replace=False)]).flatten())
+                sub_sample.append(np.concatenate([train_indices[-1][i], np.random.choice(
+                    list(set(class_indices) - set(train_indices[-1][i])), num_samples, replace=False)]).flatten())
         train_indices.append(sub_sample)
     train_indices = [np.concatenate(t).flatten() for t in train_indices]
     train_indices_all_trials.append(train_indices)
@@ -147,7 +145,7 @@ def print_old_results(file_name, cnn_model, cnn_config):
     global fraction_of_train_samples_space, number_of_train_samples_space
 
     accuracy_scores = [[np.mean(list(zip(*i))[0]), np.mean(list(zip(*i))[1])]
-                       for i in list(zip(*np.load(file_name)))]
+                       for i in list(zip(*np.load(file_name)[:2]))]
 
     for fraction_of_train_samples, number_of_train_samples, (best_accuracy, time_taken) in zip(fraction_of_train_samples_space, number_of_train_samples_space, accuracy_scores):
         print_items(fraction_of_train_samples, number_of_train_samples,
@@ -156,7 +154,7 @@ def print_old_results(file_name, cnn_model, cnn_config):
     return accuracy_scores
 
 
-def run_experiment(experiment, results_file_name, experiment_name, cnn_model=None, cnn_config={}):
+def run_experiment(experiment, results_file_name, experiment_name, rf_type="shared", cnn_model=None, cnn_config={}):
     global fraction_of_train_samples_space, numpy_data, pytorch_data, train_indices_all_trials
 
     logging.info("##################################################################")
@@ -172,20 +170,20 @@ def run_experiment(experiment, results_file_name, experiment_name, cnn_model=Non
             for fraction_of_train_samples, sub_train_indices in zip(fraction_of_train_samples_space, train_indices):
                 if not cnn_model:
                     start = time.time()
-                    accuracy = experiment(DATASET_NAME, numpy_data,
-                                          CHOOSEN_CLASSES, sub_train_indices)
+                    accuracy, time_tracker = experiment(DATASET_NAME, numpy_data,
+                                                        CHOOSEN_CLASSES, sub_train_indices, rf_type)
                     end = time.time()
                 else:
                     start = time.time()
-                    accuracy = experiment(DATASET_NAME, cnn_model, pytorch_data,
-                                          CHOOSEN_CLASSES, sub_train_indices, cnn_config)
+                    accuracy, time_tracker = experiment(DATASET_NAME, cnn_model, pytorch_data,
+                                                        CHOOSEN_CLASSES, sub_train_indices, cnn_config)
                     end = time.time()
                 time_taken = (end - start)
 
                 print_items(fraction_of_train_samples, len(sub_train_indices),
                             accuracy, time_taken, cnn_model, cnn_config)
 
-                acc_vs_n.append((accuracy, time_taken))
+                acc_vs_n.append((accuracy, time_taken, time_tracker))
 
             acc_vs_n_all_trials.append(acc_vs_n)
 
@@ -213,23 +211,26 @@ if __name__ == '__main__':
                        "naive_rf_acc_vs_n", "Naive RF")
 
         # Naive RerF
-        run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
+        run_experiment(run_naive_rerf,
+                       "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
 
         # DeepConvRF Unshared
-        run_experiment(run_one_layer_deep_conv_rf_unshared,
-                       "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)")
-        run_experiment(run_two_layer_deep_conv_rf_unshared,
-                       "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)")
+        run_experiment(run_one_layer_deep_conv_rf,
+                       "deep_conv_rf_old_acc_vs_n", "DeepConvRF (1-layer, unshared)", rf_type="unshared")
+        run_experiment(run_two_layer_deep_conv_rf,
+                       "deep_conv_rf_old_two_layer_acc_vs_n", "DeepConvRF (2-layer, unshared)", rf_type="unshared")
 
         # DeepConvRF Shared
-        run_experiment(run_one_layer_deep_conv_rf_shared,
-                       "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)")
-        run_experiment(run_two_layer_deep_conv_rf_shared,
-                       "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
+        run_experiment(run_one_layer_deep_conv_rf,
+                       "deep_conv_rf_acc_vs_n", "DeepConvRF (1-layer, shared)", rf_type="shared")
+        run_experiment(run_two_layer_deep_conv_rf,
+                       "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)", rf_type="shared")
 
         # DeepConvRerF Shared
-        run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
-        run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
+        run_experiment(run_one_layer_deep_conv_rf,
+                       "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)", rf_type="rerf_shared")
+        run_experiment(run_two_layer_deep_conv_rf,
+                       "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)", rf_type="rerf_shared")
 
     if RUN_CNN:
         # CNN

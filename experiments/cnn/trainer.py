@@ -16,18 +16,18 @@ def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, conf
         model = torch.nn.DataParallel(model)
         cudnn.benchmark = True
 
-    t0 = time.perf_counter()
+    time_taken = {"train": 0, "test": 0}
 
     loss_train = np.zeros((config["epoch"],))
     loss_test = np.zeros((config["epoch"],))
     acc_test = np.zeros((config["epoch"],))
     acc_train = np.zeros((config["epoch"],))
-    time_test = np.zeros((config["epoch"],))
 
     for epoch in range(config["epoch"]):
         scheduler.step()
 
         # train 1 epoch
+        train_start = time.time()
         model.train()
         correct = 0
         train_loss = 0
@@ -50,7 +50,11 @@ def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, conf
         acc_train[epoch] = 100 * float(correct) / float(len(train_loader.dataset))
         loss_train[epoch] = train_loss / len(train_loader.dataset)
 
+        train_end = time.time()
+        time_taken["train"] += (train_end - train_start)
+
         # testing
+        test_start = time.time()
         model.eval()
         correct = 0
         test_loss = 0
@@ -65,9 +69,11 @@ def cnn_train_model(model, train_loader, test_loader, optimizer, scheduler, conf
 
         loss_test[epoch] = test_loss/len(test_loader.dataset)
         acc_test[epoch] = 100 * float(correct) / float(len(test_loader.dataset))
-        time_test[epoch] = time.perf_counter()-t0
 
-    return acc_test[-1] / 100.0
+        test_end = time.time()
+        time_taken["test"] += (test_end - test_start)
+
+    return acc_test[-1] / 100.0, time_taken
 
 
 def run_cnn(dataset_name, input_model, data, choosen_classes, sub_train_indices, config):
