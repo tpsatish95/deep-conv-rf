@@ -12,13 +12,13 @@ from cnn.models.resnet import ResNet18
 from cnn.models.simple import SimpleCNN1layer, SimpleCNN2Layers
 from cnn.trainer import run_cnn
 from dataset import get_dataset
-# from random_forest.deep_conv_rerf_shared import (
-#     run_one_layer_deep_conv_rerf_shared, run_two_layer_deep_conv_rerf_shared)
+from random_forest.deep_conv_rerf_shared import (
+    run_one_layer_deep_conv_rerf_shared, run_two_layer_deep_conv_rerf_shared)
 from random_forest.deep_conv_rf_shared import (
     run_one_layer_deep_conv_rf_shared, run_two_layer_deep_conv_rf_shared)
 from random_forest.deep_conv_rf_unshared import (
     run_one_layer_deep_conv_rf_unshared, run_two_layer_deep_conv_rf_unshared)
-# from random_forest.naive_rerf import run_naive_rerf
+from random_forest.naive_rerf import run_naive_rerf
 from random_forest.naive_rf import run_naive_rf
 from utils import get_title_and_results_path
 
@@ -30,24 +30,24 @@ parser = ArgumentParser()
 ##############################################################################################################
 DATA_PATH = "./data"
 
-parser.add_argument("--min_samples", type=int, default=100)
-parser.add_argument("--max_samples", type=int, default=10000)
+parser.add_argument("--min_samples", type=int, default=10)
+parser.add_argument("--max_samples", type=int, default=100)
 
-parser.add_argument("--n_trials", type=int, default=3)
+parser.add_argument("--n_trials", type=int, default=20)
 
 parser.add_argument("--no_rf", dest="rf", action="store_false")
 parser.set_defaults(rf=True)
 parser.add_argument("--no_cnn", dest="cnn", action="store_false")
 parser.set_defaults(cnn=True)
 
-parser.add_argument("--dataset", default="CIFAR10")
+# parser.add_argument("--dataset", default="CIFAR10")
 # parser.add_argument("--dataset", default="SVHN")
-# parser.add_argument("--dataset", default="FashionMNIST")
+parser.add_argument("--dataset", default="FashionMNIST")
 
-parser.add_argument("--classes", nargs='+', type=int, default=[1, 9])
+parser.add_argument("--classes", nargs='+', type=int, default=[0, 3])
 
-parser.add_argument("--batch_size", type=int, default=128)
-parser.add_argument("--epochs", type=int, default=100)
+parser.add_argument("--batch_size", type=int, default=8)
+parser.add_argument("--epochs", type=int, default=10)
 
 args = parser.parse_args()
 MIN_TRAIN_SAMPLES = args.min_samples
@@ -212,8 +212,8 @@ if __name__ == '__main__':
         run_experiment(run_naive_rf,
                        "naive_rf_acc_vs_n", "Naive RF")
 
-        # # Naive RerF
-        # run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
+        # Naive RerF
+        run_experiment(run_naive_rerf, "naive_rf_pyrerf_acc_vs_n", "Naive RF (pyrerf)")
 
         # DeepConvRF Unshared
         run_experiment(run_one_layer_deep_conv_rf_unshared,
@@ -227,9 +227,9 @@ if __name__ == '__main__':
         run_experiment(run_two_layer_deep_conv_rf_shared,
                        "deep_conv_rf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared)")
 
-        # # DeepConvRerF Shared
-        # run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
-        # run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
+        # DeepConvRerF Shared
+        run_experiment(run_one_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_acc_vs_n", "DeepConvRF (1-layer, shared, pyrerf)")
+        run_experiment(run_two_layer_deep_conv_rerf_shared, "deep_conv_rf_pyrerf_two_layer_acc_vs_n", "DeepConvRF (2-layer, shared, pyrerf)")
 
     if RUN_CNN:
         # CNN
