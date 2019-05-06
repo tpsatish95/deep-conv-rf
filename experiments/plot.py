@@ -56,12 +56,33 @@ experiment_plot_styles = {
 ###############################################################################
 
 
-def load_results(file_name, results_path, x_lables, n_trials):
+def load_results(file_name, results_path, x_lables, n_trials, with_time_tracker=False):
+    '''
+    time_tracker dict's items:
+        load
+          - train_chop
+          - test_chop
+        train
+          - fit
+          - train_post
+          - final_fit
+        test
+          - test_post
+          - final_predict
+    '''
     file_name = results_path + file_name + ".npy"
     if os.path.exists(file_name):
-        return list(zip(*[list(zip(*i)) for i in list(zip(*np.load(file_name)))]))
+        file_obj = np.load(file_name)
+        if not with_time_tracker:
+            return list(zip(*[list(zip(*i)) for i in list(zip(*file_obj[:2]))]))
+        else:
+            return list(zip(*[list(zip(*i)) for i in list(zip(*file_obj[:2]))])) + [file_obj[2]]
+
     else:
-        return list([[[np.nan]*n_trials]*len(x_lables), [[np.nan]*n_trials]*len(x_lables)])
+        if not with_time_tracker:
+            return list([[[np.nan]*n_trials]*len(x_lables), [[np.nan]*n_trials]*len(x_lables)])
+        else:
+            return list([[[np.nan]*n_trials]*len(x_lables), [[np.nan]*n_trials]*len(x_lables), [{"train": [np.nan]*n_trials, "test": [np.nan]*n_trials}]*len(x_lables)])
 
 
 def plot_experiment(plot_ax, x, n_trials, experiment_name, plot_params, results_path, is_performance=False, plot_all_trials=True, plot_error_bars=True):
@@ -90,8 +111,10 @@ def plot_experiments(title, experiments, config, save_to, is_performance=False, 
         config["dataset_name"], config["choosen_classes"], config["min_samples"], config["max_samples"])
 
     if config["dataset_name"] not in DATASETS:
-        DATASETS[config["dataset_name"]] = get_dataset(DATA_PATH, config["dataset_name"], is_numpy=True)
-    x_lables = get_number_of_train_samples_space(DATASETS[config["dataset_name"]], config["choosen_classes"], config["min_samples"], config["max_samples"])
+        DATASETS[config["dataset_name"]] = get_dataset(
+            DATA_PATH, config["dataset_name"], is_numpy=True)
+    x_lables = get_number_of_train_samples_space(
+        DATASETS[config["dataset_name"]], config["choosen_classes"], config["min_samples"], config["max_samples"])
     n_trials = config["n_trials"]
 
     fig, ax = plt.subplots()
